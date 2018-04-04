@@ -24,8 +24,15 @@ password.addEventListener('keyup', key_login);
 
 
 
-const naivgate_to_gallery = () => {
-  window.location.href='/'
+const naivgate_to_gallery = (username, id) => {
+  window.location.href='/image_gallery';
+  $.ajax({
+    url: '/session',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({'username': username, 'userID': id })
+  }).done( res => console.log('great!'));
+
 }
 
 sign_in_btn.onclick = () => {
@@ -40,7 +47,7 @@ sign_in_btn.onclick = () => {
       // console.log(password.value, data2.password);
       if(password.value == data2.password){
         console.log('authen');
-        naivgate_to_gallery();
+        naivgate_to_gallery(data2.username, data2._id );
       } else {
         alert('incorrect uername or password');
       }
