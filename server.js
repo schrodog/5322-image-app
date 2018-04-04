@@ -7,64 +7,172 @@ import express from 'express';
 import http from 'http';
 import util from 'util';
 import cors from 'cors';
+import mongo from 'mongodb';
+import bodyParser from 'body-parser';
+
+
 
 const app = express();
 const httpServer = http.createServer(app);
 
+
+// const MongoClient = mongo.MongoClient;
+// const url = "mongodb://127.0.0.1:27017/";
+// let dbo;
+//
+// MongoClient.connect(url, (err,db) => {
+//   if (err) throw err;
+//   dbo = db.db("mydb");
+//   // console.log(`switch to ${db.databaseName}`);
+//
+//   // dbo.createCollection("ordersss", (err, res) => {
+//   //   if(err) throw err;
+//   //   console.log('collection!');
+//   // });
+//
+//   let obj = [
+//     {_id: 154, username: 'peter chu', email: 'abc@googlecom', password: 'highway37'},
+//     {username: 'john hui', email: 'fdsj@con.com', password: 'fadsljk'},
+//     {username: 'may may', email: 'mays@google.com', password: 'fihudais'}
+//   ];
+//
+//   let order = [
+//     {_id: 1, product_id: 154, status: 1}
+//   ];
+//   let product = [
+//     {_id: 154, name: 'chocolate heaven'},
+//     {_id: 155, name: 'Tasty Lemons'},
+//     {_id: 156, name: 'Vanilla Dreams'}
+//   ];
+//
+//   // dbo.createCollection("order", (err,res) => {});
+//   // dbo.createCollection("product", (err,res) => {});
+//   //
+//   // dbo.collection("order").insertMany(order, (err, res) => {})
+//   // dbo.collection("product").insertMany(product, (err, res) => {})
+//
+//   // dbo.collection("account").insertMany(obj, (err, res) => {
+//   //   (res.ops).forEach(i => console.log(i));
+//   // })
+//
+//   // dbo.collection("account").find().toArray( (err,result) => {
+//   //   if(err) throw err;
+//   //   console.log(result);
+//   // });
+//   // dbo.collection("account").findOne( {username: 'peter chu'}, (err,result) => {
+//   //   if(err) throw err;
+//   //   console.log(result._id);
+//   // });
+//
+//   // let query = { username: /^p/};
+//   // dbo.collection("account").find({}).project({email: 1, _id:0}).toArray( (err,result) => {
+//   //   if(err) throw err;
+//   //   console.log(result);
+//   // });
+//
+//
+//   // dbo.collection("account").find(query, {username: 1}).sort({username: -1}).toArray( (err,result) => {
+//   //   if(err) throw err;
+//   //   console.log(result);
+//   // });
+//
+//   // dbo.collection("account").deleteOne(query, (err, result) => {
+//   //   console.log('doc del');
+//   // });
+//
+//   // let newValue = {$set: {username: 'micky', email:'lll@yahoo'}};
+//   // dbo.collection("account").updateOne(query, newValue, (err, res) => {
+//   //   console.log(res);
+//   // })
+//
+//   // dbo.collection('order').aggregate([
+//   //   { $lookup: {
+//   //     from: 'product',
+//   //     localField: 'product_id',
+//   //     foreignField: '_id',
+//   //     as: 'orderdetails'
+//   //   }}
+//   // ]).toArray((err,res) => {
+//   //   if(err) throw err;
+//   //   console.log(JSON.stringify(res));
+//   // });
+//
+//
+//   // db.close();
+// });
+
+
 app.use(express.static('./public'));
-app.use(cors({credentials: true, origin: true}))
-app.set('view engine', 'ejs')
+app.use(cors({credentials: true, origin: true}));
+app.use(express.json());
+// app.use(bodyParser.urlencoded({ entended: true }));
+
+import * as account from './public/account.js';
+
+
+
+// app.get('/email', account.findAll);
+app.get('/account', account.findAll);
+// log in
+app.get('/account/:email', account.findByEmail );
+// sign up
+app.post('/account', account.createAccount );
+
+app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-app.get('/', (req,res) => {
-  res.render('index')
-});
+
+// login page
+app.get('/', (req,res) => res.render('index') );
+app.get('/image_gallery', (req,res) => res.render('image_gallery') );
+app.get('/imaging', (req,res) => res.render('imaging') );
+
 
 httpServer.listen(8000, () => console.log('start...'));
 
-// handle download file
-// function decodeBase64Image(dataString) {
-//   var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-//   var response = {};
+// // handle download file
+// // function decodeBase64Image(dataString) {
+// //   var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+// //   var response = {};
+// //
+// //   if (matches.length !== 3)
+// //   {
+// //     return new Error('Invalid input string');
+// //   }
+// //
+// //   response.type = matches[1];
+// //   response.data = new Buffer(matches[2], 'base64');
+// //
+// //   return response;
+// // }
 //
-//   if (matches.length !== 3)
-//   {
-//     return new Error('Invalid input string');
-//   }
+// http.createServer((req, res) => {
+//   // console.log('req received:');
 //
-//   response.type = matches[1];
-//   response.data = new Buffer(matches[2], 'base64');
+//   req.setEncoding('utf8')
+//   req.on('data', (data_write) => {
 //
-//   return response;
-// }
-
-http.createServer((req, res) => {
-  // console.log('req received:');
-
-  req.setEncoding('utf8')
-  req.on('data', (data_write) => {
-
-    let data2 = decodeURIComponent(data_write);
-    data2 = data2.substr(6, data2.length);
-
-    // unique name for each save
-    let d = new Date();
-    let filename = `img/test_${d.getTime()}.png`;
-    fs.writeFile(`./public/${filename}`, data2, {encoding: 'base64'}, (err)=>{
-      if (err) throw err;
-      console.log('file saved!');
-
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      res.end(filename);
-    });
-
-  });
-  // req.on('end', () => {
-  //   res.end('received')
-  // })
-
-}).listen(8001);
+//     let data2 = decodeURIComponent(data_write);
+//     data2 = data2.substr(6, data2.length);
+//
+//     // unique name for each save
+//     let d = new Date();
+//     let filename = `img/test_${d.getTime()}.png`;
+//     fs.writeFile(`./public/${filename}`, data2, {encoding: 'base64'}, (err)=>{
+//       if (err) throw err;
+//       console.log('file saved!');
+//
+//       res.setHeader('Access-Control-Allow-Origin', '*');
+//       res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//       res.end(filename);
+//     });
+//
+//   });
+//   // req.on('end', () => {
+//   //   res.end('received')
+//   // })
+//
+// }).listen(8001);
 
 
 

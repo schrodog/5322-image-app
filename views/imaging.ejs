@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>testing</title>
+  <link rel="stylesheet" type="text/css" href="./index.css"></link>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/konvajs/konva/2.0.2/konva.min.js"></script>
+  <script type="text/javascript" src="./lib/farbtastic/farbtastic.js"></script>
+  <link rel="stylesheet" href="./lib/farbtastic/farbtastic.css" type="text/css" />
+</head>
+<body>
+
+
+<!-- <input type="file" id="take-pic" accept="image/*;capture=camera" > -->
+
+<div id="box">
+  <div id="container">
+  </div>
+</div>
+
+<!-- <br>
+<button id="camera">camera</button>
+<video src=""></video> -->
+
+<div id="control-btn">
+  <button id="crop-btn">crop</button>
+  <button id="save-crop-btn">save crop</button>
+  <button id="resize-btn">resize</button>
+  <button id="save-resize-btn">save resize</button>
+  <button id="export-btn">Export</button>
+  <div class="upload-btn-wrapper">
+    <button class="btn" >Add picture</button>
+    <input type="file" name="myfile" id="add-pic-btn" accept="image/*;capture=camera" multiple />
+  </div>
+  <button id="delete-pic-btn" >Delete</button>
+  <br>
+  <button id="grey-btn">grey</button>
+  <button id="color-btn">color</button>
+  <button id="invert-btn">invert</button>
+  <button id="mask-btn">mask</button>
+  <button id="sepia-btn">sepia</button>
+  <button id="solarize-btn">solarize</button>
+  <br />
+
+  <br />
+  <button id="input_text">Text</button>
+  <button id="align-left-btn" class="img_btn"><img src="icon/Align-Left-icon.png" /></button>
+  <button id="align-center-btn" class="img_btn"><img src="icon/Align-Center-icon.png" /></button>
+  <button id="align-right-btn" class="img_btn"><img src="icon/Align-Right-icon.png" /></button>
+  <button id="align-justify-btn" class="img_btn"><img src="icon/Align-JustifyAll-icon.png" /></button>
+  <button id="text-bold-btn" class="img_btn"><img src="icon/Editing-Bold-icon.png" /></button>
+  <button id="text-italic-btn" class="img_btn"><img src="icon/Editing-Italic-icon.png" /></button>
+  <button id="text-underline-btn" class="img_btn"><img src="icon/Editing-Underline-icon.png" /></button>
+
+  <label for="font-size-range">Font Size</label>
+  <input id="font-size-range" type="range" min=5 max=60 step=1 value=25>
+
+  <label for="font-family-select">Font Family</label>
+  <select id="font-family-select" name="font-family">
+    <option value="Arial">Arial</option>
+    <option value="Arial Black">Arial Black</option>
+    <option value="Comic Sans MS">Comic Sans MS</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Palatino Linotype">Palatino Linotype</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Impact">Impact</option>
+    <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+    <option value="Tahoma">Tahoma</option>
+    <option value="Trebuchet MS">Trebuchet MS</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Courier New">Courier New</option>
+    <option value="Lucida Console">Lucida Console</option>
+  </select>
+
+  <br />
+  <select id="paint-tool-select">
+    <option value="brush">Brush</option>
+    <option value="pen">Pen</option>
+    <option value="pencil">Pencil</option>
+    <option value="eraser">Eraser</option>
+  </select>
+
+
+  <label for="pen-width-range">Pen Width</label>
+  <input id="pen-width-range" type="range" min=0.5 max=30 step=0.5 value=0.5>
+
+  <button id="start-paint-btn">Paint</button>
+  <button id="clear-paint-btn">Clear paint</button>
+  <button id="save-paint-btn">Save paint</button>
+  <form style="display:none;">
+    <input type="text" id="show-color" value="#123456" readonly/>
+  </form>
+
+  <div id="colorpicker"></div>
+  <label for="opacity-range">opacity</label>
+  <input id="opacity-range" type="range" min=0 max=1 step="0.01" value=1 />
+
+  <input type="file" id="take-pic" accept="image/*;capture=camera" style="display:none;">
+
+</div>
+
+<div class="slidingbar">
+
+  <p id="first-control">
+    <label for="brightness-range">Brightness</label>
+    <input id="brightness-range" type="range" min=-1 max=1 step="0.01" value=0>
+  </p>
+  <p>
+    <label for="contrast-range">Contrast</label>
+    <input id="contrast-range" type="range" min=-100 max=100 value=0 >
+  </p>
+  <p>
+    <label for="blur">Blur</label>
+    <input id="blur-range" type="range" min=0 max=10 value=0 >
+  </p>
+  <p>
+    <label for="hue-range">Hue</label>
+    <input id="hue-range" type="range" min=0 max=360 value=0 >
+  </p>
+  <p>
+    <label for="saturate-range">Saturate</label>
+    <input id="saturate-range" type="range" min=0 max=1 value=0 step="0.01" >
+  </p>
+
+  <p>
+    <label for="lightness-range">Lightness</label>
+    <input id="lightness-range" type="range" min=-1 max=1 value=0 step="0.01" >
+  </p>
+
+  <p>
+    <label for="mask-range">Mask</label>
+    <input id="mask-range" type="range" min=0 max=1 step=0.01 value=0.5>
+  </p>
+  <p>
+    <label for="noise-range">Noise</label>
+    <input id="noise-range" type="range" min=0 max=1 step=0.01 value=0 >
+  </p>
+  <p>
+    <label for="pixelate-range">Pixelate</label>
+    <input id="pixelate-range" type="range" min=0.001 max=10 step=0.1 >
+  </p>
+  <p>
+    <label for="posterize-range">Posterize</label>
+    <input id="posterize-range" type="range" min=0 max=1 step=0.01 value=1>
+  </p>
+
+  <p>
+    <label for="rotate-range">Rotate</label>
+    <input id="rotate-range" type="range" min=0 max=359 value=0>
+  </p>
+  <p>
+    <label for="alpha-range">Alpha</label>
+    <input id="alpha-range" type="range" min=0 max=1 value=1 step=0.01>
+  </p>
+
+</div>
+
+<!-- <textarea id="textarea">sample text</textarea> -->
+
+</body>
+<!-- <script type="text/javascript" src="./index.js"></script> -->
+<!-- <script type="module" src="./canvas.js"></script> -->
+
+<script src="./button_handler.js"></script>
+<script src="./Base_Shape.js"></script>
+<script src="./Custom_Image.js"></script>
+<script src="./Text.js"></script>
+<script src="./Paint.js"></script>
+<script src="./index.js"></script>
+
+</html>
