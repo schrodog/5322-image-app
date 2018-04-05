@@ -15,6 +15,7 @@ class BaseShape {
   constructor(targetImage, stage){
     this.baseImage = targetImage;
     // this.turnColorScale();
+    this.filterMode = '';
     this.layer = new Konva.Layer();
     this.anchorGroup = new Konva.Group();
     this.group = new Konva.Group();
@@ -48,6 +49,8 @@ class BaseShape {
 
     return this.layer;
   }
+
+
 
   // === resize and crop =======
 
@@ -342,6 +345,7 @@ class BaseShape {
   }
 
   turnGreyScale(){
+    self.filterMode = 'grey';
     self.baseImage.cache();
     self.baseImage.filters([Konva.Filters.Grayscale, Konva.Filters.Blur, Konva.Filters.Brighten, Konva.Filters.Contrast]);
     self.baseImage.draw()
@@ -350,6 +354,7 @@ class BaseShape {
   turnColorScale(){
     // cache will affect scaling
     // self.baseImage.cache();
+    self.filterMode = 'color';
     self.baseImage.filters([Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Blur, Konva.Filters.HSL, Konva.Filters.Noise, Konva.Filters.Pixelate, Konva.Filters.Posterize]);
     self.baseImage.noise(0);
     self.baseImage.pixelSize(0.001);
@@ -360,6 +365,7 @@ class BaseShape {
   }
 
   invert(){
+    self.filterMode = 'invert';
     self.baseImage.cache();
     self.baseImage.filters([Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Blur, Konva.Filters.HSL, Konva.Filters.Invert]);
     self.baseImage.draw()
@@ -367,6 +373,7 @@ class BaseShape {
 
   turnMaskScale(){
     // self.baseImage.cache();
+    self.filterMode = 'mask';
     self.baseImage.filters([Konva.Filters.Mask, Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Blur, Konva.Filters.Threshold]);
     self.mask(0.5);
   }
@@ -406,6 +413,7 @@ class BaseShape {
     self.baseImage.draw();
   }
   turnSolarize(){
+    this.filterMode = 'solarize';
     self.baseImage.cache();
     self.baseImage.filters([Konva.Filters.Solarize]);
     self.baseImage.draw()

@@ -13,64 +13,6 @@ import shortId from 'shortid';
 const app = express();
 const httpServer = http.createServer(app);
 
-// const MongoClient = mongo.MongoClient;
-// const url = "mongodb://127.0.0.1:27017/";
-// let dbo;
-// MongoClient.connect(url, (err,db) => {
-//   if (err) throw err;
-//   dbo = db.db("mydb");
-//
-//   // dbo.createCollection("account", (err, res) => {
-//   //   if(err) throw err;
-//   //   console.log('collection!');
-//   // });
-//
-//   // let obj = [
-//   //   {_id: '5ac4798ac759e365d7728f39' , username: 'peter chu', email: 'abc@google.com', password: 'highway37'},
-//   //   {_id: '5ac4798ac759e365d7728f3a' , username: 'john hui', email: 'fdsj@con.com', password: 'fadsljk'},
-//   //   {_id: '5ac4798ac759e365d7728f3b' , username: 'may may', email: 'mays@google.com', password: 'fihudais'}
-//   // ];
-//   //
-//   // dbo.collection('account').deleteMany({}, (err,res) => {});
-//   // dbo.collection("account").insertMany(obj, (err, res) => {
-//   //   // (res.ops).forEach(i => console.log(i));
-//   // });
-//
-//   // dbo.createCollection("images", (err, res) => {})
-//   //
-//   const upload = (file) => {
-//     // let imgBinary = fs.readFileSync(file);
-//     // console.log(imgBinary);
-//     let obj = {filename: `img/users/${file.filename}`, userID: file.userID, share: file.share, likedID: file.likedID};
-//     // obj.data = new mongo.Binary(imgBinary);
-//     dbo.collection('images').insert(obj, (err, res) => {
-//       console.log('inserting')
-//     });
-//   }
-//
-//   dbo.collection('images').deleteMany({}, (err,res) => {});
-//   let objs = [
-//     {'filename': '121.jpg', 'userID': '5ac4798ac759e365d7728f39', 'share': 1, 'likedID':[]},
-//     {'filename': 'image8.jpg', 'userID': '5ac4798ac759e365d7728f39', 'share': 1, 'likedID':[]},
-//     {'filename': 'image9.jpeg', 'userID': '5ac4798ac759e365d7728f39', 'share': 1, 'likedID':[]},
-//     {'filename': 'image10.jpg', 'userID': '5ac4798ac759e365d7728f3a', 'share': 1, 'likedID':[]},
-//     {'filename': 'image11.jpg', 'userID': '5ac4798ac759e365d7728f3a', 'share': 1, 'likedID':['5ac4798ac759e365d7728f39']},
-//     {'filename': 'image12.jpg', 'userID': '5ac4798ac759e365d7728f3a', 'share': 0, 'likedID':[]},
-//     {'filename': 'image13.jpg', 'userID': '5ac4798ac759e365d7728f3a', 'share': 1, 'likedID':[]},
-//     {'filename': 'images4.jpeg', 'userID': '5ac4798ac759e365d7728f3a', 'share': 1, 'likedID':[]},
-//     {'filename': 'images5.jpeg', 'userID': '5ac4798ac759e365d7728f3a', 'share': 1, 'likedID':[]},
-//     {'filename': 'images6.jpeg', 'userID': '5ac4798ac759e365d7728f3b', 'share': 1, 'likedID':[]},
-//     {'filename': 'images7.jpeg', 'userID': '5ac4798ac759e365d7728f3b', 'share': 0, 'likedID':[]},
-//     {'filename': 'sample1.jpg', 'userID': '5ac4798ac759e365d7728f3b', 'share': 1, 'likedID': ['5ac4798ac759e365d7728f3b','5ac4798ac759e365d7728f3a']},
-//     {'filename': 'sample2.jpg', 'userID': '5ac4798ac759e365d7728f3b', 'share': 0, 'likedID':[]},
-//     {'filename': 'sample3.jpg', 'userID': '5ac4798ac759e365d7728f3b', 'share': 1, 'likedID':['5ac4798ac759e365d7728f39']},
-//     {'filename': 'sample4.jpg', 'userID': '5ac4798ac759e365d7728f3b', 'share': 1, 'likedID':[]},
-//     {'filename': 'pexels-photo.jpg', 'userID': '5ac4798ac759e365d7728f3b', 'share': 1, 'likedID':[]}
-//   ]
-//   objs.forEach( i => upload(i));
-// });
-
-
 app.use(express.static('./public'));
 app.use(cors({credentials: true, origin: true}));
 app.use(express.json());
@@ -97,6 +39,8 @@ app.get('/image_gallery/images/:id', account.loadImages );
 app.get('/image_gallery/shared_images', account.loadSharedImages);
 app.post('/image_gallery/like', account.refreshLike);
 
+app.post('/imaging/status', account.saveStatus);
+
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -108,50 +52,50 @@ app.get('/imaging', (req,res) => res.render('imaging') );
 
 httpServer.listen(8000, () => console.log('start...'));
 
-// // handle download file
-// // function decodeBase64Image(dataString) {
-// //   var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-// //   var response = {};
-// //
-// //   if (matches.length !== 3)
-// //   {
-// //     return new Error('Invalid input string');
-// //   }
-// //
-// //   response.type = matches[1];
-// //   response.data = new Buffer(matches[2], 'base64');
-// //
-// //   return response;
-// // }
+// handle download file
+// function decodeBase64Image(dataString) {
+//   var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+//   var response = {};
 //
-// http.createServer((req, res) => {
-//   // console.log('req received:');
+//   if (matches.length !== 3)
+//   {
+//     return new Error('Invalid input string');
+//   }
 //
-//   req.setEncoding('utf8')
-//   req.on('data', (data_write) => {
+//   response.type = matches[1];
+//   response.data = new Buffer(matches[2], 'base64');
 //
-//     let data2 = decodeURIComponent(data_write);
-//     data2 = data2.substr(6, data2.length);
-//
-//     // unique name for each save
-//     let d = new Date();
-//     let filename = `img/test_${d.getTime()}.png`;
-//     fs.writeFile(`./public/${filename}`, data2, {encoding: 'base64'}, (err)=>{
-//       if (err) throw err;
-//       console.log('file saved!');
-//
-//       res.setHeader('Access-Control-Allow-Origin', '*');
-//       res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//       res.end(filename);
-//     });
-//
-//   });
-//   // req.on('end', () => {
-//   //   res.end('received')
-//   // })
-//
-// }).listen(8001);
+//   return response;
+// }
+
+http.createServer((req, res) => {
+  // console.log('req received:');
+
+  req.setEncoding('utf8')
+  req.on('data', (data_write) => {
+
+    let data2 = decodeURIComponent(data_write);
+    data2 = data2.substr(6, data2.length);
+
+    // unique name for each save
+    let d = new Date();
+    let filename = `img/test_${d.getTime()}.png`;
+    fs.writeFile(`./public/${filename}`, data2, {encoding: 'base64'}, (err)=>{
+      if (err) throw err;
+      console.log('file saved!');
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.end(filename);
+    });
+
+  });
+  // req.on('end', () => {
+  //   res.end('received')
+  // })
+
+}).listen(8001);
 
 
 

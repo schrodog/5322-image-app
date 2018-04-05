@@ -40,6 +40,10 @@ class CustomImage extends BaseShape {
     });
   }
 
+  // exportJSON(){
+  //   return {'id': this.baseImage._id, 'image': this.baseImage.attrs.image, 'filterMode': this.filterMode};
+  // }
+
   // destroySelf(){
   //   super.destroyAll();
   //   this.remove_listener();

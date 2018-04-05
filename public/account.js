@@ -1,5 +1,6 @@
 import mongo from 'mongodb';
 import shortId from 'shortid';
+import fs from 'fs';
 
 const ObjectID = mongo.ObjectID;
 const MongoClient = mongo.MongoClient;
@@ -100,7 +101,6 @@ exports.refreshLike = (req, res) => {
   }
 }
 
-
 exports.logout = (req, res) => {
   req.session.destroy();
   // res.cookie('connect.sid', '', {maxAge: Date.now()});
@@ -108,4 +108,52 @@ exports.logout = (req, res) => {
 }
 
 
-// /account/abc@googlecom
+exports.saveStatus = (req, res) => {
+  let [image_list, canvas_list, text_list] = [req.body.image_list, req.body.canvas_list, req.body.text_list];
+
+  const sid = req.sessionID;
+  db_session.collection("sessions").findOne({_id: sid}, (err, result) => {
+    let data = JSON.parse(result.session);
+
+    for (let i=0; i < image_list.length; i++){
+      let buf = new Buffer(image_list[i].attrs.image, 'base64' );
+      fs.writeFile('./public/img/users/development/abc.jpg', buf, (err) => {
+        if(err) throw err;
+        console.log('saved');
+      });
+      image_list[i].attrs.image = 'img/users/development/abc.jpg';
+      image_list[i].userID = data.id;
+    }
+    for (let i=0; i < canvas_list.length; i++){
+      let buf = new Buffer(canvas_list[i].attrs.image, 'base64' );
+      fs.writeFile('./public/img/users/development/def.png', buf, (err) => {
+        if(err) throw err;
+        console.log('saved');
+      });
+      canvas_list[i].attrs.image = 'img/users/development/abc.jpg';
+      canvas_list[i].userID = data.id;
+    }
+
+    console.log(image_list, canvas_list, text_list);
+    dbo.collection("development").insertMany(image_list)
+
+  });
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,9 +1,9 @@
 'use strict';
 
 const mongo = require('mongodb');
-
 const MongoClient = mongo.MongoClient;
 const url = "mongodb://127.0.0.1:27017/";
+
 let dbo;
 MongoClient.connect(url, (err,db) => {
   if (err) throw err;

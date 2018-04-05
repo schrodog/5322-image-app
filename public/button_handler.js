@@ -51,6 +51,7 @@ const rotate_range = document.getElementById("rotate-range");
 const alpha_range = document.getElementById("alpha-range");
 
 
+let Image_ref=[], Text_ref=[], Canvas_ref=[];
 
 
 

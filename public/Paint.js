@@ -234,6 +234,10 @@ class Paint extends BaseShape {
     opacity_range.removeEventListener('input', this.switchOpacity );
   }
 
+  // exportJSON(){
+  //   return {'id': this.baseImage._id, 'image': this.baseImage.attrs.image};
+  // }
+
 }
 
 

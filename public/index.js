@@ -1,8 +1,7 @@
 'use strict';
 
-let Base_ref, Crop_ref, Shadow_layer, Text_ref;
 
-const STAGE = new Konva.Stage({
+let STAGE = new Konva.Stage({
   container: 'container',
   width: 700,
   height: 500
@@ -14,7 +13,6 @@ const imageTemplate = imageObj => new Konva.Image({
   y: 10,
   image: imageObj,
   draggable: true,
-  id: 'img'
 });
 
 
@@ -25,7 +23,9 @@ const loadPicToStage = src => {
   imageObj.src = src;
 
   imageObj.onload = () => {
-    new CustomImage(imageTemplate(imageObj), STAGE);
+    let img = imageTemplate(imageObj)
+    img.id = img._id;
+    Image_ref.push(new CustomImage(img, STAGE));
   }
 }
 
@@ -57,14 +57,15 @@ startPaint_btn.onclick = () => {
     name: 'canvas',
     draggable: true
   });
-  new Paint(canvasTemplate, drawing_board, STAGE);
+  drawing_board.id = drawing_board._id;
+  Canvas_ref.push(new Paint(canvasTemplate, drawing_board, STAGE));
 }
-inputText_btn.onclick = () => new CustomText(STAGE);
+inputText_btn.onclick = () => Text_ref.push(new CustomText(STAGE));
 
 
 // ==== MAIN ====
 
-loadPicToStage('./img/big_flowers.jpg');
+// loadPicToStage('./img/big_flowers.jpg');
 
 $("#colorpicker").farbtastic("#show-color");
 
