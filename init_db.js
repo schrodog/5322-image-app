@@ -1,7 +1,6 @@
 'use strict';
 
 const mongo = require('mongodb');
-const MongoStore = require('connect-mongo')(session);
 
 const MongoClient = mongo.MongoClient;
 const url = "mongodb://127.0.0.1:27017/";
