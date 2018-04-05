@@ -1,6 +1,7 @@
 import mongo from 'mongodb';
 import shortId from 'shortid';
 
+const ObjectID = mongo.ObjectID;
 const MongoClient = mongo.MongoClient;
 const url = "mongodb://127.0.0.1:27017/";
 let dbo, db_session;
@@ -30,7 +31,7 @@ exports.findByEmail = (req, res) => {
 
 exports.createAccount = (req, res) => {
   let data = req.body;
-  // console.log('data:',data.username);
+  // console.log('data:',data);
   // console.log('req:',req);
   dbo.collection("account").insertOne(data, (err, result) => {
     if(err) throw err;
@@ -42,7 +43,7 @@ exports.createSession = (req, res) => {
   let data = req.body;
   req.session.userID = data.userID;
   req.session.username = data.username;
-  console.log(data)
+  // console.log(data)
   res.send('session set')
 }
 
@@ -52,10 +53,6 @@ exports.findSession = (req, res) => {
     let data = JSON.parse(result.session);
     res.send(data);
   });
-}
-
-exports.deleteSession = (req, res) => {
-  
 }
 
 exports.loadImages = (req, res) => {
@@ -83,9 +80,31 @@ exports.shareImage = (req, res) => {
   });
 }
 
+exports.refreshLike = (req, res) => {
+  let data = req.body;
+  let id = new ObjectID(data.picID);
+  // add like
+  if(data.action == 1){
+    // console.log(ObjectID(data.id));
+    // dbo.collection("images").findOne({'_id': id }, (err,data) => {console.log(data);});
+    dbo.collection("images").updateOne({'_id': id }, {$push: {'likedID': data.userID}}, (err,data) => {
+      if(err) throw err;
+      // console.log('data:',data);
+      res.send('ok');
+    })
+  } else {
+    dbo.collection("images").updateOne({'_id': id}, {$pull: {'likedID': data.userID}}, (err, data) => {
+      if(err) throw err;
+      res.send('ok');
+    })
+  }
+}
+
+
 exports.logout = (req, res) => {
-  let sid = req.sessionID;
-  
+  req.session.destroy();
+  // res.cookie('connect.sid', '', {maxAge: Date.now()});
+  res.end()
 }
 
 
