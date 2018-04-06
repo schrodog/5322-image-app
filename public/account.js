@@ -111,31 +111,44 @@ exports.logout = (req, res) => {
 exports.saveStatus = (req, res) => {
   let [image_list, canvas_list, text_list] = [req.body.image_list, req.body.canvas_list, req.body.text_list];
 
+  console.log(image_list, canvas_list, text_list);
+
   const sid = req.sessionID;
   db_session.collection("sessions").findOne({_id: sid}, (err, result) => {
     let data = JSON.parse(result.session);
 
-    for (let i=0; i < image_list.length; i++){
-      let buf = new Buffer(image_list[i].attrs.image, 'base64' );
-      fs.writeFile('./public/img/users/development/abc.jpg', buf, (err) => {
-        if(err) throw err;
-        console.log('saved');
-      });
-      image_list[i].attrs.image = 'img/users/development/abc.jpg';
-      image_list[i].userID = data.id;
-    }
-    for (let i=0; i < canvas_list.length; i++){
-      let buf = new Buffer(canvas_list[i].attrs.image, 'base64' );
-      fs.writeFile('./public/img/users/development/def.png', buf, (err) => {
-        if(err) throw err;
-        console.log('saved');
-      });
-      canvas_list[i].attrs.image = 'img/users/development/abc.jpg';
-      canvas_list[i].userID = data.id;
-    }
 
-    console.log(image_list, canvas_list, text_list);
-    dbo.collection("development").insertMany(image_list)
+    const createFile = target_list => {
+      for (let i=0; i < target_list.length; i++){
+        let img_data = target_list[i].attrs.image;
+        console.log(img_data);
+
+        let ext = (img_data.type).replace(/image\//g, '');
+        let filename = shortId.generate();
+        let buf = new Buffer(target_list[i].attrs.image, 'base64' );
+        fs.writeFile(`./public/img/users/development/${filename}.${ext}`, buf, (err) => {
+          if(err) throw err;
+          console.log('saved');
+        });
+        target_list[i].attrs.image = `./img/users/development/${filename}.${ext}`;
+        target_list[i].userID = data.id;
+      }
+    }
+    // for (let i=0; i < canvas_list.length; i++){
+    //   let buf = new Buffer(canvas_list[i].attrs.image, 'base64' );
+    //   fs.writeFile('./public/img/users/development/def.png', buf, (err) => {
+    //     if(err) throw err;
+    //     console.log('saved');
+    //   });
+    //   canvas_list[i].attrs.image = 'img/users/development/abc.jpg';
+    //   canvas_list[i].userID = data.id;
+    // }
+    createFile(image_list);
+    createFile(canvas_list);
+
+    // dbo.collection("development").insertMany(image_list.concat(canvas_list).concat(text_list), (e, r) => {
+    //   if(e) throw e;
+    // });
 
   });
 

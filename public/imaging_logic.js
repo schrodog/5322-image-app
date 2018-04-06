@@ -73,6 +73,7 @@ saveStatus_btn.onclick = () => {
     let json = JSON.parse(i.baseImage.toJSON());
     json.attrs.filters = i.filterMode;
     json.attrs.image = i.baseImage.attrs.image.src;
+    console.log(json.attrs.image.type);
     json.attrs.width = i.baseImage.getWidth();
     json.attrs.height = i.baseImage.getHeight();
     image_list.push(json);
