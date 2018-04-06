@@ -8,10 +8,11 @@ import * as account from './public/account.js';
 import session from 'express-session';
 const MongoStore = require('connect-mongo')(session);
 
-import shortId from 'shortid';
+// import multer from 'multer';
 
 const app = express();
 const httpServer = http.createServer(app);
+// const upload = multer({dest: 'upload/'});
 
 app.use(express.static('./public'));
 app.use(cors({credentials: true, origin: true}));
@@ -40,6 +41,10 @@ app.get('/image_gallery/shared_images', account.loadSharedImages);
 app.post('/image_gallery/like', account.refreshLike);
 
 app.post('/imaging/status', account.saveStatus);
+app.post('/imaging/images', account.uploadImages);
+app.get('/uniqueId', account.getUniqueId);
+app.post('/session/development', account.addSession);
+app.post('/development', account.initDevelopment);
 
 
 app.set('view engine', 'ejs');

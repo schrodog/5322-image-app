@@ -18,14 +18,17 @@ const imageTemplate = imageObj => new Konva.Image({
 
 
 // load picture from url to node
-const loadPicToStage = src => {
+const loadPicToStage = (src,type) => {
   let imageObj = new Image();
   imageObj.src = src;
 
   imageObj.onload = () => {
     let img = imageTemplate(imageObj)
     img.id = img._id;
-    Image_ref.push(new CustomImage(img, STAGE));
+    let ref = new CustomImage(img, STAGE);
+    Image_ref.push(ref);
+    ref.extension = type;
+    console.log('type',type)
   }
 }
 
@@ -36,8 +39,10 @@ const loadPicToStage = src => {
 const handleFiles = () => {
   let files = addPic_btn.files;
   for(let file of files){
+    // console.log('file',file)
+    let type = file.type.replace(/^image\//,'');
     let src = window.URL.createObjectURL(file);
-    loadPicToStage(src);
+    loadPicToStage(src,type);
   }
 }
 

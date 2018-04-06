@@ -1,6 +1,8 @@
 import mongo from 'mongodb';
 import shortId from 'shortid';
 import fs from 'fs';
+import fileSaver from 'file-saver';
+import formidable from 'formidable';
 
 const ObjectID = mongo.ObjectID;
 const MongoClient = mongo.MongoClient;
@@ -46,6 +48,12 @@ exports.createSession = (req, res) => {
   req.session.username = data.username;
   // console.log(data)
   res.send('session set')
+}
+
+exports.addSession = (req,res) => {
+  let data = req.body;
+  req.session[data.fieldName] = data.fieldValue;
+  res.end();
 }
 
 exports.findSession = (req, res) => {
@@ -107,52 +115,51 @@ exports.logout = (req, res) => {
   res.end()
 }
 
+exports.getUniqueId = (req, res) => {
+  let id = shortId.generate();
+  // console.log(id)
+  res.send(id)
+}
+
 
 exports.saveStatus = (req, res) => {
   let [image_list, canvas_list, text_list] = [req.body.image_list, req.body.canvas_list, req.body.text_list];
 
-  console.log(image_list, canvas_list, text_list);
+  console.log('get:',image_list, canvas_list, text_list);
 
   const sid = req.sessionID;
   db_session.collection("sessions").findOne({_id: sid}, (err, result) => {
     let data = JSON.parse(result.session);
-
-
-    const createFile = target_list => {
-      for (let i=0; i < target_list.length; i++){
-        let img_data = target_list[i].attrs.image;
-        console.log(img_data);
-
-        let ext = (img_data.type).replace(/image\//g, '');
-        let filename = shortId.generate();
-        let buf = new Buffer(target_list[i].attrs.image, 'base64' );
-        fs.writeFile(`./public/img/users/development/${filename}.${ext}`, buf, (err) => {
-          if(err) throw err;
-          console.log('saved');
-        });
-        target_list[i].attrs.image = `./img/users/development/${filename}.${ext}`;
-        target_list[i].userID = data.id;
-      }
+    
+    let data_inserted = {
+      'data': image_list.concat(canvas_list).concat(text_list),
+      'userID': sid,
+      'date': new Date()  
     }
-    // for (let i=0; i < canvas_list.length; i++){
-    //   let buf = new Buffer(canvas_list[i].attrs.image, 'base64' );
-    //   fs.writeFile('./public/img/users/development/def.png', buf, (err) => {
-    //     if(err) throw err;
-    //     console.log('saved');
-    //   });
-    //   canvas_list[i].attrs.image = 'img/users/development/abc.jpg';
-    //   canvas_list[i].userID = data.id;
-    // }
-    createFile(image_list);
-    createFile(canvas_list);
 
-    // dbo.collection("development").insertMany(image_list.concat(canvas_list).concat(text_list), (e, r) => {
-    //   if(e) throw e;
-    // });
+    dbo.collection("development").insertOne(data_inserted, (e, r) => {
+      if(e) throw e;
+    });
 
   });
+}
 
 
+exports.uploadImages = (req, res) => {
+  const form = new formidable.IncomingForm();
+  
+  form.uploadDir = 'public/img/users/development';
+  form.on('fileBegin', (fields, file) => {
+    file.path = form.uploadDir+"/"+file.name;
+  });
+  form.parse(req, (err, fields, file) => {
+  })
+}
+
+exports.initDevelopment = (req, res) => {
+  dbo.collection("development").insertOne({}, (e,r) => {
+    res.send(r.insertedId);
+  })
 }
 
 
@@ -160,8 +167,29 @@ exports.saveStatus = (req, res) => {
 
 
 
-
-
+// const createFile = (target_list, ext) => {
+//   for (let i=0; i < target_list.length; i++){
+//     let img_data = target_list[i].attrs.image;
+//     // console.log(img_data);
+//     // let ext = (img_data.type).replace(/image\//g, '');
+//     // let ext = 'jpg';
+//     let filename = shortId.generate();
+//     let buf = new Buffer(target_list[i].attrs.image, 'base64' );
+// 
+//     // console.log(filename, ext);
+//     // 
+//     // fs.writeFile(`./public/img/users/development/${filename}.${ext}`, buf, (err) => {
+//     //   if(err) throw err;
+//     //   console.log('saved');
+//     // });
+// 
+//     // target_list[i].attrs.image = `./img/users/development/${filename}.${ext}`;
+//     // target_list[i].userID = data.id;
+//   }
+// }
+// 
+// createFile(image_list, 'jpg');
+// createFile(canvas_list, 'png');
 
 
 

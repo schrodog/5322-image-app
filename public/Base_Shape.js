@@ -21,6 +21,7 @@ class BaseShape {
     this.group = new Konva.Group();
     this.stage = stage;
     this.crop_ref = null;
+    this.extension = null;
     self = this;
     // this.img_draw = null;
 
