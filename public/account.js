@@ -52,7 +52,7 @@ exports.createSession = (req, res) => {
 
 exports.addSession = (req,res) => {
   let data = req.body;
-  req.session[data.fieldName] = data.fieldValue;
+  req.session.drawboardID = data.fieldValue;
   res.end();
 }
 
@@ -162,6 +162,12 @@ exports.initDevelopment = (req, res) => {
   })
 }
 
+exports.loadDevelopment = (req, res) => {
+  let drawboardID = req.session.drawboardID;
+  dbo.collection("development").findOne({_id: ObjectID(drawboardID)}, (e,r) => {
+    res.send(r);
+  });
+}
 
 
 

@@ -197,11 +197,12 @@ document.getElementById("load-status-btn").onclick = () => {
   STAGE.destroy();
   // STAGE = Konva.Node.create(json, 'container');
   // STAGE.draw();
-
-
-
   // console.log(STAGE);
 }
 
-
+window.onload = () => {
+  $.get('/development', data => {
+    console.log(data);
+  })
+}
 

@@ -109,16 +109,15 @@ const logout_fn = () => {
 window.onload = initLoad;
 
 new_img.onclick = () => {
-  window.location.href='/imaging';
   
-  $.post({
-    
-  })
+  $.post( '/development', data_id => {
+    $.post( '/session/development', 
+      {'fieldValue': data_id }
+    ).done(data => console.log(data))
+  });
+  
+  window.location.href='/imaging';
 
-  $.post({
-    url: '/session/development',
-    data: JSON.stringify({'fieldName': 'drawboardID', 'fieldValue': })
-  })
 } 
 to_gallery.onclick = loadSharedImages;
 to_workspace.onclick = initLoad;

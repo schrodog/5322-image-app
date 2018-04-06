@@ -45,6 +45,7 @@ app.post('/imaging/images', account.uploadImages);
 app.get('/uniqueId', account.getUniqueId);
 app.post('/session/development', account.addSession);
 app.post('/development', account.initDevelopment);
+app.get('/development', account.loadDevelopment);
 
 
 app.set('view engine', 'ejs');
