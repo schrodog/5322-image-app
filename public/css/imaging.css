@@ -134,5 +134,6 @@ button.img_btn img {
   height: 20px;
 }
 
-
-
+.hide {
+  display: none;
+}

@@ -2,6 +2,9 @@
 
 const addPic_btn = document.getElementById("add-pic-btn");
 const deletePic_btn = document.getElementById("delete-pic-btn");
+const moveUp_btn = document.getElementById("move-up-btn");
+const moveDown_btn = document.getElementById("move-down-btn");
+
 
 const rotate_btn = document.getElementById("rotate-btn");
 const crop_btn = document.getElementById("crop-btn");
@@ -49,6 +52,11 @@ const pixelate_range = document.getElementById("pixelate-range");
 const posterize_range = document.getElementById("posterize-range");
 const rotate_range = document.getElementById("rotate-range");
 const alpha_range = document.getElementById("alpha-range");
+
+const normal_group_btn = document.getElementsByClassName("normal-group-btn");
+const image_group_btn = document.getElementsByClassName("image-group-btn");
+const text_group_btn = document.getElementsByClassName("text-group-btn");
+const paint_group_btn = document.getElementsByClassName("paint-group-btn");
 
 
 let Image_ref=[], Text_ref=[], Canvas_ref=[];

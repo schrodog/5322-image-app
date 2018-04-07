@@ -26,6 +26,7 @@ class CustomImage extends BaseShape {
         this.baseImage.cache();
         this.baseImage.draw();
         this.register_listener();
+        this.toggleControlVisibility();
       } else if (shape !== this.baseImage && this.active) {
         this.active = false;
         if(this.anchorGroup){
@@ -36,6 +37,7 @@ class CustomImage extends BaseShape {
         this.baseImage.cache();
         this.stage.draw();
         this.remove_listener();
+        this.toggleControlVisibility();
       }
     });
   }
@@ -71,6 +73,12 @@ class CustomImage extends BaseShape {
   //   }
   // }
 
+  toggleControlVisibility(){
+    for(let i=0; i<image_group_btn.length; i++ ){
+      image_group_btn[i].classList.toggle("hide");
+    }
+  }
+
   // register listener
   register_listener(){
     resize_btn.addEventListener('click', super.buildAllAnchor);
@@ -78,6 +86,8 @@ class CustomImage extends BaseShape {
     crop_btn.addEventListener('click', super.startCrop);
     saveCrop_btn.addEventListener('click', super.saveCrop);
     deletePic_btn.addEventListener('click', super.destroyAll);
+    moveUp_btn.addEventListener('click', super.moveUp);
+    moveDown_btn.addEventListener('click', super.moveDown);
 
     grey_btn.addEventListener('click', super.turnGreyScale);
     color_btn.addEventListener('click', super.turnColorScale);
@@ -106,6 +116,8 @@ class CustomImage extends BaseShape {
     crop_btn.removeEventListener('click', super.startCrop);
     saveCrop_btn.removeEventListener('click', super.saveCrop);
     deletePic_btn.removeEventListener('click', super.destroyAll);
+    moveUp_btn.removeEventListener('click', super.moveUp);
+    moveDown_btn.removeEventListener('click', super.moveDown);
 
     grey_btn.removeEventListener('click', super.turnGreyScale);
     color_btn.removeEventListener('click', super.turnColorScale);

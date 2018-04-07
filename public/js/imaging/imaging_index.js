@@ -46,7 +46,6 @@ const async_loadPicToStage = (src,type) =>
       let ref = new CustomImage(img, STAGE);
       Image_ref.push(ref);
       ref.extension = type;
-      console.log('type',type)
 
       resolve(ref);
     }

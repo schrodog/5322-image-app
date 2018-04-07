@@ -267,6 +267,15 @@ class BaseShape {
     self = val;
   }
 
+  moveUp(){
+    self.layer.moveUp();
+    self.layer.draw();
+  }
+
+  moveDown(){
+    self.layer.moveDown();
+    self.layer.draw();
+  }
 
 // ========= colors =========
 
@@ -369,13 +378,14 @@ class BaseShape {
   }
 
   turnSepia(){
-    this.filterMode = 'sepia';
+    self.filterMode = 'sepia';
     self.baseImage.cache();
     self.baseImage.filters([Konva.Filters.Sepia]);
     self.baseImage.draw();
   }
   turnSolarize(){
-    this.filterMode = 'solarize';
+    self.filterMode = 'solarize';
+    console.log(self.filterMode);
     self.baseImage.cache();
     self.baseImage.filters([Konva.Filters.Solarize]);
     self.baseImage.draw()

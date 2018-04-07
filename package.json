@@ -24,8 +24,10 @@
     "gridfs-stream": "^1.1.1",
     "http": "0.0.0",
     "modernizr": "^3.6.0",
+    "moment-timezone": "^0.5.14",
     "mongodb": "^3.0.5",
     "multer": "^1.3.0",
+    "path": "^0.12.7",
     "shortid": "^2.2.8"
   }
 }

@@ -13,7 +13,6 @@ class Paint extends BaseShape {
     if (src !== '') this.img_draw = src;
 
 
-    // this.baseImage.cache();
     this.stage.draw();
 
     this.manageListener();
@@ -67,7 +66,6 @@ class Paint extends BaseShape {
         // this.baseImage.draw();
         super.changeSelf(this);
         this.initPaint();
-
       }
 
       else if (shape !== this.baseImage && this.active) {
@@ -76,13 +74,16 @@ class Paint extends BaseShape {
           this.canvas_saveResize()
         }
         this.baseImage.strokeWidth(0);
-        // console.log('paint leave');
         this.baseImage.draggable(true);
-        // this.baseImage.cache();
-        // this.stage.draw();
         this.savePaint();
       }
     });
+  }
+
+  toggleControlVisibility(){
+    for(let i=0; i<paint_group_btn.length; i++ ){
+      paint_group_btn[i].classList.toggle("hide");
+    }
   }
 
   initPaint(){
@@ -212,24 +213,9 @@ class Paint extends BaseShape {
       if(canvas) canvas.destroy();
       // self.layer.cache();
       self.layer.draw();
-
-      console.log(self.layer);
-
       self.remove_listener();
     }
 
-    // $.ajax({
-    //   type: 'post',
-    //   url: 'http://localhost:8001',
-    //   data: {image},
-    //   crossDomain: true,
-    //   success: (data, txt, jqxhr) => {
-    //     // console.log('sent to server', data);
-    //     ref.appendDrawing(data)
-    //   }
-    // }).fail((xhr, status, error) => {
-    //   console.error(error);
-    // });
   }
 
   clearPaint(){
@@ -242,20 +228,44 @@ class Paint extends BaseShape {
     this.remove_listener();
   }
 
-  canvas_saveResize(){
-    self.anchorGroup.destroy();
+  saveProcess(){
+    self.active = false;
+    self.baseImage.strokeWidth(0);
+    self.baseImage.draggable(true);
+    self.savePaint();
+    self.toggleControlVisibility();
+  }
 
-    console.log(self.canvas, self.baseImage);
-    self.layer.draw();
-    // self.savePaint()
-    // self.baseImage.off('dragmove');
+  canvas_saveResize(){
+    super.saveResize();
+    self.saveProcess();
+  }
+
+  canvas_buildAllAnchor(){
+    super.buildAllAnchor();
+
+    self.stage.off('contentMouseup.proto');
+    self.stage.off('contentMousemove.proto');
+    self.stage.off('contentMousedown.proto');
+  }
+
+  moveUp(){
+    self.layer.moveUp();
+    self.saveProcess();
+  }
+
+  moveDown(){
+    self.layer.moveDown();
+    self.saveProcess();
   }
 
 
   register_listener(){
-    resize_btn.addEventListener('click', super.buildAllAnchor);
+    resize_btn.addEventListener('click', this.canvas_buildAllAnchor);
     saveResize_btn.addEventListener('click', this.canvas_saveResize);
     deletePic_btn.addEventListener('click', super.destroyAll);
+    moveUp_btn.addEventListener('click', this.moveUp);
+    moveDown_btn.addEventListener('click', this.moveDown);
 
     clearPaint_btn.addEventListener("click", this.clearPaint );
     savePaint_btn.addEventListener("click", this.savePaint );
@@ -264,13 +274,15 @@ class Paint extends BaseShape {
     color_picker.addEventListener('mouseup', this.switchColor);
     opacity_range.addEventListener('input', this.switchOpacity );
 
+    this.toggleControlVisibility();
   }
 
   remove_listener(){
-    resize_btn.removeEventListener('click', super.buildAllAnchor);
+    resize_btn.removeEventListener('click', this.canvas_buildAllAnchor);
     saveResize_btn.removeEventListener('click', this.canvas_saveResize);
     deletePic_btn.removeEventListener('click', super.destroyAll);
-
+    moveUp_btn.removeEventListener('click', this.moveUp);
+    moveDown_btn.removeEventListener('click', this.moveDown);
 
     clearPaint_btn.removeEventListener("click", this.clearPaint );
     savePaint_btn.removeEventListener("click", this.savePaint );
@@ -278,11 +290,9 @@ class Paint extends BaseShape {
     penWidth_range.removeEventListener('input', this.switchLineWidth);
     color_picker.removeEventListener('mouseup', this.switchColor);
     opacity_range.removeEventListener('input', this.switchOpacity );
-  }
 
-  // exportJSON(){
-  //   return {'id': this.baseImage._id, 'image': this.baseImage.attrs.image};
-  // }
+    this.toggleControlVisibility();
+  }
 
 }
 

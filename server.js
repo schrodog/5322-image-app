@@ -44,7 +44,8 @@ app.get('/uniqueId', account.getUniqueId);
 app.post('/session/development', account.addSession);
 app.post('/development', account.initDevelopment);
 app.get('/development', account.loadDevelopment);
-
+app.delete('/development', account.clearDevelopment);
+app.get('/image_gallery/work', account.getWork);
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');

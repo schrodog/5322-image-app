@@ -1,11 +1,13 @@
 'use strict';
 
 const img_container = document.getElementById("img-container");
+const workspace_container = document.getElementById("workspace-container");
 const new_img = document.getElementById("new-image");
 const to_gallery = document.getElementById("to-gallery");
 const to_workspace = document.getElementById("to-workspace");
 const title = document.getElementById("title");
 const logout = document.getElementById("logout");
+const workspace_items = document.getElementsByClassName("sub-work-container");
 let userID = "";
 
 const refreshLike = (container, picID) => {
@@ -56,6 +58,24 @@ const format = (i,flag) => {
   img_container.insertAdjacentHTML('beforeend',html);
 }
 
+const goToEdit = (item) => {
+  let id = item.getAttribute('data-id');
+  $.ajax({
+    url: '/session/development',
+    data: JSON.stringify({'fieldValue': id }),
+    contentType: 'application/json',
+    method: 'POST'
+  }).done(data => window.location.href = '/imaging' );
+}
+
+const workspace_format = (i) => {
+  let html = `<div><div class="sub-work-container" data-id='${i._id}' onclick='goToEdit(this)'>
+    <img class='work-img' src='${i.screenshot}'>
+    <p>last modified: ${i.date}</p>
+    </div></div>`;
+  workspace_container.insertAdjacentHTML('beforeend', html);
+}
+
 const loadOwnImages = (id) => {
   $.ajax({
     url: `/image_gallery/images/${id}`,
@@ -79,7 +99,14 @@ const initLoad = () => {
     userID = data.userID;
     loadOwnImages(data.userID);
     document.getElementById("username").innerHTML = user;
-  })
+  });
+
+  $.get('/image_gallery/work').done(data => {
+    console.log('work',data);
+    data.forEach( i => workspace_format(i));
+  });
+
+
 };
 
 const loadSharedImages = () => {
@@ -126,6 +153,8 @@ new_img.onclick = () => {
 to_gallery.onclick = loadSharedImages;
 to_workspace.onclick = initLoad;
 logout.onclick = logout_fn;
+
+console.log(workspace_items);
 
 
 

@@ -2,6 +2,8 @@ import mongo from 'mongodb';
 import shortId from 'shortid';
 import fs from 'fs';
 import formidable from 'formidable';
+import path from 'path';
+import moment from 'moment-timezone';
 
 const ObjectID = mongo.ObjectID;
 const MongoClient = mongo.MongoClient;
@@ -54,7 +56,7 @@ exports.createSession = (req, res) => {
 // momorize which drawboard user loads
 exports.addSession = (req,res) => {
   let data = req.body;
-  console.log(data);
+  // console.log(data);
   req.session.drawboardID = data.fieldValue;
   res.end();
 }
@@ -130,7 +132,7 @@ exports.getUniqueId = (req, res) => {
 exports.saveStatus = (req, res) => {
   let [image_list, canvas_list, text_list] = [req.body.image_list, req.body.canvas_list, req.body.text_list];
 
-  console.log('get:',image_list, canvas_list, text_list);
+  // console.log('get:',image_list, canvas_list, text_list);
 
   const sid = req.sessionID;
   const drawboardID = req.session.drawboardID;
@@ -138,10 +140,12 @@ exports.saveStatus = (req, res) => {
   db_session.collection("sessions").findOne({_id: sid}, (err, result) => {
     let data = JSON.parse(result.session);
 
+    let datetime = new Date();
     let data_inserted = {
       'data': image_list.concat(canvas_list).concat(text_list),
-      'userID': sid,
-      'date': new Date()
+      'userID': req.session.userID,
+      'date': moment.utc(datetime).local().format('DD MMMM YYYY H:mm:ss'),
+      'screenshot': req.body.screenshot
     };
 
     dbo.collection("development").updateOne({_id: ObjectID(drawboardID)}, {$set: data_inserted}, (e, r) => {
@@ -176,8 +180,33 @@ exports.loadDevelopment = (req, res) => {
   });
 }
 
+exports.clearDevelopment = (req, res) => {
+  let drawboardID = req.session.drawboardID;
+  dbo.collection("development").findOne({_id: ObjectID(drawboardID)}, (e,r) => {
 
+    console.log('del',r);
+    if(r.data){
+      for(let i=0; i<r.data.length; i++){
+        let file = r.data[i].attrs.image;
+        let url = path.join(__dirname  , `../${file}`);
+        if(fs.existsSync(url)){
+          console.log('no',url);
+          fs.unlink( url, (err) => {if(err) throw err});
+        }
+      }
+    }
 
+    res.end();
+  });
+}
+
+exports.getWork = (req, res) => {
+  dbo.collection("development").find({userID: req.session.userID}).toArray( (e,r) => {
+    if(e) throw e;
+    console.log('getwork',r);
+    res.send(r);
+  });
+}
 
 
 // const createFile = (target_list, ext) => {

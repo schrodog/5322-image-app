@@ -57,6 +57,8 @@ class CustomText {
       document.body.removeChild(textarea);
       textarea = null;
     }
+    const moveUp = () => this.layer.moveUp();
+    const moveDown = () => this.layer.moveDown();
 
     this.stage.on('click', (evt) => {
       let shape = evt.target;
@@ -117,6 +119,10 @@ class CustomText {
         fontFamily_select.onchange = change_font_family;
         opacity_range.oninput = change_font_alpha;
         deletePic_btn.addEventListener('click', deleteText);
+        moveUp_btn.addEventListener('click', moveUp);
+        moveDown_btn.addEventListener('click', moveDown);
+
+        this.toggleControlVisibility();
 
       } else if (shape !== this.textTemplate && this.active) {
         this.active = false;
@@ -157,6 +163,12 @@ class CustomText {
         opacity_range.removeEventListener("input", change_font_alpha );
         deletePic_btn.removeEventListener("click", deleteText );
 
+
+        moveUp_btn.removeEventListener('click', moveUp);
+        moveDown_btn.removeEventListener('click', moveDown);
+
+        this.toggleControlVisibility();
+
         this.stage.draw();
       }
 
@@ -164,9 +176,10 @@ class CustomText {
 
   }
 
-  listenEditing(){
-    // this.textTemplate.on('dblclick', () => this.editText());
-
+  toggleControlVisibility(){
+    for(let i=0; i<text_group_btn.length; i++ ){
+      text_group_btn[i].classList.toggle("hide");
+    }
   }
 
 }
