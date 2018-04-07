@@ -4,11 +4,9 @@ import http from 'http';
 import util from 'util';
 import cors from 'cors';
 import mongo from 'mongodb';
-import * as account from './public/account.js';
+import * as account from './public/js/account.js';
 import session from 'express-session';
 const MongoStore = require('connect-mongo')(session);
-
-// import multer from 'multer';
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -27,7 +25,7 @@ app.use(session({
 
 
 // app.get('/email', account.findAll);
-app.get('/account', account.findAll);
+// app.get('/account', account.findAll);
 // log in
 app.get('/account/:email', account.findByEmail );
 // sign up

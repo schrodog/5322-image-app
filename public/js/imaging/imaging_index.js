@@ -29,6 +29,8 @@ const loadPicToStage = (src,type) => {
     Image_ref.push(ref);
     ref.extension = type;
     console.log('type',type)
+
+    return ref;
   }
 }
 

@@ -1,7 +1,6 @@
 import mongo from 'mongodb';
 import shortId from 'shortid';
 import fs from 'fs';
-import fileSaver from 'file-saver';
 import formidable from 'formidable';
 
 const ObjectID = mongo.ObjectID;
@@ -15,16 +14,17 @@ MongoClient.connect(url, (err,db) => {
   db_session = db.db("sessiondb");
 });
 
-exports.findAll = (req, res) => {
-  dbo.collection("account").find({}).project({email: 1, _id:0}).toArray( (err,result) => {
-    if(err) throw err;
-    // res.setHeader('Access-Control-Allow-Origin', '*');
-    // res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.send(result);
-  });
-}
+// exports.findAll = (req, res) => {
+//   dbo.collection("account").find({}).project({email: 1, _id:0}).toArray( (err,result) => {
+//     if(err) throw err;
+//     // res.setHeader('Access-Control-Allow-Origin', '*');
+//     // res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//     // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//     res.send(result);
+//   });
+// }
 
+// login authentication
 exports.findByEmail = (req, res) => {
   let email = req.params.email; // can be username or email
   dbo.collection("account").findOne( {$or: [{email: email}, {username: email}] } , (err, result) => {
@@ -42,6 +42,7 @@ exports.createAccount = (req, res) => {
   });
 }
 
+// when login, register userid, username
 exports.createSession = (req, res) => {
   let data = req.body;
   req.session.userID = data.userID;
@@ -50,12 +51,15 @@ exports.createSession = (req, res) => {
   res.send('session set')
 }
 
+// momorize which drawboard user loads
 exports.addSession = (req,res) => {
   let data = req.body;
+  console.log(data);
   req.session.drawboardID = data.fieldValue;
   res.end();
 }
 
+// return user ID
 exports.findSession = (req, res) => {
   const sid = req.sessionID;
   db_session.collection("sessions").findOne({_id: sid}, (err, result) => {
@@ -89,6 +93,7 @@ exports.shareImage = (req, res) => {
   });
 }
 
+// refresh like in image gallery
 exports.refreshLike = (req, res) => {
   let data = req.body;
   let id = new ObjectID(data.picID);
@@ -128,16 +133,18 @@ exports.saveStatus = (req, res) => {
   console.log('get:',image_list, canvas_list, text_list);
 
   const sid = req.sessionID;
+  const drawboardID = req.session.drawboardID;
+
   db_session.collection("sessions").findOne({_id: sid}, (err, result) => {
     let data = JSON.parse(result.session);
-    
+
     let data_inserted = {
       'data': image_list.concat(canvas_list).concat(text_list),
       'userID': sid,
-      'date': new Date()  
-    }
+      'date': new Date()
+    };
 
-    dbo.collection("development").insertOne(data_inserted, (e, r) => {
+    dbo.collection("development").updateOne({_id: ObjectID(drawboardID)}, {$set: data_inserted}, (e, r) => {
       if(e) throw e;
     });
 
@@ -147,7 +154,7 @@ exports.saveStatus = (req, res) => {
 
 exports.uploadImages = (req, res) => {
   const form = new formidable.IncomingForm();
-  
+
   form.uploadDir = 'public/img/users/development';
   form.on('fileBegin', (fields, file) => {
     file.path = form.uploadDir+"/"+file.name;
@@ -181,19 +188,19 @@ exports.loadDevelopment = (req, res) => {
 //     // let ext = 'jpg';
 //     let filename = shortId.generate();
 //     let buf = new Buffer(target_list[i].attrs.image, 'base64' );
-// 
+//
 //     // console.log(filename, ext);
-//     // 
+//     //
 //     // fs.writeFile(`./public/img/users/development/${filename}.${ext}`, buf, (err) => {
 //     //   if(err) throw err;
 //     //   console.log('saved');
 //     // });
-// 
+//
 //     // target_list[i].attrs.image = `./img/users/development/${filename}.${ext}`;
 //     // target_list[i].userID = data.id;
 //   }
 // }
-// 
+//
 // createFile(image_list, 'jpg');
 // createFile(canvas_list, 'png');
 

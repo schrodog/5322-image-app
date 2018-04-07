@@ -109,16 +109,20 @@ const logout_fn = () => {
 window.onload = initLoad;
 
 new_img.onclick = () => {
-  
+
   $.post( '/development', data_id => {
-    $.post( '/session/development', 
-      {'fieldValue': data_id }
-    ).done(data => console.log(data))
+    console.log('data_id',data_id);
+    $.ajax({
+      url: '/session/development',
+      data: JSON.stringify({'fieldValue': data_id }),
+      contentType: 'application/json',
+      method: 'POST'
+    }).done(data => console.log(data))
   });
-  
+
   window.location.href='/imaging';
 
-} 
+}
 to_gallery.onclick = loadSharedImages;
 to_workspace.onclick = initLoad;
 logout.onclick = logout_fn;

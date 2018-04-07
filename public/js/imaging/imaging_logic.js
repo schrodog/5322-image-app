@@ -68,7 +68,7 @@ const processJSON = (data) => {
 saveStatus_btn.onclick = () => {
 
   let image_list=[], text_list=[], canvas_list=[], base64_data;
-  
+
   const getUniqueId = () => new Promise((resolve,rej) => {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/uniqueId');
@@ -80,9 +80,9 @@ saveStatus_btn.onclick = () => {
     }
     xhr.send();
   });
-  
+
   const uploadImage = (object_url, path) => {
-      
+
       let xhr = new XMLHttpRequest();
       xhr.open('GET', object_url, true);
       xhr.responseType = 'arraybuffer';
@@ -95,7 +95,7 @@ saveStatus_btn.onclick = () => {
             binaryString[i] = String.fromCharCode(uint8array[i]);
           }
           let byteChars = binaryString.join('');
-          
+
           let byteArrays = [];
           let sliceSize = 1024;
 
@@ -108,16 +108,15 @@ saveStatus_btn.onclick = () => {
               let byteArray = new Uint8Array(byteNumbers);
               byteArrays.push(byteArray);
           }
-          
+
           // base64_data = window.btoa(data);
           // document.getElementById("myImage").src = "data:image/png;base64,"+base64_data;
           let blob = new Blob(byteArrays);
-          
+
           let formData = new FormData();
-          console.log('type:',blob.type)
           formData.append('ImageFileField', blob, path);
           // console.log(blob)
-          
+
           $.ajax({
             url: '/imaging/images',
             data: formData,
@@ -126,24 +125,24 @@ saveStatus_btn.onclick = () => {
             contentType: false,
             processData: false
           }).done((e) => console.log('done'));
-          
+
         }
       }
       xhr.send();
-      
+
   };
-    
+
   (async function(){
     for(let i of Text_ref){
       let json = JSON.parse(i.textTemplate.toJSON());
       text_list.push(json);
     }
-    
+
     for(let i of Canvas_ref){
       let json = JSON.parse(i.baseImage.toJSON());
       let url = i.canvas.toDataURL('image/png');
       let base64_data = url.replace(/^data:([A-Za-z-+\/]+);base64,/g, '');
-      
+
       let id = await getUniqueId();
       json.attrs.image = `img/users/development/${id}.png`;
       json.attrs.width = i.baseImage.getWidth();
@@ -154,41 +153,41 @@ saveStatus_btn.onclick = () => {
         url: '/imaging/images',
         data: {'data': base64_data, 'path': `img/users/development/${id}.png`}
       }).done(data => {})
-      
+
     }
-    
-    
+
+
     for(let i of Image_ref){
-      
+
       let json = JSON.parse(i.baseImage.toJSON());
-      
+
       json.attrs.filters = i.filterMode;
       json.attrs.width = i.baseImage.getWidth();
       json.attrs.height = i.baseImage.getHeight();
-      
+
       let id = await getUniqueId();
       let ext = i.extension;
       // console.log('hi', json, id)
       json.attrs.image = `img/users/development/${id}.${ext}`;
-      
+
       let object_url = i.baseImage.attrs.image.src;
       image_list.push(json);
       console.log('id',id)
-      
+
       uploadImage(object_url, `${id}.${ext}`);
     }
-    
+
     // console.log(image_list);
     // console.log(canvas_list);
     // console.log(text_list);
-    
+
     $.ajax({
       url: '/imaging/status',
       data: JSON.stringify({'image_list': image_list, 'canvas_list': canvas_list, 'text_list': text_list}),
       contentType: 'application/json',
       method: 'POST'
     }).done(data => {});
-    
+
   })();
 
 }
@@ -198,11 +197,48 @@ document.getElementById("load-status-btn").onclick = () => {
   // STAGE = Konva.Node.create(json, 'container');
   // STAGE.draw();
   // console.log(STAGE);
+  let json =
+  {
+    "_id": ObjectId("5ac7953f659227597cd24399"),
+    "data": [{
+      "attrs": {
+        "x": 178,
+        "y": 106,
+        "draggable": true,
+        "filters": "invert",
+        "noise": 0,
+        "pixelSize": 0.001,
+        "levels": 1,
+        "shadowBlur": 0,
+        "width": 593,
+        "height": 427,
+        "image": "img/users/development/S1gwHGSjM.png"
+      },
+      "className": "Image"
+    }],
+    "date": ISODate("2018-04-06T15:42:15.801Z"),
+    "userID": "WF1NhlpIaWp_W9L4Qq3SS8B9e9owil-w"
+  };
+
+  if(json.data.className === "Image"){
+    let src = json.data.image;
+    let ref = loadPicToStage(src, src.match(/[0-9a-z]+$/i)[0]);
+    let attr = JSON.parse(JSON.stringify(json.data.attrs));
+    delete attr.filters;
+    delete attr.image;
+
+    let filter = json.data.attrs.filters;
+    ref.baseImage.setAttrs(attr);
+  }
+
+
 }
 
 window.onload = () => {
   $.get('/development', data => {
-    console.log(data);
+    // console.log('all',data);
+
+
   })
 }
 
