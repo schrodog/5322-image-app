@@ -81,7 +81,7 @@ class CustomImage extends BaseShape {
 
     grey_btn.addEventListener('click', super.turnGreyScale);
     color_btn.addEventListener('click', super.turnColorScale);
-    invert_btn.addEventListener('click', super.invert);
+    invert_btn.addEventListener('click', super.turnInvert);
     mask_btn.addEventListener('click', super.turnMaskScale);
     sepia_btn.addEventListener('click', super.turnSepia);
     solarize_btn.addEventListener('click', super.turnSolarize);
@@ -102,14 +102,14 @@ class CustomImage extends BaseShape {
 
   remove_listener(){
     resize_btn.removeEventListener('click', super.buildAllAnchor);
-    saveCrop_btn.removeEventListener('click', super.saveCrop);
+    saveResize_btn.removeEventListener('click', super.saveResize);
     crop_btn.removeEventListener('click', super.startCrop);
     saveCrop_btn.removeEventListener('click', super.saveCrop);
     deletePic_btn.removeEventListener('click', super.destroyAll);
 
     grey_btn.removeEventListener('click', super.turnGreyScale);
     color_btn.removeEventListener('click', super.turnColorScale);
-    invert_btn.removeEventListener('click', super.invert)
+    invert_btn.removeEventListener('click', super.turnInvert)
     mask_btn.removeEventListener('click', super.turnMaskScale)
     sepia_btn.removeEventListener('click', super.turnSepia)
     solarize_btn.removeEventListener('click', super.turnSolarize)

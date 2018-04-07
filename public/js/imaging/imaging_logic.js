@@ -139,25 +139,55 @@ saveStatus_btn.onclick = () => {
     }
 
     for(let i of Canvas_ref){
+      if(i.destroyFlag) continue;
+
       let json = JSON.parse(i.baseImage.toJSON());
       let url = i.canvas.toDataURL('image/png');
-      let base64_data = url.replace(/^data:([A-Za-z-+\/]+);base64,/g, '');
+      let byteChars = url.replace(/^data:([A-Za-z-+\/]+);base64,/g, '');
+      byteChars = atob(byteChars)
 
       let id = await getUniqueId();
-      json.attrs.image = `img/users/development/${id}.png`;
+      let path = `img/users/development/${id}.png`
+      json.attrs.image = path;
       json.attrs.width = i.baseImage.getWidth();
       json.attrs.height = i.baseImage.getHeight();
+      json.className = 'Canvas';
       canvas_list.push(json);
 
-      $.post({
+      // convert from base64 to blob
+      let byteArrays = [];
+      let sliceSize = 1024;
+
+      for (let offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+          let slice = byteChars.slice(offset, offset + sliceSize);
+          let byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+              byteNumbers[i] = slice.charCodeAt(i);
+          }
+          let byteArray = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+      }
+
+      let blob = new Blob(byteArrays);
+      // console.log(byteChars);
+      // console.log(blob);
+      let formData = new FormData();
+      formData.append('ImageFileField', blob, `${id}.png`);
+
+      $.ajax({
         url: '/imaging/images',
-        data: {'data': base64_data, 'path': `img/users/development/${id}.png`}
-      }).done(data => {})
+        data: formData,
+        type: 'POST',
+        cache: false,
+        contentType: false,
+        processData: false
+      }).done((e) => console.log('done'));
 
     }
 
 
     for(let i of Image_ref){
+      if(i.destroyFlag) continue;
 
       let json = JSON.parse(i.baseImage.toJSON());
 
@@ -193,42 +223,73 @@ saveStatus_btn.onclick = () => {
 }
 
 document.getElementById("load-status-btn").onclick = () => {
-  STAGE.destroy();
+  STAGE.clear();
   // STAGE = Konva.Node.create(json, 'container');
   // STAGE.draw();
   // console.log(STAGE);
   let json =
   {
-    "_id": ObjectId("5ac7953f659227597cd24399"),
     "data": [{
       "attrs": {
-        "x": 178,
-        "y": 106,
+        "x": 10,
+        "y": 10,
         "draggable": true,
-        "filters": "invert",
-        "noise": 0,
-        "pixelSize": 0.001,
-        "levels": 1,
-        "shadowBlur": 0,
-        "width": 593,
-        "height": 427,
-        "image": "img/users/development/S1gwHGSjM.png"
+        "name": "img-draw",
+        "image": "img/users/development/rJDk2hroz.png",
+        "width": 350,
+        "height": 250
       },
-      "className": "Image"
+      "className": "Canvas"
     }],
-    "date": ISODate("2018-04-06T15:42:15.801Z"),
     "userID": "WF1NhlpIaWp_W9L4Qq3SS8B9e9owil-w"
-  };
+  }
 
-  if(json.data.className === "Image"){
-    let src = json.data.image;
-    let ref = loadPicToStage(src, src.match(/[0-9a-z]+$/i)[0]);
-    let attr = JSON.parse(JSON.stringify(json.data.attrs));
-    delete attr.filters;
-    delete attr.image;
+  // resume class instances
+  for (let i=0; i<json.data.length; i++){
 
-    let filter = json.data.attrs.filters;
-    ref.baseImage.setAttrs(attr);
+    (async function(){
+    if(json.data[i].className === "Image"){
+      let src = json.data[i].attrs.image;
+
+      let ref = await async_loadPicToStage(src, src.match(/[0-9a-z]+$/i)[0]);
+
+      let attr = JSON.parse(JSON.stringify(json.data[i].attrs));
+      delete attr.filters;
+      delete attr.image;
+
+      const applyFilter = filter => ({
+        'color': ref.turnColorScale,
+        'invert': ref.turnInvert,
+        'mask': ref.turnMaskScale,
+        'solarize': ref.turnSolarize,
+        'sepia': ref.turnSepia,
+        'grey': ref.turnGreyScale
+      }[filter] || ref.turnColorScale )();
+
+      applyFilter(json.data[i].attrs.filters);
+      ref.baseImage.setAttrs(attr);
+      console.log(i,attr,src);
+
+      // STAGE.cache();
+      ref.baseImage.cache();
+      ref.baseImage.draw();
+      STAGE.draw()
+
+    } else if (json.data[i].className === "Canvas"){
+
+      let src = json.data[i].attrs.image;
+      let attr_data = json.data[i].attrs;
+      let ref = await async_initDrawing(src, attr_data.width, attr_data.height);
+
+      let attr = JSON.parse(JSON.stringify(attr_data));
+      delete attr.filters;
+      delete attr.image;
+
+      ref.baseImage.setAttrs(attr);
+
+    }
+
+  })();
   }
 
 

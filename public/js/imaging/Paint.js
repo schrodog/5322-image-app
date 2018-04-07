@@ -1,7 +1,7 @@
 'use strict';
 
 class Paint extends BaseShape {
-  constructor(canvas, targetImage, stage){
+  constructor(canvas, targetImage, stage, src=''){
     super(targetImage, stage);
 
     this.stage.add(super.buildPicture());
@@ -10,7 +10,11 @@ class Paint extends BaseShape {
     this.context = this.canvas.getContext('2d');
     // console.log(this.context);
     this.active = false;
-    this.img_draw = null;
+    if (src !== '') this.img_draw = src;
+
+
+    // this.baseImage.cache();
+    this.stage.draw();
 
     this.manageListener();
   }
@@ -64,12 +68,13 @@ class Paint extends BaseShape {
         super.changeSelf(this);
         this.initPaint();
 
-      } else if (shape !== this.baseImage && this.active) {
+      }
+
+      else if (shape !== this.baseImage && this.active) {
         this.active = false;
         if(this.anchorGroup){
-          super.saveResize()
+          this.canvas_saveResize()
         }
-        // this.baseImage.shadowBlur(0);
         this.baseImage.strokeWidth(0);
         // console.log('paint leave');
         this.baseImage.draggable(true);
@@ -80,7 +85,6 @@ class Paint extends BaseShape {
     });
   }
 
-
   initPaint(){
     // set tool style
     let drawing_tool = paintTool_select.value;
@@ -90,13 +94,17 @@ class Paint extends BaseShape {
     let mode = paintTool_select.value;
     this.chooseTool(mode);
 
-    // replce image with canvas
+    // if there is old drawing, replce image with canvas
     if(this.img_draw){
       let photo = new Image();
       photo.src = this.img_draw;
       photo.onload = () => this.context.drawImage(photo, 0, 0, this.baseImage.getWidth(), this.baseImage.getHeight());
-      this.baseImage.destroy();
-      // this.baseImage =
+      this.baseImage.setAttrs({
+        image: this.canvas,
+        stroke: 'green',
+        strokeWidth: 1,
+      });
+      this.baseImage.draw()
     }
 
 
@@ -154,43 +162,61 @@ class Paint extends BaseShape {
     this.register_listener();
   }
 
-  savePaint(ref){
+  savePaint(){
     self.stage.off('contentMouseup.proto');
     self.stage.off('contentMousemove.proto');
     self.stage.off('contentMousedown.proto');
 
     // let image = self.canvas.toDataURL('image/png').replace(/^data:image\/\w+;base64,/, '');
     let src = self.canvas.toDataURL('image/png');
-    self.img_draw = src;
 
-    const imageObj = new Image();
-    imageObj.src = src;
+    // create off-screen canvas
+    let canvas_off = document.createElement('canvas'), ctx = canvas_off.getContext('2d');
+    let new_width = self.baseImage.getWidth(), new_height = self.baseImage.getHeight();
+    canvas_off.width = new_width; canvas_off.height = new_height;
+    let new_img = new Image();
+    new_img.src = src;
+    new_img.onload = () => {
 
-    // console.log(self.img_draw);
+      ctx.drawImage(new_img, 0,0, new_width, new_height);
 
-    imageObj.onload = () => {
-      const img = new Konva.Image({
-        x: self.baseImage.getX(),
-        y: self.baseImage.getY(),
-        image: imageObj,
-        draggable: true,
-        name: 'img-draw'
-      });
-      self.baseImage.destroy();
-      self.layer.add(img);
-      self.baseImage = img;
+      console.log(src);
+      src = canvas_off.toDataURL('image/png');
+      console.log(src);
+      self.img_draw = src;
+
+      self.canvas.width = self.baseImage.getWidth();
+      self.canvas.height = self.baseImage.getHeight();
+
+      const imageObj = new Image();
+      imageObj.src = src;
+
+      // console.log(self.img_draw);
+
+      imageObj.onload = () => {
+        const img = new Konva.Image({
+          x: self.baseImage.getX(),
+          y: self.baseImage.getY(),
+          image: imageObj,
+          draggable: true,
+          name: 'img-draw'
+        });
+        self.baseImage.destroy();
+        self.layer.add(img);
+        self.baseImage = img;
+        self.layer.draw();
+      }
+
+
+      let canvas = self.layer.find(".canvas");
+      if(canvas) canvas.destroy();
+      // self.layer.cache();
       self.layer.draw();
+
+      console.log(self.layer);
+
+      self.remove_listener();
     }
-
-
-    let canvas = self.layer.find(".canvas");
-    if(canvas) canvas.destroy();
-    // self.layer.cache();
-    self.layer.draw();
-
-    console.log(self.layer);
-
-    self.remove_listener();
 
     // $.ajax({
     //   type: 'post',
@@ -216,16 +242,36 @@ class Paint extends BaseShape {
     this.remove_listener();
   }
 
+  canvas_saveResize(){
+    self.anchorGroup.destroy();
+
+    console.log(self.canvas, self.baseImage);
+    self.layer.draw();
+    // self.savePaint()
+    // self.baseImage.off('dragmove');
+  }
+
+
   register_listener(){
+    resize_btn.addEventListener('click', super.buildAllAnchor);
+    saveResize_btn.addEventListener('click', this.canvas_saveResize);
+    deletePic_btn.addEventListener('click', super.destroyAll);
+
     clearPaint_btn.addEventListener("click", this.clearPaint );
     savePaint_btn.addEventListener("click", this.savePaint );
     paintTool_select.addEventListener('change', this.switchTool);
     penWidth_range.addEventListener('input', this.switchLineWidth);
     color_picker.addEventListener('mouseup', this.switchColor);
     opacity_range.addEventListener('input', this.switchOpacity );
+
   }
 
   remove_listener(){
+    resize_btn.removeEventListener('click', super.buildAllAnchor);
+    saveResize_btn.removeEventListener('click', this.canvas_saveResize);
+    deletePic_btn.removeEventListener('click', super.destroyAll);
+
+
     clearPaint_btn.removeEventListener("click", this.clearPaint );
     savePaint_btn.removeEventListener("click", this.savePaint );
     paintTool_select.removeEventListener('change', this.switchTool);

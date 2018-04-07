@@ -22,6 +22,7 @@ class BaseShape {
     this.stage = stage;
     this.crop_ref = null;
     this.extension = null;
+    this.destroyFlag = false;
     self = this;
     // this.img_draw = null;
 
@@ -241,6 +242,8 @@ class BaseShape {
     self.layer.destroy();
     self.anchorGroup.destroy();
     self.stage.draw();
+
+    self.destroyFlag = true;
     // self.stage.off('click');
 
     // console.log(self.stage);
@@ -253,55 +256,12 @@ class BaseShape {
     // self.baseImage.off('dragmove');
   }
 
+
   rotate(){
     self.layer.cache();
     self.baseImage.rotation(rotate_range.value)
     self.layer.draw();
   }
-
-  // === drawing===
-
-  // clearPaint(flag){
-  //   let canvas = this.group.find(".canvas");
-  //   if(canvas) canvas.destroy();
-  //   if(flag){
-  //     let img_draw = this.group.find(".img-draw");
-  //     img_draw.destroy();
-  //     this.img_draw = undefined;
-  //   }
-  //
-  //   this.layer.draw();
-  // }
-
-  // stopPaint(ref){
-  //   this.canvas_img.stopPaint(ref);
-  // }
-
-  // add free hand drawing to group
-  // appendDrawing(src){
-  //   this.clearPaint();
-  //
-  //   const imageObj = new Image();
-  //   imageObj.src = src;
-  //   this.img_draw = src;
-  //
-  //   imageObj.onload = () => {
-  //     const img = new Konva.Image({
-  //       x: this.baseImage.getX(),
-  //       y: this.baseImage.getY(),
-  //       image: imageObj,
-  //       draggable: false,
-  //       name: 'img-draw'
-  //     });
-  //     this.group.add(img);
-  //     this.layer.draw();
-  //   }
-  // }
-
-  // addImg(img){
-  //   this.group.add(img);
-  //   img.draw()
-  // }
 
   changeSelf(val){
     self = val;
@@ -365,7 +325,7 @@ class BaseShape {
     }
   }
 
-  invert(){
+  turnInvert(){
     self.filterMode = 'invert';
     self.baseImage.cache();
     self.baseImage.filters([Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Blur, Konva.Filters.HSL, Konva.Filters.Invert]);
@@ -409,6 +369,7 @@ class BaseShape {
   }
 
   turnSepia(){
+    this.filterMode = 'sepia';
     self.baseImage.cache();
     self.baseImage.filters([Konva.Filters.Sepia]);
     self.baseImage.draw();
