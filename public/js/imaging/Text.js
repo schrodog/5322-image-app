@@ -20,7 +20,7 @@ class CustomText {
       fontSize: 25,
       fontFamily: 'Arial',
       fill: 'black',
-      padding: 0
+      padding: 0,
     });
     this.textTemplate.setDraggable(true);
 
@@ -78,8 +78,8 @@ class CustomText {
         this.layer.draw();
 
         // textarea.style.display = 'initial';
-        textarea.style.top = textPosition.y + stageBox.left +'px';
-        textarea.style.left = textPosition.x + stageBox.top +'px';
+        textarea.style.top = textPosition.y + stageBox.y  +'px';
+        textarea.style.left = textPosition.x + stageBox.x +'px';
         textarea.value = this.textTemplate.text();
         textarea.style.width = this.textTemplate.width() + 'px';
         textarea.style.fontFamily = this.textTemplate.fontFamily();

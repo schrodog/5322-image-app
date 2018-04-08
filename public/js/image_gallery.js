@@ -118,6 +118,9 @@ const loadSharedImages = () => {
     while(img_container.firstChild) {
       img_container.removeChild(img_container.firstChild)
     }
+    while(workspace_container.firstChild) {
+      workspace_container.removeChild(workspace_container.firstChild)
+    }
     data.forEach( i => format(i,1));
 
     document.querySelectorAll(".like-icon").forEach( i => {

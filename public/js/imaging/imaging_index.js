@@ -1,11 +1,14 @@
 'use strict';
 
+const box_size = document.getElementById("box");
 
 let STAGE = new Konva.Stage({
   container: 'container',
-  width: 700,
-  height: 500
+  width: box_size.clientWidth,
+  height: box_size.clientHeight
 });
+
+// console.log(box_size.clientWidth, box_size.clientHeight);
 
 // custom image
 const imageTemplate = imageObj => new Konva.Image({
@@ -132,4 +135,3 @@ inputText_btn.onclick = () => Text_ref.push(new CustomText(STAGE));
 // loadPicToStage('./img/big_flowers.jpg');
 
 $("#colorpicker").farbtastic("#show-color");
-

@@ -12,14 +12,6 @@ $(function() {
   })
 });
 
-logout_btn.onclick = () => {
-  $.ajax({
-    url: '/logout',
-    method: 'DELETE'
-  }).done(data => window.location.href = "/")
-};
-
-imgGallery_btn.onclick = () => window.location.href = "/image_gallery";
 
 // export current images
 const downloadURI = (uri, name) => {
@@ -179,9 +171,11 @@ const saveStatus = () => {
       if (i.destroyFlag) continue;
 
       let json = JSON.parse(i.baseImage.toJSON());
-      // let url = i.canvas.toDataURL('image/png');
-      let url = i.img_draw;
+      let url = i.canvas.toDataURL('image/png');
+      // i.img_draw can be string, not base64
+      // let url = i.img_draw;
       let byteChars = url.replace(/^data:([A-Za-z-+\/]+);base64,/g, '');
+      // console.log(byteChars);
       byteChars = atob(byteChars)
 
       let id = await getUniqueId();
@@ -269,10 +263,12 @@ const saveStatus = () => {
 const loadDrawboard = () => {
   STAGE.destroy();
   // STAGE.clearCache();
+  const box_size = document.getElementById("box");
+
   STAGE = new Konva.Stage({
     container: 'container',
-    width: 700,
-    height: 500
+    width: box_size.clientWidth,
+    height: box_size.clientHeight
   });
   STAGE.draw();
   Image_ref=[], Text_ref=[], Canvas_ref=[];
@@ -373,5 +369,17 @@ $(document).ready(() => {
 });
 $(window).on('beforeunload', saveStatus )
 
+logout_btn.onclick = () => {
+  saveStatus();
+  $.ajax({
+    url: '/logout',
+    method: 'DELETE'
+  }).done(data => window.location.href = "/")
+};
+
+imgGallery_btn.onclick = () => {
+  saveStatus();
+  window.location.href = "/image_gallery";
+}
 
 

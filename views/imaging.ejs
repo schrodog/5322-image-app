@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>testing</title>
@@ -10,168 +11,239 @@
   <script type="text/javascript" src="./lib/farbtastic/farbtastic.js"></script>
   <link rel="stylesheet" href="./lib/farbtastic/farbtastic.css" type="text/css" />
 </head>
+
+
 <body>
 
-<nav>
-  <button id="img-gallery-btn">Image gallery</button>
-  <button id="logout-btn">Logout</button>
-</nav>
+  <!-- <input type="file" id="take-pic" accept="image/*;capture=camera" > -->
+  <!-- <br>
+  <button id="camera">camera</button>
+  <video src=""></video> -->
+  <div id="mainpage">
+    <div id="navBar">
+      <h3>Image Processing</h3>
+      <div id="navBarGroup">
+        <button class="navBarButtons" id="logout-btn">Logout</button>
+        <button class="navBarButtons" id="img-gallery-btn">Goto Gallery</button>
+      </div>
+    </div>
 
-<!-- <input type="file" id="take-pic" accept="image/*;capture=camera" > -->
+    <div id="contentArea">
+      <div id="contentAreaLeft">
+        <div id="imageEditor">
+          <button class="imageEditorButtons normal-group-btn" id="resetButton">Reset</button>
 
-<div id="box">
-  <div id="container">
+
+          <button class="imageEditorButtons" id="takePhotoButton" accept="image/*;capture=camera" multiple>Take photo</button>
+          <button class="imageEditorButtons" id="export-btn">Dowload</button>
+
+          <button class="addComponentButtons normal-group-btn" id="uploadButton">
+            <label id="uploadYourPicture">
+              <input id="add-pic-btn" style="display:none;" type="file" accept="image/*;capture=camera" multiple >
+              <img style="cursor:pointer;" src="./icon/picture.png" width="35px" />
+              <!-- <span style="cursor:pointer;">Image</span> -->
+              <span class="tooltiptext">Image</span>
+            </label>
+          </button>
+          <button class="addComponentButtons normal-group-btn" id="input_text">
+            <img style="cursor:pointer;" src="./icon/text.png" width="35px"/>
+            <span class="tooltiptext">Text</span>
+          </button>
+
+          <button class="addComponentButtons normal-group-btn" id="start-paint-btn">
+            <img style="cursor:pointer;" src="./icon/painting-palette.png" width="35px"/>
+            <span class="tooltiptext">Paint</span>
+          </button>
+
+
+
+
+        </div>
+
+        <div id="slidingbar">
+
+          <!-- start text section  -->
+
+          <button class="styling-text-btn text-group-btn" id="align-left-btn" class="img_btn">
+              <img src="icon/Align-Left-icon.png" alt="Align-Left-icon" height="100%" width="auto">
+            </button>
+          <button class="styling-text-btn text-group-btn" id="align-center-btn" class="img_btn">
+              <img src="icon/Align-Center-icon.png" alt="Align-Center-icon" height="100%" width="auto">
+            </button>
+          <button class="styling-text-btn text-group-btn" id="align-right-btn" class="img_btn">
+              <img src="icon/Align-Right-icon.png" alt="Align-Right-icon" height="100%" width="auto">
+            </button>
+          <button class="styling-text-btn text-group-btn" id="align-justify-btn" class="img_btn">
+              <img src="icon/Align-JustifyAll-icon.png" alt="Align-JustifyAll-icon" height="100%" width="auto">
+            </button>
+          <button class="styling-text-btn text-group-btn" id="text-bold-btn" class="img_btn">
+              <img src="icon/bold-text-option.png" alt="Editing-Bold-icon" height="100%" width="auto">
+            </button>
+          <button class="styling-text-btn text-group-btn" id="text-italic-btn" class="img_btn">
+              <img src="icon/italicize-text.png" alt="Editing-Italic-icon" height="100%" width="auto">
+            </button>
+          <button class="styling-text-btn text-group-btn" id="text-underline-btn" class="img_btn">
+              <img src="icon/underline-text-option.png" alt="Editing-Underline-icon" height="100%" width="auto">
+            </button>
+
+          <label for="font-family" class="text-group-btn">Font:</label>
+
+          <select id="font-family-select" name="font-family" class="text-group-btn">
+              <option value="Arial">Arial</option>
+              <option value="Arial Black">Arial Black</option>
+              <option value="Comic Sans MS">Comic Sans MS</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Palatino Linotype">Palatino Linotype</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Impact">Impact</option>
+              <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+              <option value="Tahoma">Tahoma</option>
+              <option value="Trebuchet MS">Trebuchet MS</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Lucida Console">Lucida Console</option>
+          </select>
+
+          <label for="font-size-range" class="text-group-btn">Size:</label>
+          <input class="text-group-btn" id="font-size-range" type="range" min=5 max=60 step=1 value=25>
+
+          <!-- STart paint session  -->
+
+          <select class="paint-group-btn" id="paint-tool-select">
+            <option value="brush">Brush</option>
+            <option value="pen">Pen</option>
+            <option value="pencil">Pencil</option>
+            <option value="eraser">Eraser</option>
+          </select>
+
+
+          <label class="paint-group-btn" for="pen-width-range">Pen Width</label>
+          <input class="paint-group-btn" id="pen-width-range" type="range" min=0.5 max=30 step=0.5 value=0.5>
+
+          <!-- start image section  -->
+
+          <p id="first-control" class="image-group-btn">
+            <label for="brightness-range">Brightness</label>
+            <input id="brightness-range" type="range" min=-1 max=1 step="0.01" value=0>
+          </p>
+          <p class="image-group-btn">
+            <label for="contrast-range">Contrast</label>
+            <input id="contrast-range" type="range" min=-100 max=100 value=0>
+          </p>
+          <p class="image-group-btn">
+            <label for="blur">Blur</label>
+            <input id="blur-range" type="range" min=0 max=10 value=0>
+          </p>
+          <p class="image-group-btn">
+            <label for="hue-range">Hue</label>
+            <input id="hue-range" type="range" min=0 max=360 value=0>
+          </p>
+          <p class="image-group-btn">
+            <label for="saturate-range">Saturate</label>
+            <input id="saturate-range" type="range" min=0 max=1 value=0 step="0.01">
+          </p>
+
+          <p class="image-group-btn">
+            <label for="lightness-range">Lightness</label>
+            <input id="lightness-range" type="range" min=-1 max=1 value=0 step="0.01">
+          </p>
+
+          <p class="image-group-btn">
+            <label for="mask-range">Mask</label>
+            <input id="mask-range" type="range" min=0 max=1 step=0.01 value=0.5>
+          </p>
+          <p class="image-group-btn">
+            <label for="noise-range">Noise</label>
+            <input id="noise-range" type="range" min=0 max=1 step=0.01 value=0>
+          </p>
+          <p class="image-group-btn">
+            <label for="pixelate-range">Pixelate</label>
+            <input id="pixelate-range" type="range" min=0.001 max=10 step=0.1>
+          </p>
+          <p class="image-group-btn">
+            <label for="posterize-range">Posterize</label>
+            <input id="posterize-range" type="range" min=0 max=1 step=0.01 value=1>
+          </p>
+
+          <p class="image-group-btn">
+            <label for="rotate-range">Rotate</label>
+            <input id="rotate-range" type="range" min=0 max=359 value=0>
+          </p>
+          <p class="image-group-btn">
+            <label for="alpha-range">Alpha</label>
+            <input id="alpha-range" type="range" min=0 max=1 value=1 step=0.01>
+          </p>
+
+          <p class="image-group-btn">
+            <label for="pen-alpha">Opacity</label>
+            <input name="pen-alpha" type="range" min=0 max=1 step="0.01" value=1 />
+          </p>
+
+          <div class="paint-group-btn text-group-btn" id="colorpicker"></div>
+          <label class="paint-group-btn text-group-btn" for="opacity-range">opacity</label>
+          <input class="paint-group-btn text-group-btn" id="opacity-range" type="range" min=0 max=1 step="0.01" value=1 />
+
+
+        </div>
+      </div>
+
+
+
+      <!-- start top control bar  -->
+
+      <div id="contentAreaRight">
+        <div id="control-btn">
+
+          <button class="normal-group-btn controlButtons" id="crop-btn">crop</button>
+          <button class="normal-group-btn controlButtons hide" id="save-crop-btn">save crop</button>
+          <button class="normal-group-btn controlButtons" id="resize-btn">resize</button>
+          <button class="normal-group-btn controlButtons hide" id="save-resize-btn">save resize</button>
+          <button class="normal-group-btn controlButtons" id="delete-pic-btn">Delete</button>
+
+          <button class="normal-group-btn controlButtons" id="save-status-btn">Save Workspace</button>
+          <button class="normal-group-btn controlButtons" id="load-status-btn">Load Workspace</button>
+          <button class="normal-group-btn controlButtons" id="move-up-btn">Move Up</button>
+          <button class="normal-group-btn controlButtons" id="move-down-btn">Move Down</button>
+
+          <button class="controlButtons normal-group-btn" id="clear-paint-btn">Clear paint</button>
+          <button class="controlButtons paint-group-btn hide" id="save-paint-btn">Save paint</button>
+
+          <br />
+
+          <button class="filter-image-btn image-group-btn" id="grey-btn">grey</button>
+          <button class="filter-image-btn image-group-btn" id="color-btn">color</button>
+          <button class="filter-image-btn image-group-btn" id="invert-btn">invert</button>
+          <button class="filter-image-btn image-group-btn" id="mask-btn">mask</button>
+          <button class="filter-image-btn image-group-btn" id="sepia-btn">sepia</button>
+          <button class="filter-image-btn image-group-btn" id="solarize-btn">solarize</button>
+
+
+
+
+          <form style="display:none;">
+            <!-- hide to get color value -->
+            <input type="text" id="show-color" value="#123456" readonly/>
+          </form>
+
+
+          <!-- <input type="file" id="take-pic" accept="image/*;capture=camera" style="display:none;"> -->
+
+          <!-- Main canvas -->
+
+        </div>
+
+        <div id="box">
+          <div id="container">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
   </div>
-</div>
 
-<img id="myImage">
-<!-- <br>
-<button id="camera">camera</button>
-<video src=""></video> -->
-
-<div id="control-btn">
-  <button class="normal-group-btn" id="crop-btn">crop</button>
-  <button class="normal-group-btn" id="save-crop-btn">save crop</button>
-  <button class="normal-group-btn" id="resize-btn">resize</button>
-  <button class="normal-group-btn" id="save-resize-btn">save resize</button>
-  <button class="normal-group-btn" id="export-btn">Export</button>
-  <div class="upload-btn-wrapper normal-group-btn">
-    <button class="btn" >Add picture</button>
-    <input type="file" name="myfile" id="add-pic-btn" accept="image/*;capture=camera" multiple />
-  </div>
-  <button class="normal-group-btn" id="delete-pic-btn" >Delete</button>
-  <button class="normal-group-btn" id="save-status-btn" >Save</button>
-  <button class="normal-group-btn" id="load-status-btn" >Load</button>
-  <button class="normal-group-btn" id="move-up-btn" >Move Up</button>
-  <button class="normal-group-btn" id="move-down-btn" >Move Down</button>
-
-  <br>
-  <button class="image-group-btn" id="grey-btn">grey</button>
-  <button class="image-group-btn" id="color-btn">color</button>
-  <button class="image-group-btn" id="invert-btn">invert</button>
-  <button class="image-group-btn" id="mask-btn">mask</button>
-  <button class="image-group-btn" id="sepia-btn">sepia</button>
-  <button class="image-group-btn" id="solarize-btn">solarize</button>
-  <br />
-
-  <br />
-  <button class="normal-group-btn" id="input_text">Text</button>
-  <button class="text-group-btn" id="align-left-btn" class="img_btn"><img src="icon/Align-Left-icon.png" /></button>
-  <button class="text-group-btn" id="align-center-btn" class="img_btn"><img src="icon/Align-Center-icon.png" /></button>
-  <button class="text-group-btn" id="align-right-btn" class="img_btn"><img src="icon/Align-Right-icon.png" /></button>
-  <button class="text-group-btn" id="align-justify-btn" class="img_btn"><img src="icon/Align-JustifyAll-icon.png" /></button>
-  <button class="text-group-btn" id="text-bold-btn" class="img_btn"><img src="icon/Editing-Bold-icon.png" /></button>
-  <button class="text-group-btn" id="text-italic-btn" class="img_btn"><img src="icon/Editing-Italic-icon.png" /></button>
-  <button class="text-group-btn" id="text-underline-btn" class="img_btn"><img src="icon/Editing-Underline-icon.png" /></button>
-
-  <label class="text-group-btn" for="font-size-range">Font Size</label>
-  <input class="text-group-btn" id="font-size-range" type="range" min=5 max=60 step=1 value=25>
-
-  <label  class="text-group-btn" for="font-family-select">Font Family</label>
-  <select class="text-group-btn" id="font-family-select" name="font-family">
-    <option value="Arial">Arial</option>
-    <option value="Arial Black">Arial Black</option>
-    <option value="Comic Sans MS">Comic Sans MS</option>
-    <option value="Georgia">Georgia</option>
-    <option value="Palatino Linotype">Palatino Linotype</option>
-    <option value="Times New Roman">Times New Roman</option>
-    <option value="Impact">Impact</option>
-    <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
-    <option value="Tahoma">Tahoma</option>
-    <option value="Trebuchet MS">Trebuchet MS</option>
-    <option value="Verdana">Verdana</option>
-    <option value="Courier New">Courier New</option>
-    <option value="Lucida Console">Lucida Console</option>
-  </select>
-
-  <br />
-  <select class="paint-group-btn" id="paint-tool-select">
-    <option value="brush">Brush</option>
-    <option value="pen">Pen</option>
-    <option value="pencil">Pencil</option>
-    <option value="eraser">Eraser</option>
-  </select>
-
-
-  <label class="paint-group-btn" for="pen-width-range">Pen Width</label>
-  <input class="paint-group-btn" id="pen-width-range" type="range" min=0.5 max=30 step=0.5 value=0.5>
-
-  <button class="normal-group-btn" id="start-paint-btn">Paint</button>
-  <button class="normal-group-btn" id="clear-paint-btn">Clear paint</button>
-  <button class="paint-group-btn" id="save-paint-btn">Save paint</button>
-  <form style="display:none;"><!-- hide to get color value -->
-    <input type="text" id="show-color" value="#123456" readonly/>
-  </form>
-
-  <div   class="paint-group-btn text-group-btn" id="colorpicker"></div>
-  <label class="paint-group-btn text-group-btn" for="opacity-range">opacity</label>
-  <input class="paint-group-btn text-group-btn" id="opacity-range" type="range" min=0 max=1 step="0.01" value=1 />
-
-  <input type="file" id="take-pic" accept="image/*;capture=camera" style="display:none;">
-
-</div>
-
-<div class="slidingbar">
-
-  <p class="image-group-btn" id="first-control">
-    <label for="brightness-range">Brightness</label>
-    <input id="brightness-range" type="range" min=-1 max=1 step="0.01" value=0>
-  </p>
-  <p class="image-group-btn">
-    <label for="contrast-range">Contrast</label>
-    <input id="contrast-range" type="range" min=-100 max=100 value=0 >
-  </p>
-  <p class="image-group-btn">
-    <label for="blur">Blur</label>
-    <input id="blur-range" type="range" min=0 max=10 value=0 >
-  </p>
-  <p class="image-group-btn">
-    <label for="hue-range">Hue</label>
-    <input id="hue-range" type="range" min=0 max=360 value=0 >
-  </p>
-  <p class="image-group-btn">
-    <label for="saturate-range">Saturate</label>
-    <input id="saturate-range" type="range" min=0 max=1 value=0 step="0.01" >
-  </p>
-
-  <p class="image-group-btn">
-    <label for="lightness-range">Lightness</label>
-    <input id="lightness-range" type="range" min=-1 max=1 value=0 step="0.01" >
-  </p>
-
-  <p class="image-group-btn">
-    <label for="mask-range">Mask</label>
-    <input id="mask-range" type="range" min=0 max=1 step=0.01 value=0.5>
-  </p>
-  <p class="image-group-btn">
-    <label for="noise-range">Noise</label>
-    <input id="noise-range" type="range" min=0 max=1 step=0.01 value=0 >
-  </p>
-  <p class="image-group-btn">
-    <label for="pixelate-range">Pixelate</label>
-    <input id="pixelate-range" type="range" min=0.001 max=10 step=0.1 >
-  </p>
-  <p class="image-group-btn">
-    <label for="posterize-range">Posterize</label>
-    <input id="posterize-range" type="range" min=0 max=1 step=0.01 value=1>
-  </p>
-
-  <p class="normal-group-btn">
-    <label for="rotate-range">Rotate</label>
-    <input id="rotate-range" type="range" min=0 max=359 value=0>
-  </p>
-  <p class="image-group-btn">
-    <label for="alpha-range">Alpha</label>
-    <input id="alpha-range" type="range" min=0 max=1 value=1 step=0.01>
-  </p>
-
-</div>
-
-<!-- <textarea id="textarea">sample text</textarea> -->
 
 </body>
-<!-- <script type="text/javascript" src="./index.js"></script> -->
-<!-- <script type="module" src="./canvas.js"></script> -->
 
 <script src="./js/imaging/button_handler.js"></script>
 <script src="./js/imaging/Base_Shape.js"></script>

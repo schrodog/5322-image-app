@@ -80,9 +80,14 @@ class Paint extends BaseShape {
     });
   }
 
-  toggleControlVisibility(){
+  addControlVisibility(){
     for(let i=0; i<paint_group_btn.length; i++ ){
-      paint_group_btn[i].classList.toggle("hide");
+      paint_group_btn[i].classList.remove("hide");
+    }
+  }
+  removeControlVisibility(){
+    for(let i=0; i<paint_group_btn.length; i++ ){
+      paint_group_btn[i].classList.add("hide");
     }
   }
 
@@ -126,9 +131,9 @@ class Paint extends BaseShape {
       if (!isPaint) {
         return;
       }
-      if (mode === 'brush') {
+      if (paintTool_select.value !== 'eraser') {
         this.context.globalCompositeOperation = 'source-over';
-      } else if (mode === 'eraser') {
+      } else {
         this.context.globalCompositeOperation = 'destination-out';
       }
 
@@ -233,7 +238,7 @@ class Paint extends BaseShape {
     self.baseImage.strokeWidth(0);
     self.baseImage.draggable(true);
     self.savePaint();
-    self.toggleControlVisibility();
+    self.removeControlVisibility();
   }
 
   canvas_saveResize(){
@@ -274,7 +279,7 @@ class Paint extends BaseShape {
     color_picker.addEventListener('mouseup', this.switchColor);
     opacity_range.addEventListener('input', this.switchOpacity );
 
-    this.toggleControlVisibility();
+    this.addControlVisibility();
   }
 
   remove_listener(){
@@ -291,7 +296,7 @@ class Paint extends BaseShape {
     color_picker.removeEventListener('mouseup', this.switchColor);
     opacity_range.removeEventListener('input', this.switchOpacity );
 
-    this.toggleControlVisibility();
+    this.removeControlVisibility();
   }
 
 }

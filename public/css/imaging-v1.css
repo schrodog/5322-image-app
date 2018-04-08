@@ -1,0 +1,139 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#box {
+  background-color: #faf5f5;
+  border: 1px dotted black;
+  /* overflow: hidden; */
+  width: 900px;
+  height: 900px;
+}
+
+#show-pic {
+  display: block;
+  width: 400px;
+  margin: auto;
+}
+
+#control-btn {
+  margin-top: 10px;
+}
+
+.slidingbar {
+  display: grid;
+  grid-template-rows: repeat(2, 50px);
+  grid-template-columns: repeat(5, 130px);
+  grid-auto-flow: row;
+}
+
+.slidingbar #first-control {
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.slidingbar p {
+  /* Styles for the bar */
+  /* margin: 60px 0; */
+  vertical-align: middle;
+}
+
+.slidingbar input {
+  /* Styles for each button */
+  position: relative;
+  margin: 10px 20px 0 10px;
+  vertical-align: middle;
+}
+
+.slidingbar label {
+  /* Styles for button description */
+  display: inline-block;
+  width: 100px;
+  font-size: 1.1rem;
+  color: #22313F;
+  text-align: center;
+}
+
+input[type=range] {
+  width: 120px;
+  -webkit-appearance: none;
+  border-radius: 5px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 300px;
+  height: 7px;
+  background: #ABB7B7;
+  border: none;
+  border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 20px;
+  width: 20px;
+  background: #4B77BE;
+  margin-top: -6px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]:hover {
+  cursor: pointer;
+}
+
+/* input[type=range][orient=vertical][name='pen-alpha']{
+  -webkit-appearance: slider-vertical;
+  width: 8px;
+  height: 175px;
+  padding: 0 5px;
+} */
+
+
+/* file upload */
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper:hover {
+
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+textarea {
+  /* display: none; */
+  position: absolute;
+  background-color: rgba(0,0,0,0);
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+button.img_btn {
+  padding: 0;
+  width: 25px;
+  height: 25px;
+}
+button.img_btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.hide {
+  display: none;
+}
