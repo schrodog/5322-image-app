@@ -411,12 +411,8 @@ cameraSnap_btn.onclick = () => {
   mainpage_block.classList.remove('hide');
   photoSnap_block.classList.add('hide');
 
-  // async_initDrawing(cameraVideo, cameraVideo.getAttribute('width')/2, cameraVideo.getAttribute('height')/2);
   context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height );
-  // cameraCanvas.toBlob(blob => console.log(blob))
   let dataURL = cameraCanvas.toDataURL();
-  // console.log(dataURL)
-  // async_initDrawing(dataURL, cameraCanvas.width, cameraCanvas.height );
   async_loadPicToStage(dataURL);
 }
 

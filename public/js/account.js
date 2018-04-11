@@ -201,7 +201,9 @@ exports.clearDevelopment = (req, res) => {
 }
 
 exports.getWork = (req, res) => {
-  dbo.collection("development").find({userID: req.session.userID}).toArray( (e,r) => {
+  let sort = req.params.sort;
+  let order = parseInt(req.params.order);
+  dbo.collection("development").find({userID: req.session.userID}).sort({sort: order}).toArray( (e,r) => {
     if(e) throw e;
     console.log('getwork',r);
     res.send(r);

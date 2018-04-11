@@ -48,13 +48,23 @@ const format = (i,flag) => {
     } else {
       src = 'grey-heart.svg';
     }
-    heart = `<img class='like-icon' data-id='${i._id}' src='icon/${src}'><span class='like-num'>${i.likedID.length}</span>`;
+    heart = `<div class='like-pair'><img class='like-icon' data-id='${i._id}' src='icon/${src}'><span class='like-num'>${i.likedID.length}</span><div>`;
   } else {
     heart = "";
   }
-  let html = `<div>
-    <div class='sub-container'><img class='frame-img' src='${i.filename}'></div>
-    ${heart}</div>`;
+  // let html = `<div class='sub-container'>
+  //   <img class='frame-img' src='${i.filename}'>
+  //   ${heart}</div>
+  //   </div>
+  //   `;
+  let html = `<div class='sub-container'>
+    <img class='frame-img' src='${i.filename}'>
+    <div class='interactive-view'>
+      <div class='created-by'>by </div>
+      ${heart}
+    </div></div>`;
+  
+  
   img_container.insertAdjacentHTML('beforeend',html);
 }
 
@@ -69,6 +79,10 @@ const goToEdit = (item) => {
 }
 
 const workspace_format = (i) => {
+  // let html = `<div><div class="sub-work-container" data-id='${i._id}' onclick='goToEdit(this)'>
+  //   <img class='work-img' src='${i.screenshot}'>
+  //   <p>last modified: ${i.date}</p>
+  //   </div></div>`;
   let html = `<div><div class="sub-work-container" data-id='${i._id}' onclick='goToEdit(this)'>
     <img class='work-img' src='${i.screenshot}'>
     <p>last modified: ${i.date}</p>
@@ -100,8 +114,15 @@ const initLoad = () => {
     loadOwnImages(data.userID);
     document.getElementById("username").innerHTML = user;
   });
+  
+  let id = 
 
-  $.get('/image_gallery/work').done(data => {
+  $.ajax({
+    url: '/image_gallery/work',
+    method: 'GET',
+    data: JSON.stringify({'sort': sortField, 'order': order }),
+    contentType: 'application/json',
+  }).done(data => {
     console.log('work',data);
     data.forEach( i => workspace_format(i));
   });
@@ -157,7 +178,7 @@ to_gallery.onclick = loadSharedImages;
 to_workspace.onclick = initLoad;
 logout.onclick = logout_fn;
 
-console.log(workspace_items);
+// console.log(workspace_items);
 
 
 

@@ -1,25 +1,74 @@
-.container, .workspace-top {
+/* .container, .workspace-top {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
-  align-items: center;
-  align-content: center;
+}
+.sub-container {
+  width: 22%;
+}
+.frame-img, .work-img {
+  width: 100%;
+  margin: 5px 5px;
+}  */
+
+.container, .workspace-top {
+  column-count: 4;
+  column-gap: 5px;
 }
 
+@media only screen and (max-width: 1200px){
+  .container, .workspace-top {
+    column-count: 3;
+  }
+}
+@media only screen and (max-width: 900px){
+  .container, .workspace-top {
+    column-count: 2;
+  }
+}
+@media only screen and (max-width: 600px){
+  .container, .workspace-top {
+    column-count: 1;
+  }
+}
 
+.sub-container {
+  width: 100%;
+}
 .frame-img, .work-img {
-  /* width: auto; */
-  max-height: 350px;
-  margin: 5px 5px;
-  /* padding-bottom: 75% */
-  max-width: 40vw;
+  width: 100%;
+} 
+
+.interactive-view {
+  display: none;
+  position: relative;
+  bottom: 45px;
+  height: 0px;
+  color: white;
+  font-size: 20px;
+  opacity: 1;
+}
+.sub-container:hover .interactive-view {
+  display: inherit;
+  opacity: 0.8;
+  transition: opacity 1.0s;
+}
+
+.created-by {
+  position: absolute;
+  left: 20px;
+}
+
+.like-pair {
+  position: absolute;
+  right: 25px;
 }
 
 .like-icon {
-  width: 40px;
+  width: 30px;
   cursor: pointer;
 }
-.like-btn{
+.like-btn {
   background: none;
   border: none;
   padding: 0;
@@ -29,7 +78,7 @@
 }
 
 .like-num {
-  font-size: 36px;
+  font-size: 30px;
   vertical-align: top;
   padding-left: 20px;
 }
@@ -41,4 +90,5 @@
 .sub-work-container:hover {
   cursor: pointer;
 }
+
 

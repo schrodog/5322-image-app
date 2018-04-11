@@ -57,4 +57,6 @@ MongoClient.connect(url, (err,db) => {
     {'filename': 'pexels-photo.jpg', 'userID': '5ac4798ac759e365d7728f3b', 'share': 1, 'likedID':[]}
   ]
   objs.forEach( i => upload(i));
+  
+  db.close();
 });
