@@ -103,6 +103,7 @@ const async_initDrawing = (img_src, width, height) =>
 
   let img = new Image();
   img.src = img_src;
+  console.log(img.src)
   img.onload = () => {
 
     const drawing_board = new Konva.Image({

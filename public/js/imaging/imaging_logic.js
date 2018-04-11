@@ -4,6 +4,12 @@ const logout_btn = document.getElementById("logout-btn");
 const imgGallery_btn = document.getElementById("img-gallery-btn");
 const saveStatus_btn = document.getElementById("save-status-btn");
 const export_btn = document.getElementById("export-btn");
+const takePhoto_btn = document.getElementById("take-photo-btn");
+const cameraVideo = document.getElementById("camera-video");
+const cameraSnap_btn = document.getElementById("camera-snap-btn");
+const mainpage_block = document.getElementById("mainpage");
+const photoSnap_block = document.getElementById("photo-snap");
+const cameraCanvas = document.getElementById("camera-canvas");
 
 // prevent unsaved changes
 $(function() {
@@ -364,7 +370,7 @@ saveStatus_btn.onclick = saveStatus;
 document.getElementById("load-status-btn").onclick = loadDrawboard;
 
 $(document).ready(() => {
-  loadDrawboard();
+  // loadDrawboard();
   toggleControlVisibility();
 });
 $(window).on('beforeunload', saveStatus )
@@ -381,5 +387,38 @@ imgGallery_btn.onclick = () => {
   saveStatus();
   window.location.href = "/image_gallery";
 }
+
+let local_stream;
+takePhoto_btn.onclick = () => {
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+    navigator.mediaDevices.getUserMedia({ video: true }).then( stream => {
+      mainpage_block.classList.add('hide');
+      photoSnap_block.classList.remove('hide');
+      cameraVideo.srcObject = stream;
+      local_stream = stream;
+      // cameraVideo.src = window.URL.createObjectURL(stream);
+      cameraVideo.play();
+    });
+}
+
+cameraSnap_btn.onclick = () => {
+  cameraVideo.pause();
+  local_stream.getTracks().forEach(track => track.stop());
+  local_stream.srcObject = "";
+  
+  
+  const context = cameraCanvas.getContext('2d');
+  mainpage_block.classList.remove('hide');
+  photoSnap_block.classList.add('hide');
+
+  // async_initDrawing(cameraVideo, cameraVideo.getAttribute('width')/2, cameraVideo.getAttribute('height')/2);
+  context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height );
+  // cameraCanvas.toBlob(blob => console.log(blob))
+  let dataURL = cameraCanvas.toDataURL();
+  // console.log(dataURL)
+  // async_initDrawing(dataURL, cameraCanvas.width, cameraCanvas.height );
+  async_loadPicToStage(dataURL);
+}
+
 
 

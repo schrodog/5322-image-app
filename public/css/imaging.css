@@ -269,7 +269,7 @@ input[type=range]::-webkit-slider-thumb {
   margin: auto;
 }
 
-#control-btn .controlButtons {
+#control-btn .controlButtons {``
   vertical-align: middle;
   margin-bottom: 15px;
   height: 50px;
@@ -291,6 +291,20 @@ input[type=range]::-webkit-slider-thumb {
 /* .image-group-btn, .paint-group-btn {
   display: none;
 } */
+
+#camera-snap-btn {
+  vertical-align: middle;
+  margin-bottom: 15px;
+  height: 100px;
+  background-color: rgba(113, 70, 122, 0.8);
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+  border: none;
+  text-align: center;
+  font-size: 2rem;
+  width: 300px;
+}
 
 #colorpicker {
   /* display: none; */

@@ -19,6 +19,14 @@
   <!-- <br>
   <button id="camera">camera</button>
   <video src=""></video> -->
+  <div id="photo-snap" class="hide">
+    <video id="camera-video" width="800px" height="600px" autoplay></video>
+    <br>
+    <button id="camera-snap-btn">Snap Photo</button>
+    <canvas id="camera-canvas" width="800px" height="600px" style="display:none"></canvas>
+  </div>
+  
+  
   <div id="mainpage">
     <div id="navBar">
       <h3>Image Processing</h3>
@@ -34,7 +42,7 @@
           <button class="imageEditorButtons normal-group-btn" id="resetButton">Reset</button>
 
 
-          <button class="imageEditorButtons" id="takePhotoButton" accept="image/*;capture=camera" multiple>Take photo</button>
+          <button class="imageEditorButtons" id="take-photo-btn" accept="image/*;capture=camera" multiple>Take photo</button>
           <button class="imageEditorButtons" id="export-btn">Dowload</button>
 
           <button class="addComponentButtons normal-group-btn" id="uploadButton">
