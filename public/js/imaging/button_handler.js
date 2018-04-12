@@ -58,6 +58,8 @@ const image_group_btn = document.getElementsByClassName("image-group-btn");
 const text_group_btn = document.getElementsByClassName("text-group-btn");
 const paint_group_btn = document.getElementsByClassName("paint-group-btn");
 
+const styleTransfer_btn = document.getElementById("style-transfer-btn");
+
 
 let Image_ref=[], Text_ref=[], Canvas_ref=[];
 

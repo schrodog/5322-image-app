@@ -5,39 +5,42 @@ class CustomImage extends BaseShape {
     super(img, stage);
     this.initImage();
     this.active = false;
+    this.stage = stage;
     super.turnColorScale();
+    self = this;
+
     // console.log(this);
   }
 
   initImage(){
     let base_layer = super.buildPicture();
-    this.stage.add(base_layer);
-    // this.register_listener();
+    self.stage.add(base_layer);
+    // self.register_listener();
 
     let click_mark=0;
-    this.stage.on('click', (evt) => {
+    self.stage.on('click', (evt) => {
       let shape = evt.target;
-      if (shape === this.baseImage && !this.active){
+      if (shape === self.baseImage && !self.active){
         console.log('go');
-        this.changeSelf(this);
-        this.active = true;
+        self.changeSelf(self);
+        self.active = true;
         // super.turnColorScale();
-        this.baseImage.shadowBlur(10);
-        this.baseImage.cache();
-        this.baseImage.draw();
-        this.register_listener();
-        this.toggleControlVisibility();
-      } else if (shape !== this.baseImage && this.active) {
-        this.active = false;
-        if(this.anchorGroup){
+        self.baseImage.shadowBlur(10);
+        self.baseImage.cache();
+        self.baseImage.draw();
+        self.register_listener();
+        self.toggleControlVisibility();
+      } else if (shape !== self.baseImage && self.active) {
+        self.active = false;
+        if(self.anchorGroup){
           super.saveResize()
         }
-        this.baseImage.shadowBlur(0);
+        self.baseImage.shadowBlur(0);
         console.log('leave');
-        this.baseImage.cache();
-        this.stage.draw();
-        this.remove_listener();
-        this.toggleControlVisibility();
+        self.baseImage.cache();
+        self.stage.draw();
+        self.remove_listener();
+        self.toggleControlVisibility();
       }
     });
   }
@@ -73,6 +76,62 @@ class CustomImage extends BaseShape {
   //   }
   // }
 
+  // tensorflow style transfer
+  styleTransfer(){
+    const imageTemplate = imageObj => new Konva.Image({
+      x: 10,
+      y: 10,
+      image: imageObj,
+      draggable: true,
+    });
+
+    let style = 'wave';
+
+    // convert base64 to blob
+    let dataURI = self.baseImage.toDataURL({'mimeType': 'image/jpeg'});
+    // let mimeType = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+    let byteString = atob(dataURI.split(',')[1]);
+    let ab = new ArrayBuffer(byteString.length);
+    let ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    let blob = new Blob([ab], {type: 'image/jpeg'});
+    // let file_ext = mimeType.match(/\/[0-9a-z]+$/i)[0].replace('/','.');
+
+    let path = 'abc.jpg';
+    let formData = new FormData();
+    formData.append('ImageFileField', blob, path);
+    formData.append('style', style);
+
+    $.ajax({
+      url: '/python',
+      data: formData,
+      type: 'POST',
+      cache: false,
+      contentType: false,
+      processData: false
+    }).done( src => {
+
+      // create new img
+      let imageObj = new Image();
+      imageObj.src = `img/users/development/${src}`;
+
+      imageObj.onload = () => {
+        let img = imageTemplate(imageObj)
+        self.layer.add(img);
+        self.layer.draw()
+        // let ref = new CustomImage(img, self.STAGE);
+        // Image_ref.push(ref);
+        // ref.extension = type;
+      };
+
+    });
+
+  }
+
+
   toggleControlVisibility(){
     for(let i=0; i<image_group_btn.length; i++ ){
       image_group_btn[i].classList.toggle("hide");
@@ -88,6 +147,7 @@ class CustomImage extends BaseShape {
     deletePic_btn.addEventListener('click', super.destroyAll);
     moveUp_btn.addEventListener('click', super.moveUp);
     moveDown_btn.addEventListener('click', super.moveDown);
+    styleTransfer_btn.addEventListener('click', this.styleTransfer);
 
     grey_btn.addEventListener('click', super.turnGreyScale);
     color_btn.addEventListener('click', super.turnColorScale);
@@ -118,6 +178,7 @@ class CustomImage extends BaseShape {
     deletePic_btn.removeEventListener('click', super.destroyAll);
     moveUp_btn.removeEventListener('click', super.moveUp);
     moveDown_btn.removeEventListener('click', super.moveDown);
+    styleTransfer_btn.removeEventListener('click', this.styleTransfer);
 
     grey_btn.removeEventListener('click', super.turnGreyScale);
     color_btn.removeEventListener('click', super.turnColorScale);

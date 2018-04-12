@@ -1,3 +1,5 @@
 node_modules
 key.txt
 public/img/users/development/*
+tensorflow-style-transfer/__pycache__
+tensorflow-style-transfer/models

@@ -4,6 +4,7 @@ import fs from 'fs';
 import formidable from 'formidable';
 import path from 'path';
 import moment from 'moment-timezone';
+import pythonShell from 'python-shell';
 
 const ObjectID = mongo.ObjectID;
 const MongoClient = mongo.MongoClient;
@@ -163,8 +164,10 @@ exports.uploadImages = (req, res) => {
   form.on('fileBegin', (fields, file) => {
     file.path = form.uploadDir+"/"+file.name;
   });
+  // console.log(form);
   form.parse(req, (err, fields, file) => {
-  })
+  });
+  form.on('end', () => {return;})
 }
 
 exports.initDevelopment = (req, res) => {
@@ -208,6 +211,57 @@ exports.getWork = (req, res) => {
     console.log('getwork',r);
     res.send(r);
   });
+}
+
+exports.runPython = (req,res) => {
+
+  let fileSrc = shortId.generate();
+  let fileDes = shortId.generate();
+  let fileDir = 'public/img/users/development/';
+  let style, file_ext='.jpeg';
+
+  console.log('file',fileSrc, fileDes);
+
+  const form = new formidable.IncomingForm();
+  form.uploadDir = fileDir;
+
+  // console.log('form',form);
+  form.on('field', (name, value) => {
+    console.log('field:',name,value)
+    if(name === "style")
+      style = value;
+  });
+  form.on('fileBegin', (fields, file) => {
+    // file_ext = (file.name).match(/\.[0-9a-z]+$/i)[0];
+    file.path = form.uploadDir+fileSrc+file_ext;
+    console.log(file.path)
+  });
+  form.parse(req, (err, fields, file) => {
+  });
+  form.on('end', () => {
+
+    console.log(`${fileDir}${fileSrc}${file_ext}`);
+
+    const options = {
+      mode: 'text',
+      pythonPath: '/usr/bin/python3',
+      pythonOptions: ['-u'],
+      args: ['--content',`${fileDir}${fileSrc}${file_ext}` , '--style_model',`./tensorflow-style-transfer/models/${style}.ckpt`,
+      '--output', `${fileDir}${fileDes}${file_ext}`]
+    };
+
+    const pyshell = new pythonShell('/tensorflow-style-transfer/run_test.py', options);
+    pyshell.on('message', msg => {
+      console.log(msg)
+    });
+    pyshell.end((err,code,signal) => {
+      // if (err) throw err;
+      console.log('end');
+      res.send(`${fileDes}${file_ext}`)
+      return;
+    });
+  })
+
 }
 
 

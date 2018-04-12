@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Image Imagination</title>
-  <link rel="stylesheet" href="./css//image_gallery.css">
+  <link rel="stylesheet" href="./css/image_gallery.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="./lib/jquery-3.3.1.min.js"></script>
 
 </head>
@@ -15,6 +16,10 @@
   <!-- <form action="/logout" method="DELETE">
     <input id="logout" type="submit" value="Logout">
   </form> -->
+  <form action="/image_gallery/filter" method="GET">
+    <input type="text" placeholder="Search.." name="search" />
+    <button type="submit"><i class="fa fa-search"></i></button>
+  </form>
 
   <button id="logout">Logout</button>
   <button id="new-image">New image</button>
@@ -26,8 +31,14 @@
 
 <h2>Welcome back, <span id="username"></span> </h2>
 
-<input type="date" name="start-date"> -
-<input type="date" name="end-date">
+<input type="date" name="start-date"> - <input type="date" name="end-date">
+Sort by
+<select>
+  <option value="relevance">Relevance</option>
+  <option value="date">Date</option>
+  <option value="popularity">Popularity</option>
+</select>
+
 
 <div class="container" id="img-container">
 </div>

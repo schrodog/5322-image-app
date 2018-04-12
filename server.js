@@ -47,6 +47,8 @@ app.get('/development', account.loadDevelopment);
 app.delete('/development', account.clearDevelopment);
 app.get('/image_gallery/work', account.getWork);
 
+app.post('/python', account.runPython);
+
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 // login page
