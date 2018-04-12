@@ -175,6 +175,7 @@ class CustomImage extends BaseShape {
     
     showStyle_btn.addEventListener('click', this.togglePopover);
     
+    // start style transfer
     $(".style-transfer-btn").on("click", function(){
       popover_wrapper.classList.add("hide");
       $("#contentAreaRight").append("<div id='loader'></div>");
@@ -183,7 +184,7 @@ class CustomImage extends BaseShape {
         let con = $("#container");
         let pos = con.position();
         let [width, height] = [con.width(), con.height()];
-        $("#loader").css({"top": `${height/2+pos.top-60}px`, "left": `${width/2+pos.left-60}px`});
+        $("#loader").css({"top": `${height/2+pos.top-40}px`, "left": `${width/2+pos.left-40}px`});
         $("#box").css("filter", "brightness(60%)");
         console.log($(this), pos,width,height);
       })

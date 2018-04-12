@@ -53,6 +53,11 @@ const posterize_range = document.getElementById("posterize-range");
 const rotate_range = document.getElementById("rotate-range");
 const alpha_range = document.getElementById("alpha-range");
 
+const enlarge_btn = document.getElementById("stage-enlarge-btn");
+const reduce_btn = document.getElementById("stage-reduce-btn");
+const resize_factor = document.getElementById("resize-factor");
+const resize_range = document.getElementById("resize-range");
+
 const normal_group_btn = document.getElementsByClassName("normal-group-btn");
 const image_group_btn = document.getElementsByClassName("image-group-btn");
 const text_group_btn = document.getElementsByClassName("text-group-btn");

@@ -5,7 +5,9 @@ const box_size = document.getElementById("box");
 let STAGE = new Konva.Stage({
   container: 'container',
   width: box_size.clientWidth,
-  height: box_size.clientHeight
+  height: box_size.clientHeight,
+  scaleX: 1.0,
+  scaleY: 1.0
 });
 
 // console.log(box_size.clientWidth, box_size.clientHeight);
@@ -127,9 +129,33 @@ const async_initDrawing = (img_src, width, height) =>
 
 
 startPaint_btn.onclick = () => initDrawing();
-
 inputText_btn.onclick = () => Text_ref.push(new CustomText(STAGE));
 
+const updateResizeNum = () => {
+  let size = resize_range.value;
+  STAGE.scaleX(size);
+  STAGE.scaleY(size);
+  resize_factor.innerHTML = parseInt(size*100) + '%';
+  STAGE.draw();
+}
+
+resize_range.onchange = updateResizeNum;
+
+enlarge_btn.addEventListener('click', () => {
+  // let size = parseInt(resize_range.value)
+  if (parseFloat(resize_range.value) < 5){
+    console.log('resize',parseFloat(resize_range.value))
+    resize_range.value = parseFloat(resize_range.value)+0.1;
+  }
+  updateResizeNum();
+});
+
+reduce_btn.onclick = () => {
+  if (resize_range.value > 0.1)
+    resize_range.value -= 0.1;
+    console.log('resize',resize_range.value)
+  updateResizeNum();
+}
 
 // ==== MAIN ====
 
