@@ -225,14 +225,12 @@ exports.runPython = (req,res) => {
   const form = new formidable.IncomingForm();
   form.uploadDir = fileDir;
 
-  // console.log('form',form);
   form.on('field', (name, value) => {
     console.log('field:',name,value)
     if(name === "style")
       style = value;
   });
   form.on('fileBegin', (fields, file) => {
-    // file_ext = (file.name).match(/\.[0-9a-z]+$/i)[0];
     file.path = form.uploadDir+fileSrc+file_ext;
     console.log(file.path)
   });

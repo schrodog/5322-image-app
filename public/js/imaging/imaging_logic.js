@@ -385,6 +385,7 @@ logout_btn.onclick = () => {
 
 imgGallery_btn.onclick = () => {
   saveStatus();
+  
   window.location.href = "/image_gallery";
 }
 

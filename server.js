@@ -24,8 +24,6 @@ app.use(session({
 }));
 
 
-// app.get('/email', account.findAll);
-// app.get('/account', account.findAll);
 // log in
 app.get('/account/:email', account.findByEmail );
 // sign up

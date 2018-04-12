@@ -58,7 +58,11 @@ const image_group_btn = document.getElementsByClassName("image-group-btn");
 const text_group_btn = document.getElementsByClassName("text-group-btn");
 const paint_group_btn = document.getElementsByClassName("paint-group-btn");
 
-const styleTransfer_btn = document.getElementById("style-transfer-btn");
+const showStyle_btn = document.getElementById("show-style-btn");
+const popover_wrapper = document.getElementById("style-popover-wrapper");
+// const style_transfer_btns = document.getElementsByClassName("style-transfer-btn");
+
+// const styleTransfer_btn = document.getElementById("style-transfer-btn");
 
 
 let Image_ref=[], Text_ref=[], Canvas_ref=[];

@@ -77,20 +77,22 @@ class CustomImage extends BaseShape {
   // }
 
   // tensorflow style transfer
-  styleTransfer(){
-    const imageTemplate = imageObj => new Konva.Image({
-      x: 10,
-      y: 10,
-      image: imageObj,
-      draggable: true,
-    });
-
-    let style = 'wave';
-
+  styleTransfer(style){
+  
+    // console.log('style',style)
+  
+    let img = self.baseImage.getImage()
+    let canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    canvas.getContext('2d').drawImage(img, 0,0);
+    
+    let dataURI = canvas.toDataURL('image/jpeg');
+    
     // convert base64 to blob
-    let dataURI = self.baseImage.toDataURL({'mimeType': 'image/jpeg'});
+    // let dataURI = self.baseImage.toDataURL({'mimeType': 'image/jpeg'});
     // let mimeType = dataURI.split(',')[0].split(':')[1].split(';')[0]
-
+    
     let byteString = atob(dataURI.split(',')[1]);
     let ab = new ArrayBuffer(byteString.length);
     let ia = new Uint8Array(ab);
@@ -99,12 +101,12 @@ class CustomImage extends BaseShape {
     }
     let blob = new Blob([ab], {type: 'image/jpeg'});
     // let file_ext = mimeType.match(/\/[0-9a-z]+$/i)[0].replace('/','.');
-
+    
     let path = 'abc.jpg';
     let formData = new FormData();
     formData.append('ImageFileField', blob, path);
     formData.append('style', style);
-
+    
     $.ajax({
       url: '/python',
       data: formData,
@@ -113,22 +115,21 @@ class CustomImage extends BaseShape {
       contentType: false,
       processData: false
     }).done( src => {
-
-      // create new img
+    
+      // replace with new img
       let imageObj = new Image();
       imageObj.src = `img/users/development/${src}`;
-
       imageObj.onload = () => {
-        let img = imageTemplate(imageObj)
-        self.layer.add(img);
-        self.layer.draw()
-        // let ref = new CustomImage(img, self.STAGE);
-        // Image_ref.push(ref);
-        // ref.extension = type;
-      };
-
+        self.baseImage.setImage(imageObj);
+        self.baseImage.cache();
+        self.baseImage.draw();
+        
+        $("#loader").remove();
+        $("#box").css("filter", "");
+        
+      }
     });
-
+    
   }
 
 
@@ -136,6 +137,10 @@ class CustomImage extends BaseShape {
     for(let i=0; i<image_group_btn.length; i++ ){
       image_group_btn[i].classList.toggle("hide");
     }
+  }
+
+  togglePopover(){
+    popover_wrapper.classList.toggle("hide")
   }
 
   // register listener
@@ -147,7 +152,6 @@ class CustomImage extends BaseShape {
     deletePic_btn.addEventListener('click', super.destroyAll);
     moveUp_btn.addEventListener('click', super.moveUp);
     moveDown_btn.addEventListener('click', super.moveDown);
-    styleTransfer_btn.addEventListener('click', this.styleTransfer);
 
     grey_btn.addEventListener('click', super.turnGreyScale);
     color_btn.addEventListener('click', super.turnColorScale);
@@ -168,6 +172,23 @@ class CustomImage extends BaseShape {
     posterize_range.addEventListener('input', super.posterize);
     rotate_range.addEventListener('input', super.rotate);
     alpha_range.addEventListener('input', super.alpha);
+    
+    showStyle_btn.addEventListener('click', this.togglePopover);
+    
+    $(".style-transfer-btn").on("click", function(){
+      popover_wrapper.classList.add("hide");
+      $("#contentAreaRight").append("<div id='loader'></div>");
+      
+      $("#loader").ready(function(){
+        let con = $("#container");
+        let pos = con.position();
+        let [width, height] = [con.width(), con.height()];
+        $("#loader").css({"top": `${height/2+pos.top-60}px`, "left": `${width/2+pos.left-60}px`});
+        $("#box").css("filter", "brightness(60%)");
+        console.log($(this), pos,width,height);
+      })
+      self.styleTransfer($(this).attr("data-id"));
+    });
   }
 
   remove_listener(){
@@ -178,28 +199,29 @@ class CustomImage extends BaseShape {
     deletePic_btn.removeEventListener('click', super.destroyAll);
     moveUp_btn.removeEventListener('click', super.moveUp);
     moveDown_btn.removeEventListener('click', super.moveDown);
-    styleTransfer_btn.removeEventListener('click', this.styleTransfer);
 
     grey_btn.removeEventListener('click', super.turnGreyScale);
     color_btn.removeEventListener('click', super.turnColorScale);
-    invert_btn.removeEventListener('click', super.turnInvert)
-    mask_btn.removeEventListener('click', super.turnMaskScale)
-    sepia_btn.removeEventListener('click', super.turnSepia)
-    solarize_btn.removeEventListener('click', super.turnSolarize)
+    invert_btn.removeEventListener('click', super.turnInvert);
+    mask_btn.removeEventListener('click', super.turnMaskScale);
+    sepia_btn.removeEventListener('click', super.turnSepia);
+    solarize_btn.removeEventListener('click', super.turnSolarize);
 
-    brightness_range.removeEventListener('input', super.brightness)
-    contrast_range.removeEventListener('input', super.contrast)
-    blur_range.removeEventListener('input', super.blur)
-    hue_range.removeEventListener('change', super.hue)
-    saturate_range.removeEventListener('input', super.saturate)
-    lightness_range.removeEventListener('input', super.lightness)
-    mask_range.removeEventListener('input', super.mask)
-    noise_range.removeEventListener('input', super.noise)
-    pixelate_range.removeEventListener('input', super.pixelate)
-    posterize_range.removeEventListener('input',super.posterize)
-    rotate_range.removeEventListener('input', super.rotate)
-    alpha_range.removeEventListener('input', super.alpha)
+    brightness_range.removeEventListener('input', super.brightness);
+    contrast_range.removeEventListener('input', super.contrast);
+    blur_range.removeEventListener('input', super.blur);
+    hue_range.removeEventListener('change', super.hue);
+    saturate_range.removeEventListener('input', super.saturate);
+    lightness_range.removeEventListener('input', super.lightness);
+    mask_range.removeEventListener('input', super.mask);
+    noise_range.removeEventListener('input', super.noise);
+    pixelate_range.removeEventListener('input', super.pixelate);
+    posterize_range.removeEventListener('input',super.posterize);
+    rotate_range.removeEventListener('input', super.rotate);
+    alpha_range.removeEventListener('input', super.alpha);
 
+    showStyle_btn.removeEventListener('click', this.togglePopover);
+    $(".style-transfer-btn").off("click");
   }
 
 

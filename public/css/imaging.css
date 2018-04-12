@@ -328,7 +328,46 @@ textarea {
   text-align: center;
 }
 
+/* style transfer */
+#style-popover-wrapper {
+  position: absolute;
+  margin-top: -5px;
+  margin-left: 100px;
+  background-color: #d4b7b7;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.style-transfer-btn {
+  width: 100px;
+  height: 100px;
+  padding: 0 5px;
+  cursor: pointer;
+}
+
+.style-transfer-btn:hover {
+  filter: brightness(120%);
+}
+
+/* loader */
+#loader {
+  position: fixed;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #93b0c3;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
 .hide {
-  display: none;
+  display: none;  
 }
