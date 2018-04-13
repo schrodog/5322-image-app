@@ -213,6 +213,10 @@ exports.getWork = (req, res) => {
   });
 }
 
+exports.doFilter = (req, res) => {
+  
+}
+
 exports.runPython = (req,res) => {
 
   let fileSrc = shortId.generate();

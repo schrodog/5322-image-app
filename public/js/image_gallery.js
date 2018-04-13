@@ -8,6 +8,9 @@ const to_workspace = document.getElementById("to-workspace");
 const title = document.getElementById("title");
 const logout = document.getElementById("logout");
 const workspace_items = document.getElementsByClassName("sub-work-container");
+const search_txt = document.querySelector("input[name='search']");
+
+
 let userID = "";
 
 const refreshLike = (container, picID) => {
@@ -38,6 +41,7 @@ const refreshLike = (container, picID) => {
 
 }
 
+// generate public gallery images
 const format = (i,flag) => {
   let heart;
   if (flag==1){
@@ -52,22 +56,18 @@ const format = (i,flag) => {
   } else {
     heart = "";
   }
-  // let html = `<div class='sub-container'>
-  //   <img class='frame-img' src='${i.filename}'>
-  //   ${heart}</div>
-  //   </div>
-  //   `;
+
   let html = `<div class='sub-container'>
     <img class='frame-img' src='${i.filename}'>
     <div class='interactive-view'>
       <div class='created-by'>by </div>
       ${heart}
     </div></div>`;
-  
-  
+
   img_container.insertAdjacentHTML('beforeend',html);
 }
 
+// load workspace
 const goToEdit = (item) => {
   let id = item.getAttribute('data-id');
   $.ajax({
@@ -78,11 +78,8 @@ const goToEdit = (item) => {
   }).done(data => window.location.href = '/imaging' );
 }
 
+// generate workspace
 const workspace_format = (i) => {
-  // let html = `<div><div class="sub-work-container" data-id='${i._id}' onclick='goToEdit(this)'>
-  //   <img class='work-img' src='${i.screenshot}'>
-  //   <p>last modified: ${i.date}</p>
-  //   </div></div>`;
   let html = `<div><div class="sub-work-container" data-id='${i._id}' onclick='goToEdit(this)'>
     <img class='work-img' src='${i.screenshot}'>
     <p>last modified: ${i.date}</p>
@@ -90,6 +87,7 @@ const workspace_format = (i) => {
   workspace_container.insertAdjacentHTML('beforeend', html);
 }
 
+// get user image data
 const loadOwnImages = (id) => {
   $.ajax({
     url: `/image_gallery/images/${id}`,
@@ -99,6 +97,7 @@ const loadOwnImages = (id) => {
   });
 };
 
+// on page load workspace
 const initLoad = () => {
   $.ajax({
     url: '/session',
@@ -114,8 +113,8 @@ const initLoad = () => {
     loadOwnImages(data.userID);
     document.getElementById("username").innerHTML = user;
   });
-  
-  let id = 
+
+  let id =
 
   $.ajax({
     url: '/image_gallery/work',
@@ -126,10 +125,9 @@ const initLoad = () => {
     console.log('work',data);
     data.forEach( i => workspace_format(i));
   });
-
-
 };
 
+//
 const loadSharedImages = () => {
   $.ajax({
     url: '/image_gallery/shared_images',
@@ -150,12 +148,30 @@ const loadSharedImages = () => {
   })
 }
 
+// filter public gallery
+const doFilter = () => {
+
+  $.ajax({
+    url: '/image_gallery/work',
+    method: 'GET',
+    data: JSON.stringify({'sort': sortField, 'order': order }),
+    contentType: 'application/json',
+  }).done(data => {
+    console.log('work',data);
+    data.forEach( i => workspace_format(i));
+  });
+}
+
+// logout
 const logout_fn = () => {
   $.ajax({
     url: '/logout',
     method: 'DELETE'
   }).done(data => window.location.href="/")
 }
+
+
+// ==== global buttons ====
 
 window.onload = initLoad;
 

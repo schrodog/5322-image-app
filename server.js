@@ -44,6 +44,7 @@ app.post('/development', account.initDevelopment);
 app.get('/development', account.loadDevelopment);
 app.delete('/development', account.clearDevelopment);
 app.get('/image_gallery/work', account.getWork);
+app.get('image_gallery/filter', account.doFilter)
 
 app.post('/python', account.runPython);
 

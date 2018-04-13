@@ -45,54 +45,23 @@ class CustomImage extends BaseShape {
     });
   }
 
-  // exportJSON(){
-  //   return {'id': this.baseImage._id, 'image': this.baseImage.attrs.image, 'filterMode': this.filterMode};
-  // }
-
-  // destroySelf(){
-  //   super.destroyAll();
-  //   this.remove_listener();
-  //   this.stage.off('click')
-  // }
-
-  // listenStage(evt){
-  //   let shape = evt.target;
-  //   if (shape === this.baseImage && !this.active){
-  //     console.log('go');
-  //     this.changeSelf(this);
-  //     this.active = true;
-  //     // super.turnColorScale();
-  //     this.baseImage.shadowBlur(10);
-  //     this.baseImage.cache();
-  //     this.baseImage.draw();
-  //     this.register_listener();
-  //   } else if (shape !== this.baseImage && this.active) {
-  //     this.active = false;
-  //     this.baseImage.shadowBlur(0);
-  //     console.log('leave');
-  //     this.layer.cache();
-  //     this.layer.draw();
-  //     this.remove_listener();
-  //   }
-  // }
-
   // tensorflow style transfer
   styleTransfer(style){
-  
+
     // console.log('style',style)
-  
+
     let img = self.baseImage.getImage()
     let canvas = document.createElement('canvas');
     canvas.width = img.width;
     canvas.height = img.height;
     canvas.getContext('2d').drawImage(img, 0,0);
-    
+
     let dataURI = canvas.toDataURL('image/jpeg');
-    
+
     // convert base64 to blob
     // let dataURI = self.baseImage.toDataURL({'mimeType': 'image/jpeg'});
     // let mimeType = dataURI.split(',')[0].split(':')[1].split(';')[0]
-    
+
     let byteString = atob(dataURI.split(',')[1]);
     let ab = new ArrayBuffer(byteString.length);
     let ia = new Uint8Array(ab);
@@ -101,12 +70,12 @@ class CustomImage extends BaseShape {
     }
     let blob = new Blob([ab], {type: 'image/jpeg'});
     // let file_ext = mimeType.match(/\/[0-9a-z]+$/i)[0].replace('/','.');
-    
+
     let path = 'abc.jpg';
     let formData = new FormData();
     formData.append('ImageFileField', blob, path);
     formData.append('style', style);
-    
+
     $.ajax({
       url: '/python',
       data: formData,
@@ -115,7 +84,7 @@ class CustomImage extends BaseShape {
       contentType: false,
       processData: false
     }).done( src => {
-    
+
       // replace with new img
       let imageObj = new Image();
       imageObj.src = `img/users/development/${src}`;
@@ -123,13 +92,13 @@ class CustomImage extends BaseShape {
         self.baseImage.setImage(imageObj);
         self.baseImage.cache();
         self.baseImage.draw();
-        
+
         $("#loader").remove();
         $("#box").css("filter", "");
-        
+
       }
     });
-    
+
   }
 
 
@@ -172,14 +141,14 @@ class CustomImage extends BaseShape {
     posterize_range.addEventListener('input', super.posterize);
     rotate_range.addEventListener('input', super.rotate);
     alpha_range.addEventListener('input', super.alpha);
-    
+
     showStyle_btn.addEventListener('click', this.togglePopover);
-    
+
     // start style transfer
     $(".style-transfer-btn").on("click", function(){
       popover_wrapper.classList.add("hide");
       $("#contentAreaRight").append("<div id='loader'></div>");
-      
+
       $("#loader").ready(function(){
         let con = $("#container");
         let pos = con.position();
