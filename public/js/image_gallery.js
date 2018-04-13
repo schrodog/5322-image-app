@@ -8,11 +8,18 @@ const to_workspace = document.getElementById("to-workspace");
 const title = document.getElementById("title");
 const logout = document.getElementById("logout");
 const workspace_items = document.getElementsByClassName("sub-work-container");
-const search_txt = document.querySelector("input[name='search']");
 
+// filter
+const search_txt = document.querySelector("input[name='search']");
+const search_txt_btn = document.getElementById("search-txt-btn");
+const start_date_control = document.querySelector("input[name='start-date']");
+const end_date_control = document.querySelector("input[name='end-date']");
+const img_order = document.getElementById("img-order");
+const tag_select = document.getElementById("tag-select");
 
 let userID = "";
 
+// refresh public gallery like
 const refreshLike = (container, picID) => {
   let action;
   const icon = container.querySelector('.like-icon');
@@ -52,16 +59,19 @@ const format = (i,flag) => {
     } else {
       src = 'grey-heart.svg';
     }
-    heart = `<div class='like-pair'><img class='like-icon' data-id='${i._id}' src='icon/${src}'><span class='like-num'>${i.likedID.length}</span><div>`;
+    heart = `<img class='like-icon' data-id='${i._id}' src='icon/${src}'><span class='like-num'>${i.likedID.length}</span>`;
   } else {
     heart = "";
   }
 
   let html = `<div class='sub-container'>
-    <img class='frame-img' src='${i.filename}'>
+    <img class='frame-img' src='img/users/${i.path}'>
     <div class='interactive-view'>
       <div class='created-by'>by </div>
-      ${heart}
+      <div class='like-pair'>${heart}
+        <img class='speech-icon' src='speech-bubble.png'>
+        <span class='speech-num'>${i.comments.length}</span>
+      </div>
     </div></div>`;
 
   img_container.insertAdjacentHTML('beforeend',html);
@@ -114,20 +124,20 @@ const initLoad = () => {
     document.getElementById("username").innerHTML = user;
   });
 
-  let id =
+  loadSharedImages()
 
-  $.ajax({
-    url: '/image_gallery/work',
-    method: 'GET',
-    data: JSON.stringify({'sort': sortField, 'order': order }),
-    contentType: 'application/json',
-  }).done(data => {
-    console.log('work',data);
-    data.forEach( i => workspace_format(i));
-  });
+  // $.ajax({
+  //   url: '/image_gallery/work',
+  //   method: 'GET',
+  //   data: JSON.stringify({}),
+  //   contentType: 'application/json',
+  // }).done(data => {
+  //   console.log('work',data);
+  //   data.forEach( i => workspace_format(i));
+  // });
 };
 
-//
+// load public gallery image
 const loadSharedImages = () => {
   $.ajax({
     url: '/image_gallery/shared_images',
@@ -151,14 +161,26 @@ const loadSharedImages = () => {
 // filter public gallery
 const doFilter = () => {
 
+  let [startDate_value, endDate_value] = [start_date_control.value, end_date_control.value];
+  let tag_value = tag_select.value, order_value = img_order.value;
+  let search_value = search_txt.value;
+
+  // console.log(startDate,endDate,tag_value,order_value,search_value)
+  let data = {};
+  if(search_value !== '') data.filter.title = search_value;
+  if(startDate_value !== '') data.filter.startDate = startDate_value;
+  if(endDate_value !== '') data.filter.endDate = endDate_value;
+  if(tag_value !== 'all') data.filter.tag = tag_value;
+  if(order_value !== 'default') data.order = order_value;
+
   $.ajax({
-    url: '/image_gallery/work',
+    url: '/image_gallery/filter',
     method: 'GET',
-    data: JSON.stringify({'sort': sortField, 'order': order }),
+    data: JSON.stringify({'data': data),
     contentType: 'application/json',
   }).done(data => {
     console.log('work',data);
-    data.forEach( i => workspace_format(i));
+    data.forEach( i => format(i));
   });
 }
 
@@ -193,6 +215,13 @@ new_img.onclick = () => {
 to_gallery.onclick = loadSharedImages;
 to_workspace.onclick = initLoad;
 logout.onclick = logout_fn;
+
+search_txt_btn.onclick = doFilter;
+tag_select.onchange = doFilter;
+img_order.onchange = doFilter;
+start_date_control.onchange = doFilter;
+end_date_control.onchange = doFilter;
+
 
 // console.log(workspace_items);
 

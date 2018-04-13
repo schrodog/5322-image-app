@@ -71,6 +71,7 @@ exports.findSession = (req, res) => {
   });
 }
 
+// public gallery
 exports.loadImages = (req, res) => {
   let id = req.params.id;
   dbo.collection("images").find({userID: id}).toArray((err, data) => {
@@ -81,6 +82,9 @@ exports.loadImages = (req, res) => {
 
 exports.loadSharedImages = (req, res) => {
   // let id = req.params.id;
+  let sort = req.params.sort;
+  let filter = req.params.filter;
+  
   dbo.collection("images").find({share: 1}).toArray((err, data) => {
     if(err) throw err;
     res.send(data);
@@ -170,6 +174,8 @@ exports.uploadImages = (req, res) => {
   form.on('end', () => {return;})
 }
 
+// development
+
 exports.initDevelopment = (req, res) => {
   dbo.collection("development").insertOne({}, (e,r) => {
     res.send(r.insertedId);
@@ -205,6 +211,7 @@ exports.clearDevelopment = (req, res) => {
 
 exports.getWork = (req, res) => {
   let sort = req.params.sort;
+  
   let order = parseInt(req.params.order);
   dbo.collection("development").find({userID: req.session.userID}).sort({sort: order}).toArray( (e,r) => {
     if(e) throw e;
@@ -214,7 +221,23 @@ exports.getWork = (req, res) => {
 }
 
 exports.doFilter = (req, res) => {
+  let query1, query2;
+  if (req.params.data.filter){
+    let filter = req.params.data.filter;
+    query1 = dbo.collection("images").find(filter);
+  } else {
+    query1 = dbo.collection("images").find();
+  }
   
+  if (req.params.data.sort){
+    let order = req.params.data.sort;
+    query2 = query1.sort(order);
+  } else {
+    query2 = query1;
+  }
+  
+  query2.toArray((e,r) => res.send(r));
+
 }
 
 exports.runPython = (req,res) => {
