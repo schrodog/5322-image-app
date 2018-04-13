@@ -223,15 +223,34 @@ exports.getWork = (req, res) => {
 exports.doFilter = (req, res) => {
   let query1, query2;
   if (req.params.data.filter){
-    let filter = req.params.data.filter;
-    query1 = dbo.collection("images").find(filter);
+    let filter = req.params.data.filter, format={$and: []};
+    
+    if(filter.startDate || filter.endDate){
+      let obj={};
+      if(filter.startDate){
+        obj.$gt = new Date(filter.startDate);
+      }
+      if(filter.endDate){
+        obj.$lt = new Date(filter.endDate);
+      }
+      format.$and.push(obj);
+    }
+    if(filter.tag){
+      format.$and.push({'tag': filter.tag});
+    }
+    if(filter.title){
+      format.$and.push({'title': new RegExp(`/${filter.title}/`)});
+    }
+    
+    query1 = dbo.collection("images").find(format);
+    console.log('format',format)
   } else {
     query1 = dbo.collection("images").find();
   }
   
   if (req.params.data.sort){
     let order = req.params.data.sort;
-    query2 = query1.sort(order);
+    query2 = query1.sort({order: -1});
   } else {
     query2 = query1;
   }

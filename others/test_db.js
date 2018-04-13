@@ -8,19 +8,14 @@ MongoClient.connect(url, (err,db) => {
   if (err) throw err;
   const dbo = db.db("mydb");
 
-  // dbo.collection('images').find( {$and: [ {'date': {$lt: '2017-12-21', $gt: '2016-12-1'}}, {'tag': 'life'}] } ).toArray(
-  //   (err,res) => console.log(res)
-  // )
-
-  dbo.collection('images').aggregate([
-    // {$project: {'tag':1, 'likedID':1, 'comments':1}},
-    {$match: {}}, 
-    // {$unwind: '$comments'},
-    {$group: {_id: '$_id', numlikes:{$sum:'$comments.length'}} },
-    {$sort: {'numlikes': -1}}
-  ] ).toArray(
+  dbo.collection('images').find( {'date': {$gt: new Date('2017-03-02'), $lt: new Date('2018-1-1')}  } ).sort({likeNum: -1}).toArray(
     (err,res) => console.log(res)
   )
+
+  // dbo.collection('images').update(
+  //   {'title':'street food'},
+  //   {$inc: {'commentNum': -2}}
+  // )
   
 
   db.close()

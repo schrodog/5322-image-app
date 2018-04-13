@@ -69,7 +69,7 @@ const format = (i,flag) => {
     <div class='interactive-view'>
       <div class='created-by'>by </div>
       <div class='like-pair'>${heart}
-        <img class='speech-icon' src='speech-bubble.png'>
+        <img class='speech-icon' src='icon/chat2.svg'>
         <span class='speech-num'>${i.comments.length}</span>
       </div>
     </div></div>`;
@@ -162,24 +162,32 @@ const loadSharedImages = () => {
 const doFilter = () => {
 
   let [startDate_value, endDate_value] = [start_date_control.value, end_date_control.value];
-  let tag_value = tag_select.value, order_value = img_order.value;
+  let tag_value = $("#tag-select").val();
+  let order_value = $("#img-order").val();
   let search_value = search_txt.value;
-
-  // console.log(startDate,endDate,tag_value,order_value,search_value)
+  
+  const isValidDate = (date) => {
+    let bits = s.split('/');
+    let d = new Date(bits[2], bits[1]-1, bits[0]);
+    return d && (d.getMonth()+1) == bits[1];
+  }
+  
+  console.log(startDate_value,endDate_value,tag_value,order_value,search_value)
+  
   let data = {};
   if(search_value !== '') data.filter.title = search_value;
-  if(startDate_value !== '') data.filter.startDate = startDate_value;
-  if(endDate_value !== '') data.filter.endDate = endDate_value;
+  if(startDate_value !== '' && isValidDate(startDate_value)) data.filter.startDate = startDate_value;
+  if(endDate_value !== '' && isValidDate(endDate_value)) data.filter.endDate = endDate_value;
   if(tag_value !== 'all') data.filter.tag = tag_value;
   if(order_value !== 'default') data.order = order_value;
 
   $.ajax({
     url: '/image_gallery/filter',
     method: 'GET',
-    data: JSON.stringify({'data': data),
+    data: JSON.stringify({'data': data}),
     contentType: 'application/json',
   }).done(data => {
-    console.log('work',data);
+    console.log('filter arr',data);
     data.forEach( i => format(i));
   });
 }

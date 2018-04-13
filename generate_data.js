@@ -1,3 +1,7 @@
+'use strict';
+
+const init_db = require('./init_db.js');
+
 let userList = ['5ac4798ac759e365d7728f39','5ac4798ac759e365d7728f3a','5ac4798ac759e365d7728f3b','5ac4798ac759e365d7728f3c'];
 let commentList = ['marvelous', 'not bad', 'nice picture','beautiful','good work'];
 
@@ -53,8 +57,8 @@ const randomComment = () => {
 // === MAIN ===
 
 let filelist = [
-  ['blur_grass.jpeg','grass blur','nature'], ['cartoon_ant.jpg','cartoon ant', 'nature'], ['central_district.jpg','central district', 'city'], ['Family2.jpg','family gather', 'people'], ['Family3.jpg','family on beach','people'], ['family_beach.jpg','parents','people'],  ['forest_road.jpg', 'forest road', 'nature'], ['grassland_park.jpg', 'grassland park', 'nature'], ['hill_river', 'hill river','nature'],
-  ['hong_kong_skyrise.jpg', 'hong kong skyrise', 'city'], ['hot_air_balloon.jpg', 'hot air balloon', 'nature'], ['housing_estate.jpg', 'housing estate', 'city'], ['imagem_para_landscape.jpg','imagem para landscape','nature'], ['market1.jpg','market meat', 'life'], ['mountain_boat.jpeg','mountain boat','nature'], ['mountain_lake.jpg', 'mountain lake', 'nature'], ['parrot.jpg','parrot','nature'], ['pexels-photo.jpg','pexels','nature'], ['pigeon.jpg','pigeon','life'], ['road_to_wild','road to wild','nature'], ['rubber_green.jpeg','rubber green','life'], ['small_bird1.jpg','small bird','life'], ['small_flower1.jpeg','small flower', 'nature'], ['street_food','street food', 'life']
+  ['blur_grass.jpeg','grass blur','nature'], ['cartoon_ant.jpg','cartoon ant', 'nature'], ['central_district.jpg','central district', 'city'], ['Family2.jpg','family gather', 'people'], ['Family3.jpg','family on beach','people'], ['family_beach.jpg','parents','people'],  ['forest_road.jpg', 'forest road', 'nature'], ['grassland_park.jpg', 'grassland park', 'nature'], ['hill_river.jpeg', 'hill river','nature'],
+  ['hong_kong_skyrise.jpg', 'hong kong skyrise', 'city'], ['hot_air_balloon.jpg', 'hot air balloon', 'nature'], ['housing_estate.jpg', 'housing estate', 'city'], ['imagem_para_landscape.jpg','imagem para landscape','nature'], ['market1.jpg','market meat', 'life'], ['mountain_boat.jpeg','mountain boat','nature'], ['mountain_lake.jpg', 'mountain lake', 'nature'], ['parrot.jpg','parrot','nature'], ['pexels-photo.jpg','pexels','nature'], ['pigeon.jpg','pigeon','life'], ['road_to_wild.jpg','road to wild','nature'], ['rubber_green.jpeg','rubber green','life'], ['small_bird1.jpg','small bird','life'], ['small_flower1.jpeg','small flower', 'nature'], ['street_food.jpg','street food', 'life']
 ];
 
 let objs={'data':[]};
@@ -65,8 +69,12 @@ for (let file of filelist){
   tmp.share = randomShare();
   tmp.userID = userList[randomNum(4,1)];
   tmp.likedID = randomLike();
+  tmp.likeNum = tmp.likedID.length; 
   tmp.comments = randomComment();
+  tmp.commentNum = tmp.comments.length;
   objs.data.push(tmp);
 }
 
-console.log(JSON.stringify(objs))
+// console.log(JSON.stringify(objs))
+
+init_db.toMongo(objs);

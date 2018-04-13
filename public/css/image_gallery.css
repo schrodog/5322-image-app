@@ -87,6 +87,11 @@
   border: 1px dotted black;
 }
 
+.speech-icon {
+  width: 30px;
+  opacity: 0.9;
+}
+
 .sub-work-container:hover {
   cursor: pointer;
 }
