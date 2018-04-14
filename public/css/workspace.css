@@ -11,6 +11,14 @@
   margin: 5px 5px;
 }  */
 
+body {
+  margin: 0;
+}
+
+#mainpage {
+  padding: 0 10px;
+}
+
 .container, .workspace-top {
   column-count: 4;
   column-gap: 5px;
@@ -32,64 +40,45 @@
   }
 }
 
+nav {
+  background-color: black;
+  height: 40px;
+  padding: 5px;
+}
+nav button {
+  color: white;
+  background: Transparent;
+  margin-top: 6px;
+  font-size: 1.4rem;
+  border: none;
+  cursor: pointer;
+  float: right;
+  margin: 6px 6px;
+}
+nav button.style1 {
+  vertical-align: middle;
+  margin-bottom: 15px;
+  height: 40px;
+  background-color: #22A7F0;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid #22A7F0;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 0;
+}
+
 .sub-container {
   width: 100%;
 }
 .frame-img, .work-img {
   width: 100%;
-} 
-
-.interactive-view {
-  display: none;
-  position: relative;
-  bottom: 45px;
-  height: 0px;
-  color: white;
-  font-size: 20px;
-  opacity: 1;
-}
-.sub-container:hover .interactive-view {
-  display: inherit;
-  opacity: 0.8;
-  transition: opacity 1.0s;
 }
 
-.created-by {
-  position: absolute;
-  left: 20px;
-}
 
-.like-pair {
-  position: absolute;
-  right: 25px;
-}
-
-.like-icon {
-  width: 30px;
-  cursor: pointer;
-}
-.like-btn {
-  background: none;
-  border: none;
-  padding: 0;
-}
-.like-btn:active, .like-btn:focus {
-  outline: none;
-}
-
-.like-num {
-  font-size: 30px;
-  vertical-align: top;
-  padding-left: 20px;
-}
 
 .work-img {
   border: 1px dotted black;
-}
-
-.speech-icon {
-  width: 30px;
-  opacity: 0.9;
 }
 
 .sub-work-container:hover {

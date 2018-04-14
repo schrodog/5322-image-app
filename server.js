@@ -44,7 +44,7 @@ app.post('/development', account.initDevelopment);
 app.get('/development', account.loadDevelopment);
 app.delete('/development', account.clearDevelopment);
 app.get('/image_gallery/work', account.getWork);
-app.get('image_gallery/filter', account.doFilter)
+app.post('/image_gallery/filter', account.doFilter);
 
 app.post('/python', account.runPython);
 
@@ -52,7 +52,11 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 // login page
 app.get('/', (req,res) => res.render('index') );
-app.get('/image_gallery', (req,res) => res.render('image_gallery') );
+
+
+// app.get('/public_gallery', (req,res) => res.render('image_gallery', {'page': 'workspace'} ) );
+app.get('/public_gallery', (req,res) => res.render('public_gallery') );
+app.get('/workspace', (req,res) => res.render('workspace') );
 app.get('/imaging', (req,res) => res.render('imaging') );
 
 

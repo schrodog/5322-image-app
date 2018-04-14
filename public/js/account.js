@@ -84,7 +84,7 @@ exports.loadSharedImages = (req, res) => {
   // let id = req.params.id;
   let sort = req.params.sort;
   let filter = req.params.filter;
-  
+
   dbo.collection("images").find({share: 1}).toArray((err, data) => {
     if(err) throw err;
     res.send(data);
@@ -210,10 +210,9 @@ exports.clearDevelopment = (req, res) => {
 }
 
 exports.getWork = (req, res) => {
-  let sort = req.params.sort;
-  
+
   let order = parseInt(req.params.order);
-  dbo.collection("development").find({userID: req.session.userID}).sort({sort: order}).toArray( (e,r) => {
+  dbo.collection("development").find({userID: req.session.userID}).sort({'date': -1}).toArray( (e,r) => {
     if(e) throw e;
     console.log('getwork',r);
     res.send(r);
@@ -221,10 +220,11 @@ exports.getWork = (req, res) => {
 }
 
 exports.doFilter = (req, res) => {
-  let query1, query2;
-  if (req.params.data.filter){
-    let filter = req.params.data.filter, format={$and: []};
-    
+  let query1, query2, filt = req.body.data.filter;
+  console.log(req.body.data)
+  if (! (Object.keys(filt).length === 0 && filt.constructor === Object) ){
+    let filter = req.body.data.filter, format={$and: []};
+
     if(filter.startDate || filter.endDate){
       let obj={};
       if(filter.startDate){
@@ -239,22 +239,25 @@ exports.doFilter = (req, res) => {
       format.$and.push({'tag': filter.tag});
     }
     if(filter.title){
-      format.$and.push({'title': new RegExp(`/${filter.title}/`)});
+      format.$and.push({'title': new RegExp(filter.title)});
     }
-    
+
     query1 = dbo.collection("images").find(format);
     console.log('format',format)
   } else {
     query1 = dbo.collection("images").find();
   }
-  
-  if (req.params.data.sort){
-    let order = req.params.data.sort;
-    query2 = query1.sort({order: -1});
+
+  if (req.body.data.order){
+    let order = req.body.data.order;
+    let format = { [order] :-1};
+
+    query2 = query1.sort(format);
+    console.log(format);
   } else {
     query2 = query1;
   }
-  
+
   query2.toArray((e,r) => res.send(r));
 
 }

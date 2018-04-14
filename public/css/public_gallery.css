@@ -1,0 +1,155 @@
+body {
+  margin: 0;
+}
+
+#mainpage {
+  padding: 0 10px;
+}
+
+.container, .workspace-top {
+  column-count: 4;
+  column-gap: 5px;
+}
+
+@media only screen and (max-width: 1200px){
+  .container, .workspace-top {
+    column-count: 3;
+  }
+}
+@media only screen and (max-width: 900px){
+  .container, .workspace-top {
+    column-count: 2;
+  }
+}
+@media only screen and (max-width: 600px){
+  .container, .workspace-top {
+    column-count: 1;
+  }
+}
+
+/* navigation bar */
+
+nav {
+  background-color: black;
+  height: 40px;
+  padding: 5px;
+}
+nav button {
+  color: white;
+  background: Transparent;
+  margin-top: 6px;
+  font-size: 1.4rem;
+  border: none;
+  cursor: pointer;
+}
+nav button.right {
+  float: right;
+  margin: 6px 6px;
+}
+nav button.style1 {
+  vertical-align: middle;
+  margin-bottom: 15px;
+  height: 40px;
+  background-color: #22A7F0;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid #22A7F0;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 0;
+}
+
+input[name='search'] {
+  display: inline-block;
+  margin: 0;
+  font-size: 1.2rem;
+  padding: 4px;
+  border-radius: 0.4rem;
+}
+input[name='search']:focus {
+  outline: none;
+}
+
+/* filter */
+
+select {
+  /* display: inline-block; */
+  height: 1.5rem;
+  background-color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  font-size: 1rem;
+  color: #22A7F0;
+  margin: 10px 1px 10px 1px;
+  border color: #22A7F0;
+  width: 100px;
+}
+
+/* images */
+
+.sub-container {
+  width: 100%;
+}
+.frame-img, .work-img {
+  width: 100%;
+}
+
+.interactive-view {
+  display: none;
+  position: relative;
+  bottom: 45px;
+  height: 0px;
+  color: white;
+  font-size: 20px;
+  opacity: 1;
+}
+.sub-container:hover .interactive-view {
+  display: inherit;
+  opacity: 0.8;
+  transition: opacity 1.0s;
+}
+
+.created-by {
+  position: absolute;
+  left: 20px;
+}
+
+.like-pair {
+  position: absolute;
+  right: 25px;
+}
+
+.like-icon {
+  width: 30px;
+  cursor: pointer;
+}
+.like-btn {
+  background: none;
+  border: none;
+  padding: 0;
+}
+.like-btn:active, .like-btn:focus {
+  outline: none;
+}
+
+.like-num {
+  font-size: 30px;
+  vertical-align: top;
+  padding-left: 20px;
+}
+
+.work-img {
+  border: 1px dotted black;
+}
+
+.speech-icon {
+  width: 30px;
+  opacity: 0.9;
+}
+
+.sub-work-container:hover {
+  cursor: pointer;
+}
+
+

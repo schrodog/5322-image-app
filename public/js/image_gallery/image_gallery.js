@@ -122,10 +122,25 @@ const initLoad = () => {
     }
     userID = data.userID;
     loadOwnImages(data.userID);
+    // document.getElementById("username").innerHTML = user;
+    // let obj = {username: user}
+    // let html = ejs.render('s',obj);
+    // console.log(html);
+
+    // document.getElementById("placeholder").innerHTML = html;
   });
 
   loadSharedImages()
 
+  // $.ajax({
+  //   url: '/image_gallery/work',
+  //   method: 'GET',
+  //   data: JSON.stringify({}),
+  //   contentType: 'application/json',
+  // }).done(data => {
+  //   console.log('work',data);
+  //   data.forEach( i => workspace_format(i));
+  // });
 };
 
 // load public gallery image
@@ -218,11 +233,15 @@ new_img.onclick = () => {
   window.location.href='/imaging';
 
 }
-
-logout.onclick = logout_fn;
 to_gallery.onclick = loadSharedImages;
+to_workspace.onclick = initLoad;
+logout.onclick = logout_fn;
 
-
+search_txt_btn.onclick = doFilter;
+tag_select.onchange = doFilter;
+img_order.onchange = doFilter;
+start_date_control.onchange = doFilter;
+end_date_control.onchange = doFilter;
 
 
 // console.log(workspace_items);

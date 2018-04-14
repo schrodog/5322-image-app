@@ -385,9 +385,13 @@ logout_btn.onclick = () => {
 
 imgGallery_btn.onclick = () => {
   saveStatus();
-  
-  window.location.href = "/image_gallery";
+  window.location.href = "/public_gallery";
 }
+document.getElementById("to-workspace-btn").onclick = () => {
+  saveStatus();
+  window.location.href = "/workspace";
+}
+
 
 let local_stream;
 takePhoto_btn.onclick = () => {
@@ -406,8 +410,8 @@ cameraSnap_btn.onclick = () => {
   cameraVideo.pause();
   local_stream.getTracks().forEach(track => track.stop());
   local_stream.srcObject = "";
-  
-  
+
+
   const context = cameraCanvas.getContext('2d');
   mainpage_block.classList.remove('hide');
   photoSnap_block.classList.add('hide');

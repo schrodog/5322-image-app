@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Image Imagination</title>
+  <link rel="stylesheet" href="./css/public_gallery.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="./lib/jquery-3.3.1.min.js"></script>
+
+</head>
+
+<body>
+
+
+
+<nav>
+  <input type="text" placeholder="Search.." name="search" />
+  <button class="left" id="search-txt-btn"><i class="fa fa-search"></i></button>
+
+  <button class="right style1" id="logout">Logout</button>
+  <button class="right" id="new-image">New image</button>
+  <button class="right" id="to-workspace">Workspace</button>
+
+</nav>
+
+<div id="mainpage">
+
+  <h2>Public Gallery</h2>
+
+  <input type="date" name="start-date"> - <input type="date" name="end-date">
+
+  Tag
+  <select id="tag-select">
+    <option value="all">All</option>
+    <option value="nature">Nature</option>
+    <option value="people">People</option>
+    <option value="life">Life</option>
+    <option value="city">City</option>
+  </select>
+
+
+  Sort by
+  <select id="img-order">
+    <option value="default">Default</option>
+    <option value="date">Date</option>
+    <option value="likeNum">Popularity</option>
+    <option value="commentNum">Comment</option>
+  </select>
+
+
+  <div class="container" id="img-container">
+  </div>
+
+</div>
+
+
+<script src="./js/public_gallery.js"></script>
+
+</body>
+</html>

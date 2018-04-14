@@ -3,43 +3,65 @@ body {
   line-height: 1;
   font-family: sans-serif;
   background-color: black;
+  margin: 0;
 }
+
+
 
 /* nav bar */
+nav {
+  background-color: black;
+  height: 40px;
+  padding: 5px;
+}
+nav button {
+  color: white;
+  background: Transparent;
+  margin-top: 6px;
+  font-size: 1.4rem;
+  border: none;
+  cursor: pointer;
+}
+nav button.right {
+  float: right;
+  padding: 0 10px;
+}
 
 #navBar {
-  height: 50px;
-  border-bottom: 2px solid #22A7F0;
-  min-width: 900px;
-  display: flex;
+  height: 40px;
+  background-color: black;
+  height: 40px;
+  padding: 5px;
 }
 
-#navBarGroup {
-  margin-left: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-  display: grid;
-  grid-template: repeat(1, 40px) / repeat(2, 50%);
-  grid-auto-flow: row;
-  padding: 5px
+#navBar button {
+  color: white;
+  cursor: pointer;
+  float: right;
+  margin: 0 5px;
 }
 
-#navBarGroup button {
+#navBar button.style1 {
   vertical-align: middle;
   margin-bottom: 15px;
   height: 40px;
-  width: 95%;
   background-color: #22A7F0;
   border-radius: 10px;
   cursor: pointer;
-  color: #fff;
   border: 1px solid #22A7F0;
   text-align: center;
-  font-size: 100%;
+  font-size: 1.2rem;
 }
 
-h3 {
-  font-size: 2.5em;
+#navBar button.style2 {
+  background: Transparent;
+  margin-top: 6px;
+  font-size: 1.4rem;
+  border: none;
+}
+
+#navBar .h3 {
+  font-size: 2.2rem;
   color: #22A7F0;
   margin: 0px 0px 0px 0px;
 }
@@ -269,7 +291,7 @@ input[type=range]::-webkit-slider-thumb {
   margin: auto;
 }
 
-#control-btn .controlButtons {``
+#control-btn .controlButtons {
   vertical-align: middle;
   margin-bottom: 15px;
   height: 50px;
@@ -369,5 +391,5 @@ textarea {
 
 
 .hide {
-  display: none;  
+  display: none;
 }

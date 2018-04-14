@@ -13,54 +13,26 @@
 <body>
 
 <nav>
-  <!-- <form action="/logout" method="DELETE">
-    <input id="logout" type="submit" value="Logout">
-  </form> -->
   <input type="text" placeholder="Search.." name="search" />
-  <button id="search-txt-btn"><i class="fa fa-search"></i></button>
-  <!-- <form action="/image_gallery/filter" method="GET">
-  </form> -->
+  <button class="left" id="search-txt-btn"><i class="fa fa-search"></i></button>
 
-  <button id="logout">Logout</button>
-  <button id="new-image">New image</button>
-  <button id="to-gallery">Go to gallery</button>
-  <button id="to-workspace">Go to workspace</button>
+  <button class="right" id="logout">Logout</button>
+  <button class="right" id="new-image">New image</button>
+  <button class="right" id="to-gallery">Go to gallery</button>
+  <button class="right" id="to-workspace">Go to workspace</button>
+
 </nav>
 
 <h1 id="title">Saved Workspace</h1>
 
-<h2>Welcome back, <span id="username"></span> </h2>
+<!-- <h2>Welcome back, <span id="username"></span></h2> -->
+<!-- <div id="placeholder"> -->
 
-<input type="date" name="start-date"> - <input type="date" name="end-date">
-
-Tag
-<select id="tag-select">
-  <option value="all">All</option>
-  <option value="nature">Nature</option>
-  <option value="people">People</option>
-  <option value="life">Life</option>
-  <option value="city">City</option>
-</select>
+<%- include('./partials/'+page) %>
 
 
-Sort by
-<select id="img-order">
-  <!-- <option value="relevance">Relevance</option> -->
-  <option value="default">Default</option>
-  <option value="date">Date</option>
-  <option value="likeNum">Popularity</option>
-  <option value="commentNum">Comment</option>
-</select>
 
-
-<div class="container" id="img-container">
-</div>
-
-<div class="workspace-top" id="workspace-container">
-</div>
-
-
-<script src="./js/image_gallery.js"></script>
+<!-- <script src="./js/image_gallery.js"></script> -->
 
 </body>
 </html>

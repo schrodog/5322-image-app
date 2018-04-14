@@ -25,7 +25,7 @@ password.addEventListener('keyup', key_login);
 
 
 const naivgate_to_gallery = (username, id) => {
-  window.location.href='/image_gallery';
+  window.location.href='/public_gallery';
   $.ajax({
     url: '/session',
     method: 'POST',
