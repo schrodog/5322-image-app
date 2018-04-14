@@ -19,6 +19,14 @@ body {
   padding: 0 10px;
 }
 
+nav .title {
+  font-size: 2.2rem;
+  color: #22A7F0;
+  font-weight: bold;
+  margin-right: 62px;
+  font-family: sans-serif;
+}
+
 .container, .workspace-top {
   column-count: 4;
   column-gap: 5px;
@@ -42,7 +50,7 @@ body {
 
 nav {
   background-color: black;
-  height: 40px;
+  height: 45px;
   padding: 5px;
 }
 nav button {

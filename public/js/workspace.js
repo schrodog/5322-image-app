@@ -5,7 +5,7 @@ const new_img = document.getElementById("new-image");
 const to_gallery = document.getElementById("to-gallery");
 const logout = document.getElementById("logout");
 const workspace_items = document.getElementsByClassName("sub-work-container");
-let userID;
+let USERID, USERNAME;
 
 // load workspace
 const goToEdit = (item) => {
@@ -20,6 +20,7 @@ const goToEdit = (item) => {
 
 // generate workspace
 const loadWorkspace = (data) => {
+  
   data.forEach(i => {
 
     let html = `<div><div class="sub-work-container" data-id='${i._id}' onclick='goToEdit(this)'>
@@ -30,12 +31,30 @@ const loadWorkspace = (data) => {
   });
 }
 
+// generate public gallery images
+const loadImages = (data) => {
+
+  let html='';
+  data.forEach( i => {
+
+  html += `<div class='sub-container'>
+    <img class='frame-img' src='img/users/${i.path}'>
+    <div class='interactive-view'>
+      <span class='img-title'>${i.title}</span>
+
+    </div></div>`;
+
+  });
+  img_container.insertAdjacentHTML('beforeend',html);
+}
+
 // get user image data
 const loadOwnImages = (id) => {
   $.ajax({
     url: `/image_gallery/work`,
     method: 'GET',
   }).done( data => {
+    
     loadWorkspace(data);
 
   });
@@ -44,7 +63,19 @@ const loadOwnImages = (id) => {
 
 // ===global===
 
-window.onload = loadOwnImages;
+window.onload = () => {
+  $.ajax({
+    url: '/session',
+    method: 'GET',
+  }).done( data => {
+    USERNAME = data.username;
+    USERID = data.userID;
+    
+    document.getElementById("username").innerHTML = USERNAME;
+    loadOwnImages();
+  });
+} 
+
 to_gallery.onclick = () => {
   window.location.href='/public_gallery';
 }
