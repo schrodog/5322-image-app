@@ -46,6 +46,9 @@ app.delete('/development', account.clearDevelopment);
 app.get('/image_gallery/work', account.getWork);
 app.post('/image_gallery/filter', account.doFilter);
 
+app.get('/image_gallery/comment/:id', account.getComments);
+app.post('/image_gallery/comment', account.setComments);
+
 app.post('/python', account.runPython);
 
 app.set('view engine', 'ejs');

@@ -2,22 +2,21 @@
 
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
+const ObjectID = mongo.ObjectID;
 const url = "mongodb://127.0.0.1:27017/";
 
-MongoClient.connect(url, (err,db) => {
-  if (err) throw err;
-  const dbo = db.db("mydb");
+// MongoClient.connect(url, (err,db) => {
+//   if (err) throw err;
+//   const dbo = db.db("mydb");
+// 
+//   dbo.collection('images').updateOne( {_id: ObjectID("5ad0af85189135159c8ed42e")}, {$set:{ 'comments': [], 'commentNum': 0} } , (err,res) => {
+//     if (err) console.log(err)
+//   });
+//   db.close()
+// });
 
-  dbo.collection('images').find( {'date': {$gt: new Date('2017-03-02'), $lt: new Date('2018-1-1')}  } ).sort({likeNum: -1}).toArray(
-    (err,res) => console.log(res)
-  )
+let a=[{'b':1},{'b': 2}];
+a.forEach(i => console.log(i))
 
-  // dbo.collection('images').update(
-  //   {'title':'street food'},
-  //   {$inc: {'commentNum': -2}}
-  // )
-  
 
-  db.close()
-});
 

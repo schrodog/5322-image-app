@@ -2,7 +2,7 @@ body {
   margin: 0;
 }
 
-#mainpage {
+#img-container {
   padding: 0 10px;
 }
 
@@ -29,22 +29,30 @@ body {
 
 /* navigation bar */
 
+nav .title {
+  font-size: 2.2rem;
+  color: #22A7F0;
+  font-weight: bold;
+  margin-right: 62px;
+  font-family: sans-serif;
+}
+
 nav {
   background-color: black;
-  height: 40px;
+  height: 45px;
   padding: 5px;
 }
 nav button {
   color: white;
   background: Transparent;
   margin-top: 6px;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   border: none;
   cursor: pointer;
 }
 nav button.right {
   float: right;
-  margin: 6px 6px;
+  margin: 11px 6px;
 }
 nav button.style1 {
   vertical-align: middle;
@@ -56,7 +64,7 @@ nav button.style1 {
   border: 1px solid #22A7F0;
   text-align: center;
   font-size: 1.2rem;
-  margin-top: 0;
+  margin-top: 5px;
 }
 
 input[name='search'] {
@@ -70,7 +78,32 @@ input[name='search']:focus {
   outline: none;
 }
 
+.search-wrapper {
+  display: inline-block;
+}
+
 /* filter */
+
+.filter-tools {
+  padding: 10px 10px;
+  background-color: #f4f4f4;
+}
+.filter-tool-item {
+  display: inline-block;
+  padding: 0 15px;
+}
+
+input[type="date"] {
+  color: #22A7F0;
+  font-size: 1.2rem;
+  padding: 1px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+input[type="date"], focus {
+  box-shadow: none;
+}
 
 select {
   /* display: inline-block; */
@@ -85,6 +118,12 @@ select {
   border color: #22A7F0;
   width: 100px;
 }
+
+.label-filter {
+  color: #898989;
+  font-size: 16px;
+}
+
 
 /* images */
 
@@ -110,9 +149,10 @@ select {
   transition: opacity 1.0s;
 }
 
-.created-by {
+.img-title {
   position: absolute;
   left: 20px;
+  font-size: 18px;
 }
 
 .like-pair {
@@ -121,35 +161,147 @@ select {
 }
 
 .like-icon {
-  width: 30px;
+  width: 24px;
   cursor: pointer;
 }
-.like-btn {
+/* .like-btn {
   background: none;
   border: none;
   padding: 0;
 }
 .like-btn:active, .like-btn:focus {
   outline: none;
+} */
+.like-num {
+  font-size: 24px;
+  padding-left: 10px;
 }
 
-.like-num {
-  font-size: 30px;
-  vertical-align: top;
-  padding-left: 20px;
-}
 
 .work-img {
   border: 1px dotted black;
 }
 
 .speech-icon {
-  width: 30px;
+  width: 24px;
   opacity: 0.9;
+  cursor: pointer;
+}
+.speech-num {
+  font-size: 24px;
 }
 
 .sub-work-container:hover {
   cursor: pointer;
+}
+
+/* modal box */
+
+.modalDialog {
+	position: fixed;
+	font-family: Arial, Helvetica, sans-serif;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+  /* width: 500px;
+  height: 600px; */
+	background: rgba(0,0,0,0.8);
+	z-index: 99;
+	opacity: 0;
+	-webkit-transition: opacity 400ms ease-in;
+	-moz-transition: opacity 400ms ease-in;
+	transition: opacity 400ms ease-in;
+	pointer-events: none;
+}
+.modalDialog:target {
+	opacity:1;
+	pointer-events: auto;
+}
+
+.modalDialog > div {
+	width: 60vw;
+  max-width: 600px;
+	position: relative;
+	margin: 10% auto;
+	padding: 20px 20px 13px 20px;
+	border-radius: 10px;
+	background: #fff;
+	background: -moz-linear-gradient(#fff, #999);
+	background: -webkit-linear-gradient(#fff, #999);
+	background: -o-linear-gradient(#fff, #999);
+}
+
+.close {
+	background: #606061;
+	color: #FFFFFF;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+	-moz-box-shadow: 1px 1px 3px #000;
+	-webkit-box-shadow: 1px 1px 3px #000;
+	box-shadow: 1px 1px 3px #000;
+  cursor: pointer;
+}
+
+.close:hover { background: #00d9ff; }
+
+/* modal detail */
+.modal-container {
+  width: 58vw;
+  max-width: 550px;
+  max-height: 500px;
+  display: grid;
+  grid-template: 1fr / 60% 40%;
+  grid-column-gap: 20px;
+  overflow: hidden;
+}
+.modal-container img {
+  grid-row: 1;
+  grid-column: 1;
+  width: 100%
+}
+
+.comment-box-wrapper {
+  overflow-y: scroll;
+  margin-bottom: 86px;
+  padding-right: 17px;
+}
+.modal-container .comment-box {
+  grid-row: 1;
+  grid-column: 2;
+  background: #ffffff54;
+  margin-bottom: 10px;
+}
+.comment-scroll {
+  width: 100%;
+  /* box-sizing: content-box; */
+}
+
+.comment-box .author {
+  color: #006dac;
+  font-weight: bold;
+}
+.comment-box .comment-text {
+  font-size: 15px;
+}
+
+.add-comment {
+  position: absolute;
+  bottom: 15px;
+}
+.add-comment textarea {
+  width: 100%;
+  height: 40px;
+  resize: none;
 }
 
 

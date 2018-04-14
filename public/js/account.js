@@ -108,13 +108,13 @@ exports.refreshLike = (req, res) => {
   if(data.action == 1){
     // console.log(ObjectID(data.id));
     // dbo.collection("images").findOne({'_id': id }, (err,data) => {console.log(data);});
-    dbo.collection("images").updateOne({'_id': id }, {$push: {'likedID': data.userID}}, (err,data) => {
+    dbo.collection("images").updateOne({'_id': id }, {$push: {'likedID': data.userID}, $inc: {'likeNum':1} }, (err,data) => {
       if(err) throw err;
       // console.log('data:',data);
       res.send('ok');
     })
   } else {
-    dbo.collection("images").updateOne({'_id': id}, {$pull: {'likedID': data.userID}}, (err, data) => {
+    dbo.collection("images").updateOne({'_id': id}, {$pull: {'likedID': data.userID}, $inc: {'likeNum':-1} }, (err, data) => {
       if(err) throw err;
       res.send('ok');
     })
@@ -233,7 +233,7 @@ exports.doFilter = (req, res) => {
       if(filter.endDate){
         obj.$lt = new Date(filter.endDate);
       }
-      format.$and.push(obj);
+      format.$and.push({'date': obj});
     }
     if(filter.tag){
       format.$and.push({'tag': filter.tag});
@@ -243,7 +243,7 @@ exports.doFilter = (req, res) => {
     }
 
     query1 = dbo.collection("images").find(format);
-    console.log('format',format)
+    console.log('format',JSON.stringify(format))
   } else {
     query1 = dbo.collection("images").find();
   }
@@ -309,6 +309,41 @@ exports.runPython = (req,res) => {
     });
   })
 
+}
+
+exports.getComments = (req,res) => {
+  let id = req.params.id;
+  // get all comment with userID
+  dbo.collection("images").findOne({_id: ObjectID(id)}, (e,r) => {
+    let comment_data = r.comments;
+    let userIDs = comment_data.map(i => i.userID);
+    
+    // get all related user info
+    dbo.collection('account').find({_id: {$in: userIDs}} ).toArray((e2,r2) => {
+      
+      let final=[];
+      for (let i of comment_data){
+        for (let j of r2){
+          if (j._id === i.userID){
+            i.username = j.username;
+            final.push(i);
+            continue;
+          }
+      }}
+      console.log('final',final);
+      res.send(final);
+      
+    })
+  })
+}
+
+exports.setComments = (req,res) => {
+  let id = req.body.id;
+  
+  dbo.collection('images').updateOne( {_id: ObjectID(id) }, {$push:{ 'comments': req.body.data} , $inc: {'commentNum': 1} } , (e,r) => {
+    if (e) console.log(e);
+    res.end();
+  });  
 }
 
 
