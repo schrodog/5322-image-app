@@ -3,6 +3,7 @@
 const logout_btn = document.getElementById("logout-btn");
 const imgGallery_btn = document.getElementById("img-gallery-btn");
 const saveStatus_btn = document.getElementById("save-status-btn");
+const loadStatus_btn = document.getElementById("load-status-btn");
 const export_btn = document.getElementById("export-btn");
 const takePhoto_btn = document.getElementById("take-photo-btn");
 const cameraVideo = document.getElementById("camera-video");
@@ -10,13 +11,7 @@ const cameraSnap_btn = document.getElementById("camera-snap-btn");
 const mainpage_block = document.getElementById("mainpage");
 const photoSnap_block = document.getElementById("photo-snap");
 const cameraCanvas = document.getElementById("camera-canvas");
-
-// prevent unsaved changes
-$(function() {
-  $(window).areYouSure({
-    message: 'Are you sure to leave the editing page before saving? Your changes will be lost.'
-  })
-});
+const imgShare_btn = document.getElementById("share-img-btn");
 
 
 // export current images
@@ -121,6 +116,7 @@ const saveStatus = () => {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', object_url, true);
     xhr.responseType = 'arraybuffer';
+
     xhr.onload = function(e) {
       if (this.status === 200) {
         let uint8array = new Uint8Array(this.response);
@@ -174,16 +170,18 @@ const saveStatus = () => {
     }
 
     for (let i of Canvas_ref) {
+      console.log(i.destroyFlag)
       if (i.destroyFlag) continue;
 
       let json = JSON.parse(i.baseImage.toJSON());
-      let url = i.canvas.toDataURL('image/png');
-      // i.img_draw can be string, not base64
-      // let url = i.img_draw;
-      let byteChars = url.replace(/^data:([A-Za-z-+\/]+);base64,/g, '');
-      // console.log(byteChars);
-      byteChars = atob(byteChars)
 
+      // let url = i.canvas.toDataURL('image/png');
+      // // i.img_draw can be string, not base64
+      // let url = i.img_draw;
+      // let byteChars = url.replace(/^data:([A-Za-z-+\/]+);base64,/g, '');
+      // // console.log(byteChars);
+      // byteChars = atob(byteChars)
+      // //
       let id = await getUniqueId();
       let path = `img/users/development/${id}.png`
       json.attrs.image = path;
@@ -193,35 +191,53 @@ const saveStatus = () => {
 
       json.className = 'Canvas';
       canvas_list.push(json);
+      //
+      // // convert from base64 to blob
+      // let byteArrays = [];
+      // let sliceSize = 1024;
+      //
+      // for (let offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+      //   let slice = byteChars.slice(offset, offset + sliceSize);
+      //   let byteNumbers = new Array(slice.length);
+      //   for (let i = 0; i < slice.length; i++) {
+      //     byteNumbers[i] = slice.charCodeAt(i);
+      //   }
+      //   let byteArray = new Uint8Array(byteNumbers);
+      //   byteArrays.push(byteArray);
+      // }
+      //
+      // let blob = new Blob(byteArrays);
 
-      // convert from base64 to blob
-      let byteArrays = [];
-      let sliceSize = 1024;
 
-      for (let offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-        let slice = byteChars.slice(offset, offset + sliceSize);
-        let byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-        let byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
+      // create off-screen canvas
+      let canvas_off = document.createElement('canvas'), ctx = canvas_off.getContext('2d');
+      let new_img = new Image();
+      new_img.src = i.img_draw;
+      new_img.onload = () => {
+
+        let new_width = new_img.width, new_height = new_img.height;
+        canvas_off.width = new_width; canvas_off.height = new_height;
+        ctx.drawImage(new_img, 0,0, new_width, new_height);
+
+        // console.log(canvas_off)
+        canvas_off.toBlob( blob => {
+
+          console.log('blob',blob)
+
+          let formData = new FormData();
+          formData.append('ImageFileField', blob, `${id}.png`);
+
+          $.ajax({
+            url: '/imaging/images',
+            data: formData,
+            type: 'POST',
+            cache: false,
+            contentType: false,
+            processData: false
+          }).done((e) => console.log('done'));
+
+        }, 'image/png');
       }
-
-      let blob = new Blob(byteArrays);
-      let formData = new FormData();
-
-      formData.append('ImageFileField', blob, `${id}.png`);
-
-      $.ajax({
-        url: '/imaging/images',
-        data: formData,
-        type: 'POST',
-        cache: false,
-        contentType: false,
-        processData: false
-      }).done((e) => console.log('done'));
-
     }
 
 
@@ -250,6 +266,8 @@ const saveStatus = () => {
     let id = await getUniqueId();
     uploadScreenshot(`${id}.png`);
 
+    console.log('data_list',image_list, canvas_list, text_list)
+
     $.ajax({
       url: '/imaging/status',
       data: JSON.stringify({
@@ -267,8 +285,9 @@ const saveStatus = () => {
 }
 
 const loadDrawboard = () => {
+
+  // clear Stage
   STAGE.destroy();
-  // STAGE.clearCache();
   const box_size = document.getElementById("box");
 
   STAGE = new Konva.Stage({
@@ -281,21 +300,22 @@ const loadDrawboard = () => {
   // console.log(Image_ref);
 
   $.get('/development', json => {
-    // resume class instances
 
     // skip loading if no data
     if(!json.data) return;
     if(json.data.length === 0) return;
 
+    console.log(json);
     for (let i = 0; i < json.data.length; i++) {
 
+      // iterate through differnet types of data
       (async function() {
         if (json.data[i].className === "Image") {
           let attr_data = json.data[i].attrs;
           let src = attr_data.image;
 
           let ref = await async_loadPicToStage(src, src.match(/[0-9a-z]+$/i)[0]);
-
+          // clone json
           let attr = JSON.parse(JSON.stringify(attr_data));
           delete attr.filters;
           delete attr.image;
@@ -367,11 +387,12 @@ const toggleControlVisibility = () => {
 }
 
 saveStatus_btn.onclick = saveStatus;
-document.getElementById("load-status-btn").onclick = loadDrawboard;
+loadStatus_btn.onclick = loadDrawboard;
 
+// load previous stage
 $(document).ready(() => {
-  // loadDrawboard();
   toggleControlVisibility();
+  loadDrawboard();
 });
 $(window).on('beforeunload', saveStatus )
 

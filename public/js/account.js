@@ -26,6 +26,13 @@ MongoClient.connect(url, (err,db) => {
 //     res.send(result);
 //   });
 // }
+const deleteImage = (url) => {
+  let file = path.resolve('public',url);
+  console.log('del file',file)
+  if(fs.existsSync(file)){
+    fs.unlink(file);
+  }
+}
 
 // login authentication
 exports.findByEmail = (req, res) => {
@@ -153,8 +160,11 @@ exports.saveStatus = (req, res) => {
       'screenshot': req.body.screenshot
     };
 
+    dbo.collection("development").findOne({_id: ObjectID(drawboardID)}, (e,r) => deleteImage(r.screenshot));
+
     dbo.collection("development").updateOne({_id: ObjectID(drawboardID)}, {$set: data_inserted}, (e, r) => {
       if(e) throw e;
+      return;
     });
 
   });
@@ -317,10 +327,10 @@ exports.getComments = (req,res) => {
   dbo.collection("images").findOne({_id: ObjectID(id)}, (e,r) => {
     let comment_data = r.comments;
     let userIDs = comment_data.map(i => i.userID);
-    
+
     // get all related user info
     dbo.collection('account').find({_id: {$in: userIDs}} ).toArray((e2,r2) => {
-      
+
       let final=[];
       for (let i of comment_data){
         for (let j of r2){
@@ -332,18 +342,18 @@ exports.getComments = (req,res) => {
       }}
       console.log('final',final);
       res.send(final);
-      
+
     })
   })
 }
 
 exports.setComments = (req,res) => {
   let id = req.body.id;
-  
+
   dbo.collection('images').updateOne( {_id: ObjectID(id) }, {$push:{ 'comments': req.body.data} , $inc: {'commentNum': 1} } , (e,r) => {
     if (e) console.log(e);
     res.end();
-  });  
+  });
 }
 
 

@@ -1,16 +1,19 @@
 'use strict';
 
-const box_size = document.getElementById("box");
+const box_obj = document.getElementById("box");
+const box_size = document.getElementById("tmp_box").getBoundingClientRect();
+$("#tmp_box").remove();
+
+box_obj.style.width = box_size.width+'px';
+box_obj.style.height = box_size.height+'px';
 
 let STAGE = new Konva.Stage({
   container: 'container',
-  width: box_size.clientWidth,
-  height: box_size.clientHeight,
+  width: box_size.width,
+  height: box_size.height,
   scaleX: 1.0,
   scaleY: 1.0
 });
-
-// console.log(box_size.clientWidth, box_size.clientHeight);
 
 // custom image
 const imageTemplate = imageObj => new Konva.Image({
@@ -105,7 +108,7 @@ const async_initDrawing = (img_src, width, height) =>
 
   let img = new Image();
   img.src = img_src;
-  console.log(img.src)
+  // console.log(img.src)
   img.onload = () => {
 
     const drawing_board = new Konva.Image({
@@ -144,7 +147,7 @@ resize_range.onchange = updateResizeNum;
 enlarge_btn.addEventListener('click', () => {
   // let size = parseInt(resize_range.value)
   if (parseFloat(resize_range.value) < 5){
-    console.log('resize',parseFloat(resize_range.value))
+    // console.log('resize',parseFloat(resize_range.value))
     resize_range.value = parseFloat(resize_range.value)+0.1;
   }
   updateResizeNum();
@@ -153,7 +156,7 @@ enlarge_btn.addEventListener('click', () => {
 reduce_btn.onclick = () => {
   if (resize_range.value > 0.1)
     resize_range.value -= 0.1;
-    console.log('resize',resize_range.value)
+    // console.log('resize',resize_range.value)
   updateResizeNum();
 }
 

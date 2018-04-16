@@ -186,9 +186,9 @@ class Paint extends BaseShape {
 
       ctx.drawImage(new_img, 0,0, new_width, new_height);
 
-      console.log(src);
+      // console.log(src);
       src = canvas_off.toDataURL('image/png');
-      console.log(src);
+      // console.log(src);
       self.img_draw = src;
 
       self.canvas.width = self.baseImage.getWidth();
@@ -197,7 +197,7 @@ class Paint extends BaseShape {
       const imageObj = new Image();
       imageObj.src = src;
 
-      // console.log(self.img_draw);
+      console.log(self.img_draw);
 
       imageObj.onload = () => {
         const img = new Konva.Image({

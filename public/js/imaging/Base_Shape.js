@@ -246,7 +246,7 @@ class BaseShape {
     self.destroyFlag = true;
     // self.stage.off('click');
 
-    // console.log(self.stage);
+    console.log('destroyed');
     // delete window.self;
   }
 

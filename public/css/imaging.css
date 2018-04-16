@@ -334,8 +334,13 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 #box {
-  background-color: #faf5f5c4;;
-  /* border: 1px dotted black; */
+  background-color: #faf5f5c4;
+  /* width: calc(100vw - 20% - 100px);
+  height: calc(100vh - 200px); */
+}
+
+#tmp_box {
+  /* display: none; */
   width: calc(100vw - 20% - 100px);
   height: calc(100vh - 200px);
 }

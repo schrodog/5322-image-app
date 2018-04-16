@@ -65,11 +65,8 @@ const paint_group_btn = document.getElementsByClassName("paint-group-btn");
 
 const showStyle_btn = document.getElementById("show-style-btn");
 const popover_wrapper = document.getElementById("style-popover-wrapper");
-// const style_transfer_btns = document.getElementsByClassName("style-transfer-btn");
 
-// const styleTransfer_btn = document.getElementById("style-transfer-btn");
-
-
+// reference to all image objects
 let Image_ref=[], Text_ref=[], Canvas_ref=[];
 
 

@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="./css/imaging.css"></link>
   <script src="./lib/jquery-3.3.1.min.js"></script>
   <script src="./lib/konva-2.0.2.min.js"></script>
-  <script src="./lib/AreYouSure/jquery.are-you-sure.js"></script>
+  <!-- <script src="./lib/AreYouSure/jquery.are-you-sure.js"></script> -->
   <script type="text/javascript" src="./lib/farbtastic/farbtastic.js"></script>
   <link rel="stylesheet" href="./lib/farbtastic/farbtastic.css" type="text/css" />
 </head>
@@ -205,10 +205,11 @@
           <button class="normal-group-btn controlButtons hide" id="save-resize-btn">save resize</button>
           <button class="normal-group-btn controlButtons" id="delete-pic-btn">Delete</button>
 
-          <button class="normal-group-btn controlButtons" id="save-status-btn">Save Workspace</button>
-          <button class="normal-group-btn controlButtons" id="load-status-btn">Load Workspace</button>
+          <button class="normal-group-btn controlButtons" id="save-status-btn">Save</button>
+          <button class="normal-group-btn controlButtons" id="load-status-btn">Load</button>
           <button class="normal-group-btn controlButtons" id="move-up-btn">Move Up</button>
           <button class="normal-group-btn controlButtons" id="move-down-btn">Move Down</button>
+          <button class="controlButtons " id="share-img-btn">Share</button>
 
           <button class="controlButtons normal-group-btn" id="clear-paint-btn">Clear paint</button>
           <button class="controlButtons paint-group-btn hide" id="save-paint-btn">Save paint</button>
@@ -255,7 +256,9 @@
           <div id="container">
           </div>
         </div>
+        <div id="tmp_box">
 
+        </div>
         <!-- <div id="loader"></div> -->
 
       </div>

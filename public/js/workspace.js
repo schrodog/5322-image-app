@@ -20,15 +20,14 @@ const goToEdit = (item) => {
 
 // generate workspace
 const loadWorkspace = (data) => {
-  
+  let html='';
   data.forEach(i => {
-
-    let html = `<div><div class="sub-work-container" data-id='${i._id}' onclick='goToEdit(this)'>
+    html += `<div class="sub-work-container" data-id='${i._id}' onclick='goToEdit(this)'>
     <img class='work-img' src='${i.screenshot}'>
-    <p>last modified: ${i.date}</p>
-    </div></div>`;
-    workspace_container.insertAdjacentHTML('beforeend', html);
+    <p><span class="last">last modified:</span> <br> ${i.date}</p>
+    </div>`;
   });
+  workspace_container.insertAdjacentHTML('beforeend', html);
 }
 
 // generate public gallery images
@@ -54,7 +53,7 @@ const loadOwnImages = (id) => {
     url: `/image_gallery/work`,
     method: 'GET',
   }).done( data => {
-    
+
     loadWorkspace(data);
 
   });
@@ -70,11 +69,11 @@ window.onload = () => {
   }).done( data => {
     USERNAME = data.username;
     USERID = data.userID;
-    
+
     document.getElementById("username").innerHTML = USERNAME;
     loadOwnImages();
   });
-} 
+}
 
 to_gallery.onclick = () => {
   window.location.href='/public_gallery';
