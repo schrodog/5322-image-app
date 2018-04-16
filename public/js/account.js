@@ -30,7 +30,10 @@ const deleteImage = (url) => {
   let file = path.resolve('public',url);
   console.log('del file',file)
   if(fs.existsSync(file)){
-    fs.unlink(file);
+    fs.unlink(file, err => {});
+    return;
+  } else {
+    return
   }
 }
 
@@ -64,7 +67,7 @@ exports.createSession = (req, res) => {
 // momorize which drawboard user loads
 exports.addSession = (req,res) => {
   let data = req.body;
-  // console.log(data);
+  console.log('add drawboard ID',data);
   req.session.drawboardID = data.fieldValue;
   res.end();
 }
@@ -159,13 +162,28 @@ exports.saveStatus = (req, res) => {
       'date': moment.utc(datetime).local().format('DD MMMM YYYY H:mm:ss'),
       'screenshot': req.body.screenshot
     };
-
-    dbo.collection("development").findOne({_id: ObjectID(drawboardID)}, (e,r) => deleteImage(r.screenshot));
-
-    dbo.collection("development").updateOne({_id: ObjectID(drawboardID)}, {$set: data_inserted}, (e, r) => {
-      if(e) throw e;
-      return;
+    
+    dbo.collection("development").findOne({_id: ObjectID(drawboardID)}, (e,r) => {
+      if(r){
+        if(r.screenshot){
+          deleteImage(r.screenshot);
+          console.log('screenshot',r.screenshot)
+        } 
+      }
     });
+    console.log('drawboardID',req.session)
+
+    dbo.collection("development").findOne({_id: ObjectID(drawboardID)}, (e1,r1) => {
+      let src = r1.data.map(i => i.attrs.image);
+      console.log('src',src)
+      src.forEach(i => deleteImage(i));
+      
+      dbo.collection("development").updateOne({_id: ObjectID(drawboardID)}, {$set: data_inserted}, (e, r) => {
+        if(e) throw e;
+        return;
+      });
+    })
+
 
   });
 }
@@ -188,7 +206,19 @@ exports.uploadImages = (req, res) => {
 
 exports.initDevelopment = (req, res) => {
   dbo.collection("development").insertOne({}, (e,r) => {
-    res.send(r.insertedId);
+    // console.log('get inserted id',r.insertedId);
+    console.log('sessionID', req.sessionID)
+    req.session.drawboardID = r.insertedId;
+    // console.log(req.session)
+    // console.log(req.session.drawboardID)
+    res.send()
+    // db_session.collection("sessions").updateOne({'_id': req.sessionID}, {$set: {'drawboardID': r.insertedId}}, (e1,r1)=>{
+    //   if(e1) console.log(e1);
+    //   console.log(r1)
+    //   res.end();
+    //   return;
+    // })
+    // req.session.drawboardID = r.insertedId;
   })
 }
 

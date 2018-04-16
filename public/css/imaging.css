@@ -6,6 +6,9 @@ body {
   margin: 0;
 }
 
+button:focus {
+  outline: 0;
+}
 
 
 /* nav bar */
@@ -209,6 +212,8 @@ button.imageEditorButtons:hover {
   border: 1px solid #22A7F0;
   text-align: center;
   font-size: 23px;
+  min-width: 75px;
+  margin-left: 5px;
 }
 
 .addComponentButtons {
@@ -279,7 +284,6 @@ input[type=range]::-webkit-slider-thumb {
 
 #control-btn {
   padding-bottom: 5px;
-  border-bottom: 1px solid #22A7F0;
 }
 
 .farbtastic, .farbtastic .wheel {
@@ -294,7 +298,7 @@ input[type=range]::-webkit-slider-thumb {
 #control-btn .controlButtons {
   vertical-align: middle;
   margin-bottom: 15px;
-  height: 50px;
+  height: 42px;
   background-color: rgba(113, 70, 122, 0.8);
   border-radius: 10px;
   cursor: pointer;
@@ -302,7 +306,10 @@ input[type=range]::-webkit-slider-thumb {
   border: none;
   text-align: center;
   font-size: 100%;
+  min-width: 80px;
+  margin-left: 5px;
 }
+
 
 #control-btn .controlButtons:hover {
   background-color: rgba(255,255,255, 0.8);
@@ -376,6 +383,37 @@ textarea {
 
 .style-transfer-btn:hover {
   filter: brightness(120%);
+}
+
+/* zoom stage */
+.zoom-wrapper {
+  position: fixed;
+  bottom: 16px;
+  right: 30vw;
+  width: 250px;
+}
+
+.zoom-btn {
+  vertical-align: middle;
+  background-color: #22A7F0;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #fff;
+  border: 1px solid #22A7F0;
+  text-align: center;
+  font-size: 14px;
+  width: 21px;
+}
+.zoom-wrapper #resize-range {
+  -webkit-appearance: none;
+  border-radius: 10px;
+  height: 5px;
+  vertical-align: middle;
+  margin-bottom: -2px;
+}
+.zoom-wrapper #resize-factor {
+  color: white;
+  padding-left: 5px;
 }
 
 /* loader */

@@ -211,17 +211,10 @@ window.onload = () => {
 
 new_img.onclick = () => {
 
-  $.post( '/development', data_id => {
-    console.log('data_id',data_id);
-    $.ajax({
-      url: '/session/development',
-      data: JSON.stringify({'fieldValue': data_id }),
-      contentType: 'application/json',
-      method: 'POST'
-    }).done(data => console.log(data))
+  $.post( '/development/new_img', data_id => {
+    window.location.href='/imaging';
   });
 
-  window.location.href='/imaging';
 }
 
 logout.onclick = () => {

@@ -160,6 +160,14 @@ reduce_btn.onclick = () => {
   updateResizeNum();
 }
 
+// crop_btn.onclick = () => {
+//   for (i of Image_ref){
+//     if(i.active){
+// 
+//     }
+//   }
+// }
+
 // ==== MAIN ====
 
 // loadPicToStage('./img/big_flowers.jpg');

@@ -200,7 +200,7 @@
         <div id="control-btn">
 
           <button class="normal-group-btn controlButtons" id="crop-btn">crop</button>
-          <button class="normal-group-btn controlButtons hide" id="save-crop-btn">save crop</button>
+          <button class="normal-group-btn controlButtons" id="save-crop-btn">save crop</button>
           <button class="normal-group-btn controlButtons" id="resize-btn">resize</button>
           <button class="normal-group-btn controlButtons hide" id="save-resize-btn">save resize</button>
           <button class="normal-group-btn controlButtons" id="delete-pic-btn">Delete</button>
@@ -234,10 +234,12 @@
             <img class="style-transfer-btn" data-id="wave" src="./img/style_transfer/wave.jpg">
           </div>
 
-          <button id="stage-reduce-btn">-</button>
-          <input id="resize-range" type="range" min=0.1 max=5 step=0.1 value=1>
-          <button id="stage-enlarge-btn">+</button>
-          <span id="resize-factor">100%</span>
+          <div class="zoom-wrapper">
+            <button id="stage-reduce-btn" class="zoom-btn">-</button>
+            <input id="resize-range" class="zoom-range" type="range" min=0.1 max=5 step=0.1 value=1>
+            <button id="stage-enlarge-btn" class="zoom-btn">+</button>
+            <span id="resize-factor">100%</span>
+          </div>
 
 
           <form style="display:none;">

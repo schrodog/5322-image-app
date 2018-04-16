@@ -40,7 +40,7 @@ app.post('/imaging/status', account.saveStatus);
 app.post('/imaging/images', account.uploadImages);
 app.get('/uniqueId', account.getUniqueId);
 app.post('/session/development', account.addSession);
-app.post('/development', account.initDevelopment);
+app.post('/development/new_img', account.initDevelopment);
 app.get('/development', account.loadDevelopment);
 app.delete('/development', account.clearDevelopment);
 app.get('/image_gallery/work', account.getWork);
