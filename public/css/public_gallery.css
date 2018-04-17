@@ -145,14 +145,16 @@ select {
 }
 .sub-container:hover .interactive-view {
   display: inherit;
-  opacity: 0.8;
+  opacity: 0.9;
   transition: opacity 1.0s;
 }
 
 .img-title {
   position: absolute;
   left: 20px;
-  font-size: 18px;
+  font-size: 19px;
+  font-weight: bold;
+  opacity: 1;
 }
 
 .like-pair {

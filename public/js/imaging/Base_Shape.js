@@ -20,9 +20,9 @@ class BaseShape {
     this.anchorGroup = new Konva.Group();
     this.group = new Konva.Group();
     this.stage = stage;
-    this.crop_ref = null;
     this.extension = null;
     this.destroyFlag = false;
+    this.cropMode = false;
     self = this;
     // this.img_draw = null;
 
@@ -64,8 +64,13 @@ class BaseShape {
       self.buildAnchor(coor[i], coor[i+1], i/2, mode);
     }
     self.group.setDraggable(true);
-    self.group.add(self.anchorGroup);
-    self.layer.draw()
+    if (mode != 'crop'){
+      self.group.add(self.anchorGroup);
+      self.layer.draw()
+    } else {
+      self.shadow_layer.add(self.anchorGroup);
+      self.shadow_layer.draw()
+    }
 
   }
 
@@ -82,7 +87,7 @@ class BaseShape {
 
   startCrop(){
     const baseImage = self.baseImage;
-    
+
     self.baseImage.draggable(false);
     self.shadow_layer = self.layer.clone();
     self.stage.add(self.shadow_layer);
@@ -90,14 +95,15 @@ class BaseShape {
     self.baseImage.brightness(-0.45);
     self.baseImage.cache()
     self.baseImage.draw();
-    
+
     self.buildAllAnchor('crop');
-    self.shadow_layer.moveDown();
-    self.shadow_layer.cache();
-    self.shadow_layer.draw();
+    self.anchorGroup.moveToTop();
+    // self.shadow_layer.cache();
+    self.anchorGroup.draw();
+    self.cropMode = true;
     // self.anchorGroup.cache();
     // self.anchorGroup.draw();
-    
+
     // self.buildAllAnchor();
 
     // const crop = new Konva.Rect({
@@ -122,9 +128,11 @@ class BaseShape {
     //     }
     //   }
     // });
-    
+
     // register listener to resize handler
-    
+
+
+
     // const crop_base = crop_ref.baseImage;
     // self.stage.draw()
     // let shadow_img = self.shadow_layer.find('.img');
@@ -138,7 +146,7 @@ class BaseShape {
     //   self.shadow_layer.draw();
     // }
     // console.log(crop_base.getWidth(),crop_base.getHeight(),crop_base.getX(),crop_base.getY());
-    // 
+    //
     // crop_ref.anchorGroup.on('dragmove', () => {
     //   shadowResize()
     // });
@@ -147,7 +155,7 @@ class BaseShape {
     // });
 
   }
-  
+
   shadowResize(){
     self.shadow_layer.setClip({
       x: self.anchorGroup.getX(),
@@ -155,26 +163,28 @@ class BaseShape {
       width:  self.anchorGroup.getWidth(),
       height: self.anchorGroup.getHeight()
     });
-    self.shadow_layer.draw();  
+    self.shadow_layer.draw();
   }
 
   saveCrop(){
-    let coor = [self.baseImage.getX(), self.baseImage.getY()]
-    let size = [self.baseImage.getWidth(), self.baseImage.getHeight()]
-    self.cropPicture(coor, size);
-    if (self.background_image){
-      self.background_image.destroy();
-      self.brightness();
-    }
-    // if (self.shadow_layer){
-    //   self.shadow_layer.destroy()
-    // }
-    self.group.setDraggable(false);
+    // let coor = [self.shadow_layer.getX(), self.shadow_layer.getY()]
+    // let size = [self.shadow_layer.getWidth(), self.shadow_layer.getHeight()]
+    let coor = [self.cropX-self.baseImage.getX(), self.cropY-self.baseImage.getY()];
+    let size = [self.cropWidth, self.cropHeight];
+    let pos = [self.cropX, self.cropY];
+    console.log(coor,size,pos)
+    self.cropPicture(coor, size, pos);
+
+    self.shadow_layer.destroy();
+    self.brightness();
+
+    self.group.setDraggable(true);
     self.anchorGroup.destroy();
-    self.layer.draw()
+    self.stage.draw();
+    self.cropMode = false;
   }
 
-  cropPicture(coor, size){
+  cropPicture(coor, size, pos){
     self.baseImage.crop({
       x: coor[0],
       y: coor[1],
@@ -186,8 +196,8 @@ class BaseShape {
 
     self.baseImage.setWidth(size[0]);
     self.baseImage.setHeight(size[1]);
-    self.baseImage.setX(coor[0]);
-    self.baseImage.setY(coor[1]);
+    self.baseImage.setX(pos[0]);
+    self.baseImage.setY(pos[1]);
 
     self.baseImage.draw();
   }
@@ -220,19 +230,22 @@ class BaseShape {
       x_list.push(shape.getX());
       y_list.push(shape.getY());
     });
-    
-    let minx = x_list.min()+7, miny = y_list.min()+7;
-    let width = Math.abs(point[1].getY()-point[3].getY());
-    let height = Math.abs(point[0].getX()-point[1].getX());
+
     if(mode == 'crop'){
-      console.log('min',x,y,width,height )
+      self.cropX = x_list.min()+7;
+      self.cropY = y_list.min()+7;
+      self.cropHeight = Math.abs(point[1].getY()-point[3].getY());
+      self.cropWidth = Math.abs(point[0].getX()-point[1].getX());
+      // console.log('min',minx,miny,width,height )
       self.shadow_layer.setClip({
-        x: minx,
-        y: miny,
-        width:  width,
-        height: height
+        x: self.cropX,
+        y: self.cropY,
+        width:  self.cropWidth,
+        height: self.cropHeight
       });
-      self.shadow_layer.draw();  
+      self.shadow_layer.cache();
+      self.shadow_layer.draw();
+      self.anchorGroup.draw()
     }
     return [x_list.min()+7, y_list.min()+7, Math.abs(point[0].getX()-point[1].getX()), Math.abs(point[1].getY()-point[3].getY()) ];
   }

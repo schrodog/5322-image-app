@@ -162,22 +162,27 @@ exports.saveStatus = (req, res) => {
       'date': moment.utc(datetime).local().format('DD MMMM YYYY H:mm:ss'),
       'screenshot': req.body.screenshot
     };
-    
+
     dbo.collection("development").findOne({_id: ObjectID(drawboardID)}, (e,r) => {
       if(r){
         if(r.screenshot){
           deleteImage(r.screenshot);
           console.log('screenshot',r.screenshot)
-        } 
+        }
       }
     });
     console.log('drawboardID',req.session)
 
     dbo.collection("development").findOne({_id: ObjectID(drawboardID)}, (e1,r1) => {
-      let src = r1.data.map(i => i.attrs.image);
-      console.log('src',src)
-      src.forEach(i => deleteImage(i));
-      
+
+      if(r1.data){
+        let src = r1.data.map(i => i.attrs.image);
+        console.log('src',src)
+        src.forEach(i => {
+          if(i) deleteImage(i);
+        } );
+      }
+
       dbo.collection("development").updateOne({_id: ObjectID(drawboardID)}, {$set: data_inserted}, (e, r) => {
         if(e) throw e;
         return;
@@ -191,15 +196,43 @@ exports.saveStatus = (req, res) => {
 
 exports.uploadImages = (req, res) => {
   const form = new formidable.IncomingForm();
+  let dir='', filename='';
 
   form.uploadDir = 'public/img/users/development';
   form.on('fileBegin', (fields, file) => {
     file.path = form.uploadDir+"/"+file.name;
+    filename = file.name;
   });
   // console.log(form);
   form.parse(req, (err, fields, file) => {
   });
-  form.on('end', () => {return;})
+  form.on('field', (name,value) => {
+    if(name === 'dir') {
+      dir = value;
+      console.log('dir1',dir)
+    }
+  });
+  form.on('end', () => {
+    if(dir !==''){
+      console.log('dir',dir)
+      fs.rename(`public/img/users/development/${filename}`, `public/img/users/${filename}`, (err) => {
+        res.send()
+        return;
+      });
+    }
+  });
+}
+
+exports.shareImage = (req,res) => {
+  let data = req.body;
+  console.log('share data',data)
+  dbo.collection("images").insertOne({
+    'path': data.path, 'title': data.title, 'tag': data.tag, 'date': new Date(), 'share':1,
+    'userID': req.session.userID, 'likedID': [], 'likeNum': 0, 'comments': [], 'commentNum': 0
+  }, (e,r) => {
+    res.end();
+    return;
+  })
 }
 
 // development

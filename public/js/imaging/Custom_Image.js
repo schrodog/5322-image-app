@@ -35,6 +35,9 @@ class CustomImage extends BaseShape {
         if(self.anchorGroup){
           super.saveResize()
         }
+        if(self.cropMode){
+          super.saveCrop()
+        }
         self.baseImage.shadowBlur(0);
         console.log('leave');
         self.baseImage.cache();

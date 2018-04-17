@@ -77,41 +77,41 @@ const loadImages = (data) => {
 }
 
 const submitComment = (img_id) => {
-  
+
   let textarea = document.querySelector(".add-comment textarea");
   let content = textarea.value;
   textarea.value = "";
-  
+
   let data = {'userID': userID, 'content': content };
-  
-  let html = 
+
+  let html =
   `<div class="comment-box">
     <div class="author">${USERNAME}</div>
     <div class="comment-text">${content}</div>
   </div>`;
-  
+
   $.ajax({
     url: '/image_gallery/comment',
     method: 'POST',
     data: JSON.stringify({'data': data, 'id': img_id}),
     contentType: 'application/json',
   }).done(res => {
-    
+
     comment_buffer.insertAdjacentHTML('beforeend', html);
-    
+
     let speechRef = $(`img[data-id='${img_id}']`).parent().children(".speech-num");
     speechRef.text(parseInt(speechRef.text())+1);
-    
+
   });
 }
 
 const loadComments = (data, img_id) => {
   let html='';
-  
+
   console.log('usr data',img_id)
-  
+
   data.forEach(i => {
-    html += 
+    html +=
     `<div class="comment-box">
       <div class="author">${i.username}</div>
       <div class="comment-text">${i.content}</div>
@@ -120,7 +120,7 @@ const loadComments = (data, img_id) => {
   console.log(html)
   comment_buffer.innerHTML = "";
   comment_buffer.insertAdjacentHTML('beforeend',html);
-  
+
   $("#comment-submit").on('click', () => submitComment(img_id));
 }
 
@@ -140,7 +140,7 @@ const doFilter = () => {
   }
 
   console.log(`${startDate_value},${endDate_value},${tag_value},${order_value},${search_value}`)
-  
+
   console.log(isValidDate(startDate_value))
   console.log(isValidDate(endDate_value))
 
@@ -169,15 +169,15 @@ const doFilter = () => {
     document.querySelectorAll(".like-icon").forEach( i => {
       i.onclick = () => refreshLike(i.parentElement, i.getAttribute('data-id'));
     });
-    
+
     $(".speech-icon").on('click',function(){
       $("nav, #mainpage").css("pointer-event", "none");
-      $(".modalDialog").css({"opacity":"1", "pointer-events":"inherit" });
-      
+      $(".modalDialog").css({"opacity":"0.5", "pointer-events":"inherit" });
+
       let img_src = $(this).parent().parent().parent().children("img").attr("src");
       $("#openModal img").attr("src", img_src);
       let id = $(this).parent().children(".like-icon").attr("data-id");
-      
+
       // get all userid with comment
       $.ajax({
         url: `/image_gallery/comment/${id}`,
@@ -187,11 +187,11 @@ const doFilter = () => {
         // console.log('get userdate',data)
         loadComments(JSON.parse(data), id);
       });
-      
-      
+
+
       // console.log(img_src)
     });
-    
+
   });
 }
 

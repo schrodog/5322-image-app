@@ -197,7 +197,7 @@ class Paint extends BaseShape {
       const imageObj = new Image();
       imageObj.src = src;
 
-      console.log(self.img_draw);
+      // console.log(self.img_draw);
 
       imageObj.onload = () => {
         const img = new Konva.Image({
@@ -268,6 +268,8 @@ class Paint extends BaseShape {
   register_listener(){
     resize_btn.addEventListener('click', this.canvas_buildAllAnchor);
     saveResize_btn.addEventListener('click', this.canvas_saveResize);
+    // crop_btn.addEventListener('click', super.startCrop);
+    // saveCrop_btn.addEventListener('click', super.saveCrop);
     deletePic_btn.addEventListener('click', super.destroyAll);
     moveUp_btn.addEventListener('click', this.moveUp);
     moveDown_btn.addEventListener('click', this.moveDown);
@@ -285,6 +287,8 @@ class Paint extends BaseShape {
   remove_listener(){
     resize_btn.removeEventListener('click', this.canvas_buildAllAnchor);
     saveResize_btn.removeEventListener('click', this.canvas_saveResize);
+    // crop_btn.removeEventListener('click', super.startCrop);
+    // saveCrop_btn.removeEventListener('click', super.saveCrop);
     deletePic_btn.removeEventListener('click', super.destroyAll);
     moveUp_btn.removeEventListener('click', this.moveUp);
     moveDown_btn.removeEventListener('click', this.moveDown);

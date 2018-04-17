@@ -8,6 +8,7 @@ class CustomText {
     this.initText();
     this.editText()
     this.active = false;
+    this.destroyFlag = false;
     // textarea = document.getElementById("textarea");
     // this.listenEditing();
   }
@@ -56,6 +57,8 @@ class CustomText {
       textarea.value = "";
       document.body.removeChild(textarea);
       textarea = null;
+      this.destroyFlag = true;
+      this.toggleControlVisibility()
     }
     const moveUp = () => this.layer.moveUp();
     const moveDown = () => this.layer.moveDown();

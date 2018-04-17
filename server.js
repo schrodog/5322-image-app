@@ -48,6 +48,7 @@ app.post('/image_gallery/filter', account.doFilter);
 
 app.get('/image_gallery/comment/:id', account.getComments);
 app.post('/image_gallery/comment', account.setComments);
+app.post('/imaging/shareImage', account.shareImage);
 
 app.post('/python', account.runPython);
 

@@ -4,6 +4,8 @@ const addPic_btn = document.getElementById("add-pic-btn");
 const deletePic_btn = document.getElementById("delete-pic-btn");
 const moveUp_btn = document.getElementById("move-up-btn");
 const moveDown_btn = document.getElementById("move-down-btn");
+const shareImg_btn = document.getElementById("share-img-btn");
+const submitShare_btn = document.getElementById("submit-share-btn");
 
 
 const rotate_btn = document.getElementById("rotate-btn");

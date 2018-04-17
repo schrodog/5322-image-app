@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="./css/public_gallery.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="./lib/jquery-3.3.1.min.js"></script>
-  
+
 
 </head>
 
@@ -17,7 +17,7 @@
 
 <nav>
   <span class="title">Public Gallery</span>
-  
+
   <div class="search-wrapper">
     <input type="text" placeholder="Search.." name="search" />
     <button class="left" id="search-txt-btn"><i class="fa fa-search"></i></button>
@@ -32,12 +32,12 @@
 <div id="mainpage">
 
   <div class="filter-tools">
-    
+
     <div class="filter-tool-item">
       <label class="label-filter">Date range</label>
       <input type="date" name="start-date"> - <input type="date" name="end-date">
     </div>
-    
+
     <div class="filter-tool-item">
       <label class="label-filter">Tag</label>
       <select id="tag-select">
@@ -48,7 +48,7 @@
         <option value="city">City</option>
       </select>
     </div>
-    
+
     <div class="filter-tool-item">
       <label class="label-filter">Sort by</label>
       <select id="img-order">
@@ -58,7 +58,7 @@
         <option value="commentNum">Comment</option>
       </select>
     </div>
-    
+
   </div>
 
 
@@ -73,31 +73,23 @@
 <div id="openModal" class="modalDialog">
   <div>
     <a title="Close" class="close">X</a>
-    
+
     <div class="modal-container">
-      
+
       <img src="">
-      
+
       <div class="comment-box-wrapper">
         <div class="comment-scroll" id="comment-buffer">
-          <!-- <div class="comment-box">
-            <div class="author">Susana</div>
-            <div class="comment-text">excellent!!</div>
-          </div>
-          <div class="comment-box">
-            <div class="author">tapatim</div>
-            <div class="comment-text">sempre bella</div>
-          </div> -->
         </div>
-        
+
         <div class="add-comment">
-          <textarea placeholder="Add comment here ..."></textarea>  
-          <button id="comment-submit">submit</button>   
+          <textarea placeholder="Add comment here ..."></textarea>
+          <button id="comment-submit">submit</button>
         </div>
       </div>
-      
-    </div>    
-    
+
+    </div>
+
   </div>
 </div>
 

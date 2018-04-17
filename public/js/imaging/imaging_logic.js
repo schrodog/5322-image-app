@@ -1,5 +1,12 @@
 'use strict';
 
+Array.prototype.max = function(){
+  return Math.max.apply(null, this);
+}
+Array.prototype.min = function(){
+  return Math.min.apply(null, this);
+}
+
 const logout_btn = document.getElementById("logout-btn");
 const imgGallery_btn = document.getElementById("img-gallery-btn");
 const saveStatus_btn = document.getElementById("save-status-btn");
@@ -11,7 +18,6 @@ const cameraSnap_btn = document.getElementById("camera-snap-btn");
 const mainpage_block = document.getElementById("mainpage");
 const photoSnap_block = document.getElementById("photo-snap");
 const cameraCanvas = document.getElementById("camera-canvas");
-const imgShare_btn = document.getElementById("share-img-btn");
 
 
 // export current images
@@ -24,13 +30,103 @@ const downloadURI = (uri, name) => {
   document.body.removeChild(link);
 }
 
-export_btn.onclick = () => {
-  let dataurl = STAGE.toDataURL();
-  downloadURI(dataurl, 'final.png');
+const getUniqueId = () => new Promise((resolve, rej) => {
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', '/uniqueId');
+  xhr.responseType = "text";
+  xhr.onload = function(e) {
+    if (this.status === 200) {
+      resolve(this.response)
+    }
+  }
+  xhr.send();
+});
+
+const getClipBoundary = () => {
+  let x_list=[], y_list=[];
+
+  for(let i of Image_ref.concat(Canvas_ref)){
+    if(! i.destroyFlag){
+      x_list.push(i.baseImage.getX());
+      x_list.push(i.baseImage.getX()+i.baseImage.getWidth());
+      y_list.push(i.baseImage.getY());
+      y_list.push(i.baseImage.getY()+i.baseImage.getHeight());
+    }
+  }
+  for (let i of Text_ref){
+    if(! i.destroyFlag){
+      x_list.push(i.textTemplate.x());
+      x_list.push(i.textTemplate.x()+parseInt(i.textTemplate.getWidth()));
+      y_list.push(i.textTemplate.y());
+      y_list.push(i.textTemplate.y()+parseInt(i.textTemplate.height()));
+    }
+  }
+
+  let xmax = x_list.max(), xmin = x_list.min();
+  let ymax = y_list.max(), ymin = y_list.min();
+  console.log(x_list, y_list)
+  console.log(xmin,xmax,ymin,ymax);
+
+  return [xmin,ymin,xmax-xmin,ymax-ymin];
 }
 
-const uploadScreenshot = (path) => {
-  let dataURI = STAGE.toDataURL();
+export_btn.onclick = () => {
+
+  let [x,y,width,height] = getClipBoundary();
+
+  STAGE.toImage({callback: (img) => {
+    // console.log(img.src);
+    downloadURI(img.src, 'final.png')
+    }, x: x, y:y , width: width, height: height }
+  );
+}
+
+shareImg_btn.onclick = () => {
+  $("nav, #mainpage").css("pointer-event", "none");
+  $(".modalDialog").css({"opacity":"0.5", "pointer-events":"inherit" });
+}
+
+$(".close").on('click',function(){
+  $("nav, #mainpage").css("pointer-event", "inherit");
+  $(".modalDialog").css({"opacity":"0","pointer-events":"none"});
+});
+
+submitShare_btn.onclick = () => {
+
+  $("nav, #mainpage").css("pointer-event", "inherit");
+  $(".modalDialog").css({"opacity":"0","pointer-events":"none"});
+
+  let [x,y,width,height] = getClipBoundary();
+
+  (async function(){
+
+    let id = await getUniqueId();
+    let uri = STAGE.toDataURL({x:x, y:y, width:width, height:height});
+    uploadScreenshot(`${id}.png`, uri, true);
+
+    let title = $("#share-title").val();
+    let tag_value = $("#tag-select option:selected").val();
+    $("#share-title").val('');
+
+    $.ajax({
+      url: '/imaging/shareImage',
+      data: JSON.stringify({
+        'title': title,
+        'tag': tag_value,
+        'path': `${id}.png`
+      }),
+      contentType: 'application/json',
+      method: 'POST'
+    }).done(data => {
+      alert('image shared');
+    });
+
+  })();
+
+}
+
+const uploadScreenshot = (path, dataURI, share=false) => {
+  // let dataURI = STAGE.toDataURL();
 
   let byteString = atob(dataURI.split(',')[1]);
   let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
@@ -43,6 +139,9 @@ const uploadScreenshot = (path) => {
 
   let formData = new FormData();
   formData.append('ImageFileField', blob, path);
+  if(share) {
+    formData.append('dir', 'public/img/users');
+  }
 
   $.ajax({
     url: '/imaging/images',
@@ -99,17 +198,7 @@ const saveStatus = () => {
     canvas_list = [],
     base64_data;
 
-  const getUniqueId = () => new Promise((resolve, rej) => {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/uniqueId');
-    xhr.responseType = "text";
-    xhr.onload = function(e) {
-      if (this.status === 200) {
-        resolve(this.response)
-      }
-    }
-    xhr.send();
-  });
+
 
   const uploadImage = (object_url, path) => {
 
@@ -165,6 +254,7 @@ const saveStatus = () => {
     for (let i of Text_ref) {
       let json = JSON.parse(i.textTemplate.toJSON());
       json.attrs.zindex = i.layer.getZIndex();
+      json.attrs.height = i.textTemplate.height();
 
       text_list.push(json);
     }
@@ -264,7 +354,7 @@ const saveStatus = () => {
 
     // upload screenshot
     let id = await getUniqueId();
-    uploadScreenshot(`${id}.png`);
+    uploadScreenshot(`${id}.png`, STAGE.toDataURL());
 
     console.log('data_list',image_list, canvas_list, text_list)
 
