@@ -146,8 +146,8 @@ const doFilter = () => {
 
   let data = {'filter': {}};
   if(search_value !== '' ) data.filter.title = search_value;
-  if(startDate_value !== '' && isValidDate(startDate_value)) data.filter.startDate = startDate_value;
-  if(endDate_value !== '' && isValidDate(endDate_value)) data.filter.endDate = endDate_value;
+  if(startDate_value !== '') data.filter.startDate = startDate_value;
+  if(endDate_value !== '') data.filter.endDate = endDate_value;
   if(tag_value !== 'all') data.filter.tag = tag_value;
   if(order_value !== 'default') data.order = order_value;
 
