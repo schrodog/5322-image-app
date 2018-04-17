@@ -119,11 +119,8 @@ class Paint extends BaseShape {
     let lastPointerPosition = undefined;
 
     this.stage.on('contentMousedown.proto', () => {
-
-
       isPaint = true;
       lastPointerPosition = this.stage.getPointerPosition();
-
     });
 
     this.stage.on('contentMouseup.proto', () => isPaint = false );
@@ -163,8 +160,6 @@ class Paint extends BaseShape {
     });
 
     // console.log(this.stage);
-
-
     this.register_listener();
   }
 

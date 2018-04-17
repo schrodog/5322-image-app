@@ -83,7 +83,7 @@ export_btn.onclick = () => {
 
 shareImg_btn.onclick = () => {
   $("nav, #mainpage").css("pointer-event", "none");
-  $(".modalDialog").css({"opacity":"0.5", "pointer-events":"inherit" });
+  $(".modalDialog").css({"opacity":"1.0", "pointer-events":"inherit" });
 }
 
 $(".close").on('click',function(){

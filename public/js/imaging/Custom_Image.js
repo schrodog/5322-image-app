@@ -14,36 +14,42 @@ class CustomImage extends BaseShape {
 
   initImage(){
     let base_layer = super.buildPicture();
-    self.stage.add(base_layer);
-    // self.register_listener();
+    this.stage.add(base_layer);
+    // this.register_listener();
 
     let click_mark=0;
-    self.stage.on('click', (evt) => {
+    this.stage.on('click', (evt) => {
       let shape = evt.target;
-      if (shape === self.baseImage && !self.active){
-        console.log('go');
-        self.changeSelf(self);
-        self.active = true;
+      if (shape === this.baseImage && !this.active){
+        console.log('image go');
+        this.changeSelf(this);
+        this.active = true;
         // super.turnColorScale();
-        self.baseImage.shadowBlur(10);
-        self.baseImage.cache();
-        self.baseImage.draw();
-        self.register_listener();
-        self.toggleControlVisibility();
-      } else if (shape !== self.baseImage && self.active) {
-        self.active = false;
-        if(self.anchorGroup){
+        this.baseImage.shadowBlur(10);
+        this.baseImage.cache();
+        this.baseImage.draw();
+        this.register_listener();
+        // this.toggleControlVisibility();
+        for(let i=0; i<image_group_btn.length; i++ ){
+          image_group_btn[i].classList.remove("hide");
+        }
+      } else if (shape !== this.baseImage && this.active) {
+        this.active = false;
+        if(this.anchorGroup){
           super.saveResize()
         }
-        if(self.cropMode){
+        if(this.cropMode){
           super.saveCrop()
         }
-        self.baseImage.shadowBlur(0);
+        this.baseImage.shadowBlur(0);
         console.log('leave');
-        self.baseImage.cache();
-        self.stage.draw();
-        self.remove_listener();
-        self.toggleControlVisibility();
+        this.baseImage.cache();
+        this.stage.draw();
+        this.remove_listener();
+        // this.toggleControlVisibility();
+        for(let i=0; i<image_group_btn.length; i++ ){
+          image_group_btn[i].classList.add("hide");
+        }
       }
     });
   }

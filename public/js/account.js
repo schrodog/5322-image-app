@@ -159,7 +159,7 @@ exports.saveStatus = (req, res) => {
     let data_inserted = {
       'data': image_list.concat(canvas_list).concat(text_list),
       'userID': req.session.userID,
-      'date': moment.utc(datetime).local().format('DD MMMM YYYY H:mm:ss'),
+      'date': moment.utc(datetime).utcOffset(8).format('DD MMMM YYYY H:mm:ss'),
       'screenshot': req.body.screenshot
     };
 
