@@ -368,7 +368,9 @@ const saveStatus = () => {
       }),
       contentType: 'application/json',
       method: 'POST'
-    }).done(data => {});
+    }).done(data => {
+      alert('saved');
+    });
 
   })();
 
