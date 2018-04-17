@@ -172,7 +172,7 @@ const doFilter = () => {
 
     $(".speech-icon").on('click',function(){
       $("nav, #mainpage").css("pointer-event", "none");
-      $(".modalDialog").css({"opacity":"0.5", "pointer-events":"inherit" });
+      $(".modalDialog").css({"opacity":"0.9", "pointer-events":"inherit" });
 
       let img_src = $(this).parent().parent().parent().children("img").attr("src");
       $("#openModal img").attr("src", img_src);
