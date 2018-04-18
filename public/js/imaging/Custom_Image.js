@@ -11,6 +11,7 @@ class CustomImage extends BaseShape {
 
     // console.log(this);
   }
+  
 
   initImage(){
     let base_layer = super.buildPicture();
@@ -33,7 +34,7 @@ class CustomImage extends BaseShape {
         for(let i=0; i<image_group_btn.length; i++ ){
           image_group_btn[i].classList.remove("hide");
         }
-      } else if (shape !== this.baseImage && this.active) {
+      } else if ( shape !== this.baseImage && this.active) {
         this.active = false;
         if(this.anchorGroup){
           super.saveResize()
@@ -52,6 +53,14 @@ class CustomImage extends BaseShape {
         }
       }
     });
+  }
+  
+  destroyAllCustom(){
+    self.remove_listener();
+    for(let i=0; i<image_group_btn.length; i++ ){
+      image_group_btn[i].classList.add("hide");
+    }
+    super.destroyAll();
   }
 
   // tensorflow style transfer
@@ -127,7 +136,7 @@ class CustomImage extends BaseShape {
     saveResize_btn.addEventListener('click', super.saveResize);
     crop_btn.addEventListener('click', super.startCrop);
     saveCrop_btn.addEventListener('click', super.saveCrop);
-    deletePic_btn.addEventListener('click', super.destroyAll);
+    deletePic_btn.addEventListener('click', this.destroyAllCustom);
     moveUp_btn.addEventListener('click', super.moveUp);
     moveDown_btn.addEventListener('click', super.moveDown);
 
@@ -175,7 +184,7 @@ class CustomImage extends BaseShape {
     saveResize_btn.removeEventListener('click', super.saveResize);
     crop_btn.removeEventListener('click', super.startCrop);
     saveCrop_btn.removeEventListener('click', super.saveCrop);
-    deletePic_btn.removeEventListener('click', super.destroyAll);
+    deletePic_btn.removeEventListener('click', this.destroyAllCustom);
     moveUp_btn.removeEventListener('click', super.moveUp);
     moveDown_btn.removeEventListener('click', super.moveDown);
 

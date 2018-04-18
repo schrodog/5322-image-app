@@ -225,6 +225,10 @@ button.imageEditorButtons:hover {
   cursor: pointer;
 }
 
+#uploadButton {
+  padding: 11px;
+}
+
 .addComponentButtons:hover img {
   filter: brightness(120%);
 }

@@ -258,6 +258,14 @@ class Paint extends BaseShape {
     self.layer.moveDown();
     self.saveProcess();
   }
+  
+  destroyAllPaint(){
+    super.destroyAll();
+    self.stage.off('contentMouseup.proto');
+    self.stage.off('contentMousemove.proto');
+    self.stage.off('contentMousedown.proto');
+    self.remove_listener();
+  }
 
 
   register_listener(){
@@ -265,7 +273,7 @@ class Paint extends BaseShape {
     saveResize_btn.addEventListener('click', this.canvas_saveResize);
     // crop_btn.addEventListener('click', super.startCrop);
     // saveCrop_btn.addEventListener('click', super.saveCrop);
-    deletePic_btn.addEventListener('click', super.destroyAll);
+    deletePic_btn.addEventListener('click', this.destroyAllPaint);
     moveUp_btn.addEventListener('click', this.moveUp);
     moveDown_btn.addEventListener('click', this.moveDown);
 
@@ -284,7 +292,7 @@ class Paint extends BaseShape {
     saveResize_btn.removeEventListener('click', this.canvas_saveResize);
     // crop_btn.removeEventListener('click', super.startCrop);
     // saveCrop_btn.removeEventListener('click', super.saveCrop);
-    deletePic_btn.removeEventListener('click', super.destroyAll);
+    deletePic_btn.removeEventListener('click', this.destroyAllPaint);
     moveUp_btn.removeEventListener('click', this.moveUp);
     moveDown_btn.removeEventListener('click', this.moveDown);
 
