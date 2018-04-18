@@ -76,8 +76,12 @@ exports.addSession = (req,res) => {
 exports.findSession = (req, res) => {
   const sid = req.sessionID;
   db_session.collection("sessions").findOne({_id: sid}, (err, result) => {
-    let data = JSON.parse(result.session);
-    res.send(data);
+    if(result){
+      let data = JSON.parse(result.session);
+      res.send(data);
+    } else {
+      return;
+    }
   });
 }
 
