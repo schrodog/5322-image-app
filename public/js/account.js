@@ -157,6 +157,7 @@ exports.saveStatus = (req, res) => {
   const drawboardID = req.session.drawboardID;
 
   db_session.collection("sessions").findOne({_id: sid}, (err, result) => {
+    if(!result){ return; }
     let data = JSON.parse(result.session);
 
     let datetime = new Date();
