@@ -54,6 +54,7 @@ class CustomText {
     const change_font_family = () => textarea.style.fontFamily = fontFamily_select.value;
     const change_font_alpha = () => textarea.style.opacity = opacity_range.value;
     const deleteText = () => {
+      this.active = false;
       textarea.value = "";
       document.body.removeChild(textarea);
       textarea = null;
